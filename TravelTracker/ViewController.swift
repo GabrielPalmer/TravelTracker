@@ -20,7 +20,7 @@ class ViewController: UIViewController {
 //        view.addSubview(maplyVC!.view)
 //        maplyVC!.view.frame = view.bounds
 //        addChild(maplyVC!)
-//        
+//
 //        let globeVC = maplyVC as? WhirlyGlobeViewController
 //
 //        // we want a black background for a globe, a white background for a map.
@@ -43,8 +43,8 @@ class ViewController: UIViewController {
 //        globeVC!.height = 0.8
 //        globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.0)
     
+        
     }
-
 
 }
 
