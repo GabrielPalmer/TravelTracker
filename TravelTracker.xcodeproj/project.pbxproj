@@ -8,8 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		7497F006224931DE00824123 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7497F005224931DE00824123 /* GoogleService-Info.plist */; };
+		7497F00E224A625000824123 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00D224A625000824123 /* StartViewController.swift */; };
+		7497F010224A626C00824123 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00F224A626C00824123 /* SignInViewController.swift */; };
+		7497F012224A628000824123 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F011224A628000824123 /* SignUpViewController.swift */; };
+		7497F015224A663E00824123 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F014224A663E00824123 /* FriendsViewController.swift */; };
+		7497F017224A666600824123 /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F016224A666600824123 /* RequestsViewController.swift */; };
+		7497F019224A66A800824123 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F018224A66A800824123 /* SearchViewController.swift */; };
+		7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F024224A68B400824123 /* TabBarAnimationExtension.swift */; };
 		74E485B32249119100788691 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B22249119100788691 /* AppDelegate.swift */; };
-		74E485B52249119100788691 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B42249119100788691 /* ViewController.swift */; };
+		74E485B52249119100788691 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B42249119100788691 /* MapViewController.swift */; };
 		74E485B82249119100788691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E485B62249119100788691 /* Main.storyboard */; };
 		74E485BA2249119300788691 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74E485B92249119300788691 /* Assets.xcassets */; };
 		74E485BD2249119300788691 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E485BB2249119300788691 /* LaunchScreen.storyboard */; };
@@ -44,9 +51,16 @@
 /* Begin PBXFileReference section */
 		338698D1B467768FEDA81DE0 /* Pods-TravelTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTracker.debug.xcconfig"; path = "Target Support Files/Pods-TravelTracker/Pods-TravelTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		7497F005224931DE00824123 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7497F00D224A625000824123 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
+		7497F00F224A626C00824123 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		7497F011224A628000824123 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		7497F014224A663E00824123 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		7497F016224A666600824123 /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsViewController.swift; sourceTree = "<group>"; };
+		7497F018224A66A800824123 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		7497F024224A68B400824123 /* TabBarAnimationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAnimationExtension.swift; sourceTree = "<group>"; };
 		74E485AF2249119100788691 /* TravelTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E485B22249119100788691 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		74E485B42249119100788691 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		74E485B42249119100788691 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		74E485B72249119100788691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		74E485B92249119300788691 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		74E485BC2249119300788691 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -81,6 +95,45 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7497F008224A616100824123 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				74E485B62249119100788691 /* Main.storyboard */,
+				74E485BB2249119300788691 /* LaunchScreen.storyboard */,
+				7497F024224A68B400824123 /* TabBarAnimationExtension.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7497F00B224A616F00824123 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7497F00D224A625000824123 /* StartViewController.swift */,
+				7497F00F224A626C00824123 /* SignInViewController.swift */,
+				7497F011224A628000824123 /* SignUpViewController.swift */,
+				74E485B42249119100788691 /* MapViewController.swift */,
+				7497F013224A661800824123 /* Friends Tab Bar */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		7497F00C224A619800824123 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		7497F013224A661800824123 /* Friends Tab Bar */ = {
+			isa = PBXGroup;
+			children = (
+				7497F014224A663E00824123 /* FriendsViewController.swift */,
+				7497F016224A666600824123 /* RequestsViewController.swift */,
+				7497F018224A66A800824123 /* SearchViewController.swift */,
+			);
+			path = "Friends Tab Bar";
+			sourceTree = "<group>";
+		};
 		74E485A62249119100788691 = {
 			isa = PBXGroup;
 			children = (
@@ -103,11 +156,11 @@
 			isa = PBXGroup;
 			children = (
 				74E485B22249119100788691 /* AppDelegate.swift */,
-				74E485B42249119100788691 /* ViewController.swift */,
-				74E485B62249119100788691 /* Main.storyboard */,
+				7497F008224A616100824123 /* Views */,
+				7497F00B224A616F00824123 /* Controllers */,
+				7497F00C224A619800824123 /* Models */,
 				74E485E2224914BA00788691 /* geography-class_medres.mbtiles */,
 				74E485B92249119300788691 /* Assets.xcassets */,
-				74E485BB2249119300788691 /* LaunchScreen.storyboard */,
 				74E485BE2249119300788691 /* Info.plist */,
 				7497F005224931DE00824123 /* GoogleService-Info.plist */,
 			);
@@ -305,8 +358,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74E485B52249119100788691 /* ViewController.swift in Sources */,
+				7497F010224A626C00824123 /* SignInViewController.swift in Sources */,
+				7497F017224A666600824123 /* RequestsViewController.swift in Sources */,
+				7497F019224A66A800824123 /* SearchViewController.swift in Sources */,
+				7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */,
+				74E485B52249119100788691 /* MapViewController.swift in Sources */,
 				74E485B32249119100788691 /* AppDelegate.swift in Sources */,
+				7497F00E224A625000824123 /* StartViewController.swift in Sources */,
+				7497F015224A663E00824123 /* FriendsViewController.swift in Sources */,
+				7497F012224A628000824123 /* SignUpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,7 @@
 import UIKit
 import WhirlyGlobeMaplyComponent
 
-class ViewController: UIViewController {
+class MapViewController: UIViewController {
     
     private var maplyVC: MaplyBaseViewController? //myViewC
 
