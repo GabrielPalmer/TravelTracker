@@ -1,0 +1,4 @@
+include ':app'
+
+include ':maply'
+project(':maply').projectDir = new File(settingsDir,"../../library/maply/")
