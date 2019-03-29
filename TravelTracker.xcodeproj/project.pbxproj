@@ -109,8 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				7497F00D224A625000824123 /* StartViewController.swift */,
-				7497F00F224A626C00824123 /* SignInViewController.swift */,
 				7497F011224A628000824123 /* SignUpViewController.swift */,
+				7497F00F224A626C00824123 /* SignInViewController.swift */,
 				74E485B42249119100788691 /* MapViewController.swift */,
 				7497F013224A661800824123 /* Friends Tab Bar */,
 			);
