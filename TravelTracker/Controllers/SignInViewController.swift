@@ -7,24 +7,36 @@
 //
 
 import UIKit
+import FirebaseCore
 
-class SignInViewController: UIViewController {
+class SignInViewController: UITableViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var userNameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var signInButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
-
+ 
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if userNameTextField.isFirstResponder {
+            passwordTextField.becomeFirstResponder()
+        } else if passwordTextField.isFirstResponder {
+            passwordTextField.resignFirstResponder()
+        }
+        
+        return true
+    }
+    
+    @IBAction func signInButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "fromSignIn", sender: nil)
+    }
+    
 }

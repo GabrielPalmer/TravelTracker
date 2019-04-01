@@ -7,24 +7,52 @@
 //
 
 import UIKit
+import FirebaseCore
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UITableViewController, UITextFieldDelegate {
 
+    @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var userNameTextField: UITextField!
+    @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var confirmTextField: UITextField!
+    @IBOutlet weak var createButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        nameTextField.delegate = self
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        confirmTextField.delegate = self
+        
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
-
+    
+    //===========================================
+    // MARK: - Text Field Delegate
+    //===========================================
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if nameTextField.isFirstResponder {
+            userNameTextField.becomeFirstResponder()
+        } else if userNameTextField.isFirstResponder {
+            passwordTextField.becomeFirstResponder()
+        } else if passwordTextField.isFirstResponder {
+            confirmTextField.becomeFirstResponder()
+        } else if confirmTextField.isFirstResponder {
+            confirmTextField.resignFirstResponder()
+        }
+        
+        return true
+    }
+    
+    @IBAction func createButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "fromUserCreator", sender: nil)
+    }
+    
 }
