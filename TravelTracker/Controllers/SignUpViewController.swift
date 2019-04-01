@@ -9,7 +9,7 @@
 import UIKit
 import FirebaseCore
 
-class SignUpViewController: UIViewController, UITextFieldDelegate {
+class SignUpViewController: UITableViewController, UITextFieldDelegate {
 
     @IBOutlet weak var nameTextField: UITextField!
     @IBOutlet weak var userNameTextField: UITextField!
@@ -51,5 +51,8 @@ class SignUpViewController: UIViewController, UITextFieldDelegate {
         return true
     }
     
-
+    @IBAction func createButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "fromUserCreator", sender: nil)
+    }
+    
 }
