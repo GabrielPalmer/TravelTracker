@@ -61,26 +61,29 @@ class MapViewController: UIViewController {
         globeVC!.clearColor = (globeVC != nil) ? UIColor.black : UIColor.white
         globeVC!.frameInterval = 3
         
-        // set up the data source
-        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-            layer.handleEdges = (globeVC != nil)
-            layer.coverPoles = (globeVC != nil)
-            layer.requireElev = false
-            layer.waitLoad = false
-            layer.drawPriority = 0
-            layer.singleLevelLoading = false
-            mapVC!.add(layer)
-        }
+        // set up the data source MAP
+//        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
+//            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
+//            layer.handleEdges = (globeVC != nil)
+//            layer.coverPoles = (globeVC != nil)
+//            layer.requireElev = false
+//            layer.waitLoad = false
+//            layer.drawPriority = 0
+//            layer.singleLevelLoading = false
+//            mapVC!.add(layer)
+//        }
+        
+        
+        //GLOBE
         // mousebird.github.io/WhirlyGlobe/tutorial/ios/remote_image_layer.html
         let useLocalTiles = false
-        let layer: MaplyQuadImageTilesLayer
+        let globeLayer: MaplyQuadImageTilesLayer
         
         if useLocalTiles {
             guard let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres") else {
-                print("can't load local tile set")
+                print("Can't load local tile set")
             }
-            layer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
+            globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
         } else {
             let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
             let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
@@ -91,12 +94,38 @@ class MapViewController: UIViewController {
                 ext: "png",
                 minZoom: 0,
                 maxZoom: maxZoom) else {
-                    print("can't create a remote tile source")
+                    print("Can't create a remote tile source")
                     return
             }
             tileSource.cacheDir = tilesCacheDir
-            layer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
-            globeVC!.add(layer)
+            globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
+            globeVC!.add(globeLayer)
+        }
+        
+        //MAP
+        let mapLayer: MaplyQuadImageTilesLayer
+        
+        if useLocalTiles {
+            guard let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres") else {
+                print("Can't load local tile set")
+            }
+            mapLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
+        } else {
+            let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
+            let maxZoom = Int32(18)
+            
+            guard let tileSource = MaplyRemoteTileSource(
+                baseURL: "http://tile.stamen.com/terrain/",
+                ext: "png",
+                minZoom: 0,
+                maxZoom: maxZoom) else {
+                    print("Can't create a remote tile source")
+                    return
+            }
+            tileSource.cacheDir = tilesCacheDir
+            mapLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
+            mapVC!.add(mapLayer)
         }
         
         /*
@@ -111,11 +140,14 @@ class MapViewController: UIViewController {
          globeVC!.add(layer)
          }
          */
-        globeVC!.height = 0.8
-        //globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.0)
+        
+        globeVC!.height = 0.5
+        globeVC!.keepNorthUp = true
+        globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         
         mapVC!.height = 1
-        mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(-3.6704803, 40.5023056), time: 1.0)
+        mapVC!.viewWrap = true
+        mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         
         view.bringSubviewToFront(testButton)
     }
