@@ -254,16 +254,35 @@
                     <view key="view" contentMode="scaleToFill" id="wcM-AF-Woi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3C-tg-auO">
+                                <rect key="frame" x="8" y="28" width="72" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="FJC-zu-RPO"/>
+                                    <constraint firstAttribute="width" constant="72" id="YbG-fp-jgq"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                <state key="normal" title="Switch"/>
+                                <connections>
+                                    <action selector="testButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
+                                </connections>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="e3C-tg-auO" firstAttribute="top" secondItem="NhB-Wf-Cxi" secondAttribute="top" constant="8" id="szb-7K-Yzh"/>
+                            <constraint firstItem="e3C-tg-auO" firstAttribute="leading" secondItem="NhB-Wf-Cxi" secondAttribute="leading" constant="8" id="xpu-H5-jXc"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="NhB-Wf-Cxi"/>
                     </view>
                     <connections>
+                        <outlet property="testButton" destination="e3C-tg-auO" id="hEg-ti-6S2"/>
                         <segue destination="HY6-kv-FhX" kind="presentation" identifier="friendsSegue" id="44h-5e-Jde"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="EDZ-LJ-jDn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2839" y="24"/>
+            <point key="canvasLocation" x="2837.5999999999999" y="23.838080959520241"/>
         </scene>
         <!--Item-->
         <scene sceneID="aBW-Tx-IKm">
