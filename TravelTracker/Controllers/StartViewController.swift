@@ -16,7 +16,7 @@ class StartViewController: UIViewController {
         case 0:
             performSegue(withIdentifier: "signUpSegue", sender: nil)
         case 1:
-            performSegue(withIdentifier: "singInSegue", sender: nil)
+            performSegue(withIdentifier: "signInSegue", sender: nil)
         default:
             print("\nUnkown segue indentifier in start view controller\n")
         }
