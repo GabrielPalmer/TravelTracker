@@ -8,10 +8,39 @@
 
 import UIKit
 import WhirlyGlobeMaplyComponent
+import CoreLocation
 
-class MapViewController: UIViewController {
+class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
     
+    //    // get location
+    //    let locationManager = CLLocationManager()
+    //    //
     var globeIsVisible: Bool = true
+    
+    var latitude: Float = 40.419774
+    var longitude: Float = -111.885743
+    
+    @IBOutlet weak var displayView: UIView!
+    
+    @IBOutlet weak var toolbar: UIView!
+    
+    @IBOutlet weak var addPinButton: UIButton!
+    
+    
+    
+    @IBOutlet weak var addCommentButton: UIButton!
+    
+    @IBOutlet weak var addPictureButton: UIButton!
+    
+    @IBOutlet weak var friendsButton: UIButton!
+    
+    @IBAction func friendsButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "friendsSegue", sender: nil)
+    }
+    
+    @IBOutlet weak var settingsButton: UIButton!
+    
+    
     
     @IBOutlet weak var testButton: UIButton!
     
@@ -36,23 +65,33 @@ class MapViewController: UIViewController {
     private var globeVC: WhirlyGlobeViewController? //myViewC
     private var mapVC: MaplyViewController?
     
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        // Get location
+        //        locationManager.delegate = self
+        //        locationManager.requestLocation()
+        //        //
+        toolbar.backgroundColor = UIColor.clear
+        
         testButton.layer.cornerRadius = 5
         testButton.setTitle("Map", for: .normal)
         testButton.setTitleColor(UIColor.white, for: .normal)
         testButton.backgroundColor = UIColor.gray.withAlphaComponent(0.85)
         
         mapVC = MaplyViewController(mapType: .typeFlat)
-        view.addSubview(mapVC!.view)
-        mapVC!.view.frame = view.bounds
+        displayView.addSubview(mapVC!.view)
+        mapVC!.view.frame = displayView.bounds
         addChild(mapVC!)
         mapVC!.view.isHidden = true
         mapVC!.rotateGesture = false
         
         globeVC = WhirlyGlobeViewController()
-        view.addSubview(globeVC!.view)
-        globeVC!.view.frame = view.bounds
+        displayView.addSubview(globeVC!.view)
+        globeVC!.view.frame = displayView.bounds
         addChild(globeVC!)
         globeVC!.view.isHidden = false
         globeVC!.setZoomLimitsMin(0.000002, max: 1.5)
@@ -62,16 +101,16 @@ class MapViewController: UIViewController {
         globeVC!.frameInterval = 3
         
         // set up the data source MAP
-//        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-//            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-//            layer.handleEdges = (globeVC != nil)
-//            layer.coverPoles = (globeVC != nil)
-//            layer.requireElev = false
-//            layer.waitLoad = false
-//            layer.drawPriority = 0
-//            layer.singleLevelLoading = false
-//            mapVC!.add(layer)
-//        }
+        //        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
+        //            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
+        //            layer.handleEdges = (globeVC != nil)
+        //            layer.coverPoles = (globeVC != nil)
+        //            layer.requireElev = false
+        //            layer.waitLoad = false
+        //            layer.drawPriority = 0
+        //            layer.singleLevelLoading = false
+        //            mapVC!.add(layer)
+        //        }
         
         
         //GLOBE
@@ -141,15 +180,53 @@ class MapViewController: UIViewController {
          }
          */
         
+        //Testing Markers
+        let mark = UIImage(named: "Mark")
+        let markMarker = MaplyScreenMarker()
+        markMarker.image = mark
+        markMarker.loc = MaplyCoordinateMakeWithDegrees(-122.4192, 37.7793)
+        markMarker.size = CGSize(width: 40, height: 40)
+        //
+        
         globeVC!.height = 0.5
         globeVC!.keepNorthUp = true
         globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
+        globeVC!.addScreenMarkers([markMarker], desc: nil)
         
         mapVC!.height = 1
         mapVC!.viewWrap = true
         mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
+        mapVC!.addScreenMarkers([markMarker], desc: nil)
         
-        view.bringSubviewToFront(testButton)
+        displayView.bringSubviewToFront(testButton)
+        view.bringSubviewToFront(toolbar)
+        
+        globeVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
+        mapVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
     }
     
+    func getSimulationPoint() -> MaplyLocationTrackerSimulationPoint {
+        return MaplyLocationTrackerSimulationPoint(lonDeg: longitude, latDeg: latitude, headingDeg: 180.0)
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didChange status: CLAuthorizationStatus) {
+        
+    }
+    
+    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    //        if let location = locations.first {
+    //            print("Found user's location: \(location)")
+    //        }
+    //    }
+    //
+    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    //        print("Failed to find the user's location: \(error.localizedDescription)")
+    //    }
+    
 }
+
+// globeVC!.stopLocationTracking()
