@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA8142251B6CD0062D762 /* FirebaseController.swift */; };
+		747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA81A2252636F0062D762 /* OtherExtensions.swift */; };
 		7497F00E224A625000824123 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00D224A625000824123 /* StartViewController.swift */; };
 		7497F010224A626C00824123 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00F224A626C00824123 /* SignInViewController.swift */; };
 		7497F012224A628000824123 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F011224A628000824123 /* SignUpViewController.swift */; };
@@ -52,6 +53,7 @@
 /* Begin PBXFileReference section */
 		338698D1B467768FEDA81DE0 /* Pods-TravelTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTracker.debug.xcconfig"; path = "Target Support Files/Pods-TravelTracker/Pods-TravelTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		747FA8142251B6CD0062D762 /* FirebaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
+		747FA81A2252636F0062D762 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
 		7497F00D224A625000824123 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		7497F00F224A626C00824123 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		7497F011224A628000824123 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +105,7 @@
 				74E485B62249119100788691 /* Main.storyboard */,
 				74E485BB2249119300788691 /* LaunchScreen.storyboard */,
 				7497F024224A68B400824123 /* TabBarAnimationExtension.swift */,
+				747FA81A2252636F0062D762 /* OtherExtensions.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -353,6 +356,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */,
 				747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */,
 				7497F010224A626C00824123 /* SignInViewController.swift in Sources */,
 				7497F017224A666600824123 /* RequestsViewController.swift in Sources */,

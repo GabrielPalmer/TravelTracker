@@ -18,6 +18,12 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        signInButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
+        signInButton.isEnabled = false
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -33,6 +39,16 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         }
         
         return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+            if let text = passwordTextField.text {
+              signInButton.isEnabled = text.count >= 5
+            }
+        
+        let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
+        return string.rangeOfCharacter(from: invalidCharacters) == nil
     }
     
     @IBAction func signInButtonTapped(_ sender: Any) {

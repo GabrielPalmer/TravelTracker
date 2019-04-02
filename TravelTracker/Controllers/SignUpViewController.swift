@@ -17,6 +17,8 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var confirmTextField: UITextField!
     @IBOutlet weak var createButton: UIButton!
     
+    var validTextFields: [Bool] = [false, false, false, false]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,6 +26,9 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         userNameTextField.delegate = self
         passwordTextField.delegate = self
         confirmTextField.delegate = self
+        
+        createButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
+        createButton.isEnabled = false
         
     }
     
@@ -48,7 +53,54 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             confirmTextField.resignFirstResponder()
         }
         
+        print(validTextFields)
+        
         return true
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        switch textField {
+        case nameTextField:
+            if let text = nameTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                validTextFields[0] = true
+            } else {
+                validTextFields[0] = false
+            }
+            
+        case userNameTextField:
+            if let text = userNameTextField.text, text.count >= 5 {
+                validTextFields[1] = true
+            } else {
+                validTextFields[1] = false
+            }
+            
+        case passwordTextField:
+            if let text = passwordTextField.text, text.count >= 5 {
+                validTextFields[2] = true
+            } else {
+                validTextFields[2] = false
+            }
+            
+        case confirmTextField:
+            if let text = confirmTextField.text, text.count >= 5 {
+                validTextFields[3] = true
+            } else {
+                validTextFields[3] = false
+            }
+        default:
+            print("textFieldDidEndEditing switch statment does not include this text field")
+        }
+        
+        createButton.isEnabled = !validTextFields.contains(false)
+        
+        if textField == nameTextField {
+            let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ").inverted
+            return string.rangeOfCharacter(from: invalidCharacters) == nil
+        } else {
+            let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
+            return string.rangeOfCharacter(from: invalidCharacters) == nil
+        }
     }
     
     @IBAction func createButtonTapped(_ sender: Any) {
