@@ -10,7 +10,7 @@ import UIKit
 import WhirlyGlobeMaplyComponent
 import CoreLocation
 
-class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
+class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate {
     
     //    // get location
     //    let locationManager = CLLocationManager()
@@ -22,21 +22,18 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
     
     @IBOutlet weak var displayView: UIView!
     
+    private var globeVC: WhirlyGlobeViewController? //myViewC
+    private var mapVC: MaplyViewController?
+    
     @IBOutlet weak var toolbar: UIView!
     
     @IBOutlet weak var addPinButton: UIButton!
-    
-    
     
     @IBOutlet weak var addCommentButton: UIButton!
     
     @IBOutlet weak var addPictureButton: UIButton!
     
     @IBOutlet weak var friendsButton: UIButton!
-    
-    @IBAction func friendsButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "friendsSegue", sender: nil)
-    }
     
     @IBOutlet weak var settingsButton: UIButton!
     
@@ -62,9 +59,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
         }
     }
     
-    private var globeVC: WhirlyGlobeViewController? //myViewC
-    private var mapVC: MaplyViewController?
-    
     override var prefersStatusBarHidden: Bool {
         return true
     }
@@ -88,6 +82,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
         addChild(mapVC!)
         mapVC!.view.isHidden = true
         mapVC!.rotateGesture = false
+        mapVC!.delegate = self
         
         globeVC = WhirlyGlobeViewController()
         displayView.addSubview(globeVC!.view)
@@ -99,6 +94,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
         // we want a black background for a globe, a white background for a map.
         globeVC!.clearColor = (globeVC != nil) ? UIColor.black : UIColor.white
         globeVC!.frameInterval = 3
+        globeVC!.delegate = self
         
         // set up the data source MAP
         //        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
@@ -181,32 +177,78 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
          */
         
         //Testing Markers
-        let mark = UIImage(named: "Mark")
-        let markMarker = MaplyScreenMarker()
-        markMarker.image = mark
-        markMarker.loc = MaplyCoordinateMakeWithDegrees(-122.4192, 37.7793)
-        markMarker.size = CGSize(width: 40, height: 40)
+        /* Mark Zuckerburg
+         let mark = UIImage(named: "Mark")
+         let markMarker = MaplyScreenMarker()
+         markMarker.image = mark
+         markMarker.loc = MaplyCoordinateMakeWithDegrees(-122.4192, 37.7793)
+         markMarker.size = CGSize(width: 40, height: 40)
+         */
+        let redPin = UIImage(named: "Red-Pin")
+        let redPinMarker = MaplyScreenMarker()
+        redPinMarker.image = redPin
+        redPinMarker.loc = MaplyCoordinateMakeWithDegrees(-111.885743, 40.419774)
+        redPinMarker.size = CGSize(width: 17.9, height: 36.4)
+        
+        
         //
         
         globeVC!.height = 0.5
         globeVC!.keepNorthUp = true
         globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        globeVC!.addScreenMarkers([markMarker], desc: nil)
+        globeVC!.addScreenMarkers([redPinMarker], desc: nil)
+        //globeVC!.addScreenMarkers([markMarker], desc: nil)
         
         mapVC!.height = 1
         mapVC!.viewWrap = true
         mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        mapVC!.addScreenMarkers([markMarker], desc: nil)
+        mapVC!.addScreenMarkers([redPinMarker], desc: nil)
+        //mapVC!.addScreenMarkers([markMarker], desc: nil)
         
         displayView.bringSubviewToFront(testButton)
         view.bringSubviewToFront(toolbar)
         
-        globeVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
-        mapVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
     }
     
-    func getSimulationPoint() -> MaplyLocationTrackerSimulationPoint {
-        return MaplyLocationTrackerSimulationPoint(lonDeg: longitude, latDeg: latitude, headingDeg: 180.0)
+    //    func getSimulationPoint() -> MaplyLocationTrackerSimulationPoint {
+    //        return MaplyLocationTrackerSimulationPoint(lonDeg: longitude, latDeg: latitude, headingDeg: 180.0)
+    //    }
+    
+    private func handleSelection(selectedObject: NSObject) {
+        if let selectedObject = selectedObject as? MaplyVectorObject {
+            let loc = selectedObject.centroid()
+            addAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
+        } else if let selectedObject = selectedObject as? MaplyScreenMarker {
+            addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
+        }
+    }
+    
+    func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
+        handleSelection(selectedObject: selectedObj)
+    }
+    
+    func maplyViewController(_ viewC: MaplyViewController, didSelect selectedObj: NSObject) {
+        handleSelection(selectedObject: selectedObj)
+    }
+    
+    private func addAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
+        globeVC!.clearAnnotations()
+        
+        let a = MaplyAnnotation()
+        a.title = title
+        a.subTitle = subtitle
+        
+        globeVC!.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
+    }
+    
+    func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
+        let subtitle = String(format: "(%.2fN, %.2fE)", coord.y*57.296, coord.x*57.296) as String
+        addAnnotationWithTitle(title: "Tap!", subtitle: subtitle, loc: coord)
+    }
+    
+    func maplyViewController(_ viewC: MaplyViewController, didTapAt coord: MaplyCoordinate) {
+        let subtitle = String(format: "(%.2fN, %.2fE)", coord.y*57.296, coord.x*57.296) as String
+        addAnnotationWithTitle(title: "Tap!", subtitle: subtitle, loc: coord)
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -215,6 +257,11 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didChange status: CLAuthorizationStatus) {
         
+    }
+    
+    @IBAction func addPinButtonTapped(_ sender: Any) {
+        //        globeVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
+        //        mapVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
     }
     
     //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {

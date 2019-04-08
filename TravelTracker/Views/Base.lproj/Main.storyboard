@@ -259,6 +259,9 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
                                                 <rect key="frame" x="0.0" y="0.0" width="42.5" height="34"/>
                                                 <state key="normal" title="Pin"/>
+                                                <connections>
+                                                    <action selector="addPinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="psS-4p-1uy"/>
+                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uk-FV-LoX">
                                                 <rect key="frame" x="42.5" y="0.0" width="94.5" height="34"/>
@@ -271,9 +274,6 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
                                                 <rect key="frame" x="206.5" y="0.0" width="72" height="34"/>
                                                 <state key="normal" title="Friends"/>
-                                                <connections>
-                                                    <action selector="friendsButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="zdx-a6-U7F"/>
-                                                </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
                                                 <rect key="frame" x="278.5" y="0.0" width="80.5" height="34"/>
@@ -541,6 +541,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="F6t-nI-ra9"/>
+        <segue reference="cEY-Uc-4Vy"/>
     </inferredMetricsTieBreakers>
 </document>
