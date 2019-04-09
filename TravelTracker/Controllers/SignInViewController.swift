@@ -7,16 +7,22 @@
 //
 
 import UIKit
-import FirebaseCore
 
 class SignInViewController: UITableViewController, UITextFieldDelegate {
 
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        userNameTextField.delegate = self
+        passwordTextField.delegate = self
+        
+        signInButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
+        signInButton.isEnabled = false
         
     }
     
@@ -35,8 +41,20 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+            if let text = passwordTextField.text {
+              signInButton.isEnabled = text.count >= 5
+            }
+        
+        let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
+        return string.rangeOfCharacter(from: invalidCharacters) == nil
+    }
+    
     @IBAction func signInButtonTapped(_ sender: Any) {
+        
         performSegue(withIdentifier: "fromSignIn", sender: nil)
+        
     }
     
 }

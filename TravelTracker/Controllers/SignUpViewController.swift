@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseCore
 
 class SignUpViewController: UITableViewController, UITextFieldDelegate {
 
@@ -16,6 +15,9 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var confirmTextField: UITextField!
     @IBOutlet weak var createButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
+    
+    var validTextFields: [Bool] = [false, false, false, false]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,10 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         userNameTextField.delegate = self
         passwordTextField.delegate = self
         confirmTextField.delegate = self
+        
+        createButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
+        createButton.isEnabled = false
+        errorLabel.isHidden = true
         
     }
     
@@ -38,11 +44,29 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
+        print("textFieldShouldReturn called")
+        
         if nameTextField.isFirstResponder {
             userNameTextField.becomeFirstResponder()
         } else if userNameTextField.isFirstResponder {
+            
+            if let text = userNameTextField.text, text.count < 5 {
+                userNameTextField.resignFirstResponder()
+                errorLabel.text = "Username must be at least five characters"
+                errorLabel.isHidden = false
+                return true
+            }
+            
             passwordTextField.becomeFirstResponder()
         } else if passwordTextField.isFirstResponder {
+            
+            if let text = passwordTextField.text, text.count < 5 {
+                passwordTextField.resignFirstResponder()
+                errorLabel.text = "Password must be at least five characters"
+                errorLabel.isHidden = false
+                return true
+            }
+            
             confirmTextField.becomeFirstResponder()
         } else if confirmTextField.isFirstResponder {
             confirmTextField.resignFirstResponder()
@@ -51,8 +75,80 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         return true
     }
     
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        switch textField {
+        case nameTextField:
+            if let text = nameTextField.text, !text.trimmingCharacters(in: .whitespaces).isEmpty {
+                validTextFields[0] = true
+            } else {
+                validTextFields[0] = false
+            }
+            
+        case userNameTextField:
+            if let text = userNameTextField.text, text.count >= 5 {
+                validTextFields[1] = true
+            } else {
+                validTextFields[1] = false
+            }
+            
+        case passwordTextField:
+            if let text = passwordTextField.text, text.count >= 5 {
+                validTextFields[2] = true
+            } else {
+                validTextFields[2] = false
+            }
+            
+        case confirmTextField:
+            if let text = confirmTextField.text, text.count >= 5 {
+                validTextFields[3] = true
+            } else {
+                validTextFields[3] = false
+            }
+        default:
+            print("text field switch statment does not include this text field")
+        }
+        
+        createButton.isEnabled = !validTextFields.contains(false)
+        
+        if textField == nameTextField {
+            let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ").inverted
+            return string.rangeOfCharacter(from: invalidCharacters) == nil
+        } else {
+            let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
+            return string.rangeOfCharacter(from: invalidCharacters) == nil
+        }
+    }
+    
     @IBAction func createButtonTapped(_ sender: Any) {
-        performSegue(withIdentifier: "fromUserCreator", sender: nil)
+        guard let name = nameTextField.text, name.trimmingCharacters(in: .whitespaces).count > 0 else {
+            createButton.isEnabled = false
+            errorLabel.text = "Name is invalid"
+            errorLabel.isHidden = false
+            return
+        }
+        
+        guard let username = userNameTextField.text, username.trimmingCharacters(in: .whitespaces).count >= 5 else {
+            createButton.isEnabled = false
+            return
+        }
+        
+        guard let password = passwordTextField.text, password.trimmingCharacters(in: .whitespaces).count >= 5 else {
+            createButton.isEnabled = false
+            return
+        }
+        
+        guard let confirmText = confirmTextField.text, password == confirmText else {
+            createButton.isEnabled = false
+            errorLabel.text = "Passwords do not match"
+            errorLabel.isHidden = false
+            return
+        }
+        
+        FirebaseController.createUser(name: name, username: username, password: password) { (user) in
+            
+        }
+        
     }
     
 }
