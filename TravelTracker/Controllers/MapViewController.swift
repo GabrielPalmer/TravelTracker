@@ -17,6 +17,8 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     //    //
     var globeIsVisible: Bool = true
     
+    var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
+    
     var latitude: Float = 40.419774
     var longitude: Float = -111.885743
     
@@ -214,24 +216,35 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     //        return MaplyLocationTrackerSimulationPoint(lonDeg: longitude, latDeg: latitude, headingDeg: 180.0)
     //    }
     
-    private func handleSelection(selectedObject: NSObject) {
-        if let selectedObject = selectedObject as? MaplyVectorObject {
+    func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
+        if let selectedObject = selectedObj as? MaplyVectorObject {
             let loc = selectedObject.centroid()
-            addAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
-        } else if let selectedObject = selectedObject as? MaplyScreenMarker {
-            addAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
+            addGlobeAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
+        } else if let selectedObject = selectedObj as? MaplyScreenMarker {
+            addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
     }
     
-    func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
-        handleSelection(selectedObject: selectedObj)
-    }
-    
     func maplyViewController(_ viewC: MaplyViewController, didSelect selectedObj: NSObject) {
-        handleSelection(selectedObject: selectedObj)
+        if let selectedObject = selectedObj as? MaplyVectorObject {
+            let loc = selectedObject.centroid()
+            addGlobeAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
+        } else if let selectedObject = selectedObj as? MaplyScreenMarker {
+            addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
+        }
     }
     
-    private func addAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
+    private func addMapAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
+        mapVC!.clearAnnotations()
+        
+        let a = MaplyAnnotation()
+        a.title = title
+        a.subTitle = subtitle
+        
+        mapVC!.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
+    }
+    
+    private func addGlobeAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
         globeVC!.clearAnnotations()
         
         let a = MaplyAnnotation()
@@ -242,13 +255,17 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
-        let subtitle = String(format: "(%.2fN, %.2fE)", coord.y*57.296, coord.x*57.296) as String
-        addAnnotationWithTitle(title: "Tap!", subtitle: subtitle, loc: coord)
+        let title = "Add Pin Here?"
+        let subtitle = ""
+        addGlobeAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
+        lastTappedCoordinate = coord
     }
     
     func maplyViewController(_ viewC: MaplyViewController, didTapAt coord: MaplyCoordinate) {
-        let subtitle = String(format: "(%.2fN, %.2fE)", coord.y*57.296, coord.x*57.296) as String
-        addAnnotationWithTitle(title: "Tap!", subtitle: subtitle, loc: coord)
+        let title = "Add Pin Here?"
+        let subtitle = ""
+        addMapAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
+        lastTappedCoordinate = coord
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -260,8 +277,19 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     @IBAction func addPinButtonTapped(_ sender: Any) {
-        //        globeVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
-        //        mapVC!.startLocationTracking(with: self, useHeading: true, useCourse: true, simulate: true)
+        let redPin = UIImage(named: "Red-Pin")
+        let redPinMarker = MaplyScreenMarker()
+        redPinMarker.image = redPin
+        redPinMarker.loc = lastTappedCoordinate
+        redPinMarker.size = CGSize(width: 17.9, height: 36.4)
+        
+        if globeIsVisible {
+            globeVC!.clearAnnotations()
+            globeVC!.addScreenMarkers([redPinMarker], desc: nil)
+        } else if !globeIsVisible {
+            mapVC!.clearAnnotations()
+            mapVC!.addScreenMarkers([redPinMarker], desc: nil)
+        }
     }
     
     //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
