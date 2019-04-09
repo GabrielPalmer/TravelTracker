@@ -70,7 +70,7 @@
             </objects>
             <point key="canvasLocation" x="940" y="26.53673163418291"/>
         </scene>
-        <!--Sign Up View Controller-->
+        <!--Sign Up-->
         <scene sceneID="SR6-h8-jFL">
             <objects>
                 <tableViewController id="cLL-qk-vHs" customClass="SignUpViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -197,15 +197,15 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="101" id="pYT-0M-fmd">
-                                        <rect key="frame" x="0.0" y="404" width="375" height="101"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="134" id="pYT-0M-fmd">
+                                        <rect key="frame" x="0.0" y="404" width="375" height="134"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pYT-0M-fmd" id="fZv-Cn-khK">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="101"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hc8-ng-FCo">
-                                                    <rect key="frame" x="41" y="36" width="293" height="60"/>
+                                                    <rect key="frame" x="41" y="36" width="293" height="65.5"/>
                                                     <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                                     <state key="normal" title="Create Account"/>
@@ -213,11 +213,20 @@
                                                         <action selector="createButtonTapped:" destination="cLL-qk-vHs" eventType="touchUpInside" id="G2i-tY-gez"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vWR-j8-mKy">
+                                                    <rect key="frame" x="152" y="107.5" width="71" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="0.15449517190000001" blue="0.078773848630000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="vWR-j8-mKy" secondAttribute="bottom" constant="6" id="Hvf-HL-qLa"/>
                                                 <constraint firstItem="Hc8-ng-FCo" firstAttribute="leading" secondItem="fZv-Cn-khK" secondAttribute="leadingMargin" constant="25" id="KFG-Xe-2xL"/>
+                                                <constraint firstItem="vWR-j8-mKy" firstAttribute="top" secondItem="Hc8-ng-FCo" secondAttribute="bottom" constant="6" id="ZG6-Qq-NvE"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Hc8-ng-FCo" secondAttribute="trailing" constant="25" id="aje-4s-mcx"/>
                                                 <constraint firstItem="Hc8-ng-FCo" firstAttribute="top" secondItem="fZv-Cn-khK" secondAttribute="topMargin" constant="25" id="ce3-pf-7kx"/>
+                                                <constraint firstItem="vWR-j8-mKy" firstAttribute="centerX" secondItem="fZv-Cn-khK" secondAttribute="centerX" id="sCa-MA-xhf"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -229,9 +238,11 @@
                             <outlet property="delegate" destination="cLL-qk-vHs" id="Ovz-qH-a8C"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Sign Up" id="iDT-JR-CPf"/>
                     <connections>
                         <outlet property="confirmTextField" destination="kJi-MY-Jmz" id="bas-Se-UWy"/>
                         <outlet property="createButton" destination="Hc8-ng-FCo" id="AFb-yU-PYd"/>
+                        <outlet property="errorLabel" destination="vWR-j8-mKy" id="WGF-y4-0Mg"/>
                         <outlet property="nameTextField" destination="ceA-WG-hvm" id="VxL-Xj-Py0"/>
                         <outlet property="passwordTextField" destination="gpK-Zx-o8U" id="Hwu-du-JEE"/>
                         <outlet property="userNameTextField" destination="1hG-dZ-9id" id="bJ4-X9-i9v"/>
@@ -240,7 +251,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Xw7-3e-32l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1884" y="-320"/>
+            <point key="canvasLocation" x="1884" y="-320.68965517241384"/>
         </scene>
         <!--Map View Controller-->
         <scene sceneID="enc-k1-2WF">
@@ -364,7 +375,7 @@
             </objects>
             <point key="canvasLocation" x="0.80000000000000004" y="26.53673163418291"/>
         </scene>
-        <!--Sign In View Controller-->
+        <!--Sign In-->
         <scene sceneID="vXJ-4k-Iun">
             <objects>
                 <tableViewController id="szu-94-zvT" customClass="SignInViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -433,15 +444,15 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="101" id="Gw0-mL-uCe">
-                                        <rect key="frame" x="0.0" y="202" width="375" height="101"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" rowHeight="134" id="Gw0-mL-uCe">
+                                        <rect key="frame" x="0.0" y="202" width="375" height="134"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Gw0-mL-uCe" id="3tW-qG-ciA">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="101"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="134"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eCS-d3-DOv">
-                                                    <rect key="frame" x="41" y="36" width="293" height="60"/>
+                                                    <rect key="frame" x="41" y="36" width="293" height="65.5"/>
                                                     <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="40"/>
                                                     <state key="normal" title="Sign In"/>
@@ -449,11 +460,20 @@
                                                         <action selector="signInButtonTapped:" destination="szu-94-zvT" eventType="touchUpInside" id="J58-fJ-35R"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error text" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ylk-DS-n8R">
+                                                    <rect key="frame" x="152" y="107.5" width="71" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="1" green="0.15449517190000001" blue="0.078773848630000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="eCS-d3-DOv" firstAttribute="leading" secondItem="3tW-qG-ciA" secondAttribute="leadingMargin" constant="25" id="FA3-fd-EIe"/>
                                                 <constraint firstItem="eCS-d3-DOv" firstAttribute="top" secondItem="3tW-qG-ciA" secondAttribute="topMargin" constant="25" id="M1h-K8-SOa"/>
+                                                <constraint firstAttribute="bottom" secondItem="Ylk-DS-n8R" secondAttribute="bottom" constant="6" id="Oij-aF-Nua"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="eCS-d3-DOv" secondAttribute="trailing" constant="25" id="XmM-HF-t37"/>
+                                                <constraint firstItem="Ylk-DS-n8R" firstAttribute="top" secondItem="eCS-d3-DOv" secondAttribute="bottom" constant="6" id="erZ-5O-uMs"/>
+                                                <constraint firstItem="Ylk-DS-n8R" firstAttribute="centerX" secondItem="3tW-qG-ciA" secondAttribute="centerX" id="sxC-1Y-XrT"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -465,7 +485,9 @@
                             <outlet property="delegate" destination="szu-94-zvT" id="MKM-Dr-I1D"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" title="Sign In" id="yuV-85-4Qr"/>
                     <connections>
+                        <outlet property="errorLabel" destination="Ylk-DS-n8R" id="3cp-ae-haG"/>
                         <outlet property="passwordTextField" destination="Qqx-FB-btP" id="HuC-pa-6VF"/>
                         <outlet property="signInButton" destination="eCS-d3-DOv" id="Xp1-Sb-DLN"/>
                         <outlet property="userNameTextField" destination="h2L-0E-CYC" id="CJj-7M-RAp"/>

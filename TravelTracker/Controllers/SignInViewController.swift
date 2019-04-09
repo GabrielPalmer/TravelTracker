@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import FirebaseCore
 
 class SignInViewController: UITableViewController, UITextFieldDelegate {
 
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signInButton: UIButton!
+    @IBOutlet weak var errorLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,7 +52,9 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func signInButtonTapped(_ sender: Any) {
+        
         performSegue(withIdentifier: "fromSignIn", sender: nil)
+        
     }
     
 }
