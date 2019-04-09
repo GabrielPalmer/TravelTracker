@@ -10,6 +10,7 @@ import Foundation
 
 class Marker {
     
+    let id: String
     let date: Date
     let xCoord: Float
     let yCoord: Float
@@ -18,6 +19,7 @@ class Marker {
     
     init(xCoord: Float, yCoord: Float) {
         date = Date()
+        id = UUID().uuidString
         self.xCoord = xCoord
         self.yCoord = yCoord
     }
