@@ -261,28 +261,91 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3C-tg-auO">
-                                <rect key="frame" x="8" y="28" width="72" height="40"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sud-dN-29S">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="w9k-o3-nvr">
+                                        <rect key="frame" x="8" y="8" width="359" height="34"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
+                                                <rect key="frame" x="0.0" y="0.0" width="42.5" height="34"/>
+                                                <state key="normal" title="Pin"/>
+                                                <connections>
+                                                    <action selector="addPinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="psS-4p-1uy"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Uk-FV-LoX">
+                                                <rect key="frame" x="42.5" y="0.0" width="94.5" height="34"/>
+                                                <state key="normal" title="Comment"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pWy-61-J4N">
+                                                <rect key="frame" x="137" y="0.0" width="69.5" height="34"/>
+                                                <state key="normal" title="Picture"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
+                                                <rect key="frame" x="206.5" y="0.0" width="72" height="34"/>
+                                                <state key="normal" title="Friends"/>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
+                                                <rect key="frame" x="278.5" y="0.0" width="80.5" height="34"/>
+                                                <state key="normal" title="Settings"/>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="FJC-zu-RPO"/>
-                                    <constraint firstAttribute="width" constant="72" id="YbG-fp-jgq"/>
+                                    <constraint firstItem="w9k-o3-nvr" firstAttribute="top" secondItem="sud-dN-29S" secondAttribute="top" constant="8" id="AWV-6e-6Ng"/>
+                                    <constraint firstItem="w9k-o3-nvr" firstAttribute="leading" secondItem="sud-dN-29S" secondAttribute="leading" constant="8" id="LK4-rv-LNB"/>
+                                    <constraint firstAttribute="bottom" secondItem="w9k-o3-nvr" secondAttribute="bottom" constant="8" id="Rw3-d8-wOi"/>
+                                    <constraint firstAttribute="trailing" secondItem="w9k-o3-nvr" secondAttribute="trailing" constant="8" id="gYX-6h-MVa"/>
+                                    <constraint firstAttribute="height" constant="50" id="lh6-HL-8cC"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                <state key="normal" title="Switch"/>
-                                <connections>
-                                    <action selector="testButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
-                                </connections>
-                            </button>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-8W-A8l">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="617"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3C-tg-auO">
+                                        <rect key="frame" x="16" y="16" width="72" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="FJC-zu-RPO"/>
+                                            <constraint firstAttribute="width" constant="72" id="YbG-fp-jgq"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                        <state key="normal" title="Switch"/>
+                                        <connections>
+                                            <action selector="testButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="e3C-tg-auO" firstAttribute="leading" secondItem="yA8-8W-A8l" secondAttribute="leading" constant="16" id="9XX-5N-dsO"/>
+                                    <constraint firstItem="e3C-tg-auO" firstAttribute="top" secondItem="yA8-8W-A8l" secondAttribute="top" constant="16" id="G3m-cx-nFA"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="e3C-tg-auO" firstAttribute="top" secondItem="NhB-Wf-Cxi" secondAttribute="top" constant="8" id="szb-7K-Yzh"/>
-                            <constraint firstItem="e3C-tg-auO" firstAttribute="leading" secondItem="NhB-Wf-Cxi" secondAttribute="leading" constant="8" id="xpu-H5-jXc"/>
+                            <constraint firstItem="sud-dN-29S" firstAttribute="trailing" secondItem="NhB-Wf-Cxi" secondAttribute="trailing" id="3r8-8C-6qe"/>
+                            <constraint firstItem="sud-dN-29S" firstAttribute="leading" secondItem="NhB-Wf-Cxi" secondAttribute="leading" id="6uz-oN-cey"/>
+                            <constraint firstItem="sud-dN-29S" firstAttribute="top" secondItem="yA8-8W-A8l" secondAttribute="bottom" id="7fq-oB-5Q7"/>
+                            <constraint firstItem="yA8-8W-A8l" firstAttribute="top" secondItem="wcM-AF-Woi" secondAttribute="top" id="DdP-qL-eRU"/>
+                            <constraint firstItem="yA8-8W-A8l" firstAttribute="trailing" secondItem="NhB-Wf-Cxi" secondAttribute="trailing" id="HUT-RI-dI1"/>
+                            <constraint firstItem="yA8-8W-A8l" firstAttribute="leading" secondItem="NhB-Wf-Cxi" secondAttribute="leading" id="j1t-bt-p4I"/>
+                            <constraint firstItem="sud-dN-29S" firstAttribute="bottom" secondItem="NhB-Wf-Cxi" secondAttribute="bottom" id="vaw-3K-lcG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NhB-Wf-Cxi"/>
                     </view>
                     <connections>
+                        <outlet property="addCommentButton" destination="3Uk-FV-LoX" id="zbi-4j-YQW"/>
+                        <outlet property="addPictureButton" destination="pWy-61-J4N" id="ajI-xz-gbI"/>
+                        <outlet property="addPinButton" destination="EVl-iG-uH9" id="gVU-vn-H1o"/>
+                        <outlet property="displayView" destination="yA8-8W-A8l" id="6ox-7d-xGt"/>
+                        <outlet property="friendsButton" destination="0jY-69-XSg" id="Tqi-7A-m6S"/>
+                        <outlet property="settingsButton" destination="gl1-ao-A4L" id="89r-Op-nGI"/>
                         <outlet property="testButton" destination="e3C-tg-auO" id="hEg-ti-6S2"/>
+                        <outlet property="toolbar" destination="sud-dN-29S" id="lyR-YU-utz"/>
                         <segue destination="HY6-kv-FhX" kind="presentation" identifier="friendsSegue" id="44h-5e-Jde"/>
                     </connections>
                 </viewController>
