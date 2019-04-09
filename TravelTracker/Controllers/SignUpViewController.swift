@@ -145,6 +145,13 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
+        guard username != password else {
+            createButton.isEnabled = false
+            errorLabel.text = "Username and password cannot be the same"
+            errorLabel.isHidden = false
+            return
+        }
+        
         FirebaseController.createUser(name: name, username: username, password: password) { (user) in
             
         }

@@ -12,6 +12,7 @@ class User {
     let name: String
     let username: String
     let password: String
+    var markers: [Marker] = []
     
     init(name: String, username: String, password: String) {
         self.name = name
