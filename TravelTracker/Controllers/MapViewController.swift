@@ -12,9 +12,8 @@ import CoreLocation
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate {
     
-    //    // get location
-    //    let locationManager = CLLocationManager()
-    //    //
+    var markerArray: [Marker] = []
+    var markerIsSelected: Bool = false
     var globeIsVisible: Bool = true
     
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
@@ -286,9 +285,11 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         if globeIsVisible {
             globeVC!.clearAnnotations()
             globeVC!.addScreenMarkers([redPinMarker], desc: nil)
+            markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
         } else if !globeIsVisible {
             mapVC!.clearAnnotations()
             mapVC!.addScreenMarkers([redPinMarker], desc: nil)
+            markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
         }
     }
     
