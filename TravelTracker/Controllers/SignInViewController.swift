@@ -23,6 +23,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         
         signInButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
         signInButton.isEnabled = false
+        errorLabel.isHidden = true
         
     }
     
