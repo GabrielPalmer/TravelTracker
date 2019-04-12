@@ -8,19 +8,16 @@
 
 import Foundation
 
-class Marker {
+class MapMarker {
     
+    let info: MarkerInfo
+    var screenMarker: MaplyScreenMarker
+    var component: MaplyComponentObject?
     let id: String
-    let date: Date
-    let xCoord: Float
-    let yCoord: Float
-    var image: UIImage?
-    var comment: String?
     
-    init(xCoord: Float, yCoord: Float) {
-        date = Date()
+    init(info: MarkerInfo) {
+        self.info = info
+        self.screenMarker = MaplyScreenMarker()
         id = UUID().uuidString
-        self.xCoord = xCoord
-        self.yCoord = yCoord
     }
 }
