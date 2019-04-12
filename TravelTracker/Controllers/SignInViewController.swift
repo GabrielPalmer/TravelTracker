@@ -92,7 +92,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         }
         
         FirebaseController.signIn(username: username, password: password) { (user) in
-            <#code#>
+            
         }
         
     }

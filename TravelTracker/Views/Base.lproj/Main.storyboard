@@ -344,25 +344,7 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yA8-8W-A8l">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="617"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e3C-tg-auO">
-                                        <rect key="frame" x="16" y="16" width="72" height="40"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="40" id="FJC-zu-RPO"/>
-                                            <constraint firstAttribute="width" constant="72" id="YbG-fp-jgq"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
-                                        <state key="normal" title="Switch"/>
-                                        <connections>
-                                            <action selector="mapTypeButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstItem="e3C-tg-auO" firstAttribute="leading" secondItem="yA8-8W-A8l" secondAttribute="leading" constant="16" id="9XX-5N-dsO"/>
-                                    <constraint firstItem="e3C-tg-auO" firstAttribute="top" secondItem="yA8-8W-A8l" secondAttribute="top" constant="16" id="G3m-cx-nFA"/>
-                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -385,7 +367,6 @@
                         <outlet property="defaultToolbar" destination="ov9-dA-Gi8" id="6Se-yU-Ag4"/>
                         <outlet property="displayView" destination="yA8-8W-A8l" id="6ox-7d-xGt"/>
                         <outlet property="friendsButton" destination="0jY-69-XSg" id="Tqi-7A-m6S"/>
-                        <outlet property="mapTypeButton" destination="e3C-tg-auO" id="hEg-ti-6S2"/>
                         <outlet property="pinEditorToolbar" destination="8zp-YK-iPZ" id="0CS-6B-6Td"/>
                         <outlet property="settingsButton" destination="gl1-ao-A4L" id="89r-Op-nGI"/>
                         <outlet property="toolbar" destination="sud-dN-29S" id="lyR-YU-utz"/>

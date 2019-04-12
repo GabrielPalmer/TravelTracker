@@ -13,14 +13,15 @@ import CoreLocation
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate {
     
-    private var globeVC: WhirlyGlobeViewController? //myViewC
-    private var mapVC: MaplyViewController?
+    let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
     
-    var markerArray: [Marker] = []
+    var mapMarkers: [MapMarker] = []
     var globeIsVisible: Bool = true
+    
+    var markerInfo: MarkerInfo = MarkerInfo(xCoord: 0, yCoord: 0)
+    var currentSelectedMarkerIndex: Int?
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
-    var currentMarker: Marker?
-    var markerComponents: [MaplyComponentObject] = []
+    
     var latitude: Float = 40.419774
     var longitude: Float = -111.885743
     
@@ -44,26 +45,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var addAndRemovePinButton: UIButton!
     
-    @IBOutlet weak var mapTypeButton: UIButton!
-    
-    @IBAction func mapTypeButtonTapped(_ sender: Any) {
-        if globeIsVisible {
-            globeIsVisible = !globeIsVisible
-            mapTypeButton.setTitle("Globe", for: .normal)
-            mapTypeButton.setTitleColor(UIColor.white, for: .normal)
-            mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
-            globeVC!.view.isHidden = true
-            mapVC!.view.isHidden = false
-        } else if !globeIsVisible {
-            globeIsVisible = !globeIsVisible
-            mapTypeButton.setTitle("Map", for: .normal)
-            mapTypeButton.setTitleColor(UIColor.white, for: .normal)
-            mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
-            mapVC!.view.isHidden = true
-            globeVC!.view.isHidden = false
-        }
-    }
-    
     override var prefersStatusBarHidden: Bool {
         // Makes it so the ugly top of the iphone xr look pretty
         return true
@@ -77,43 +58,18 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         
         toolbar.backgroundColor = UIColor.clear
         
-        mapTypeButton.layer.cornerRadius = 5
-        mapTypeButton.setTitle("Map", for: .normal)
-        mapTypeButton.setTitleColor(UIColor.white, for: .normal)
-        mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.85)
+        displayView.addSubview(globeVC.view)
+        globeVC.view.frame = displayView.bounds
+        addChild(globeVC)
         
-        mapVC = MaplyViewController(mapType: .typeFlat)
-        displayView.addSubview(mapVC!.view)
-        mapVC!.view.frame = displayView.bounds
-        addChild(mapVC!)
-        mapVC!.view.isHidden = true
-        mapVC!.rotateGesture = false
-        mapVC!.delegate = self
-        
-        globeVC = WhirlyGlobeViewController()
-        displayView.addSubview(globeVC!.view)
-        globeVC!.view.frame = displayView.bounds
-        addChild(globeVC!)
-        globeVC!.view.isHidden = false
-        globeVC!.setZoomLimitsMin(0.000002, max: 1.5)
-        
-        // we want a black background for a globe, a white background for a map.
-        globeVC!.clearColor = (globeVC != nil) ? UIColor.black : UIColor.white
-        globeVC!.frameInterval = 3
-        globeVC!.delegate = self
-        
-        // set up the data source MAP
-        //        if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-        //            let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-        //            layer.handleEdges = (globeVC != nil)
-        //            layer.coverPoles = (globeVC != nil)
-        //            layer.requireElev = false
-        //            layer.waitLoad = false
-        //            layer.drawPriority = 0
-        //            layer.singleLevelLoading = false
-        //            mapVC!.add(layer)
-        //        }
-        
+        globeVC.clearColor = UIColor.black
+        globeVC.setZoomLimitsMin(0.000002, max: 1.5)
+        globeVC.frameInterval = 2
+        globeVC.keepNorthUp = true
+        globeVC.view.isHidden = false
+        globeVC.delegate = self
+        globeVC.height = 0.5
+        globeVC.autoMoveToTap = false
         
         //GLOBE
         // mousebird.github.io/WhirlyGlobe/tutorial/ios/remote_image_layer.html
@@ -140,33 +96,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             }
             tileSource.cacheDir = tilesCacheDir
             globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
-            globeVC!.add(globeLayer)
-        }
-        
-        //MAP
-        let mapLayer: MaplyQuadImageTilesLayer
-        
-        if useLocalTiles {
-            guard let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres") else {
-                print("Can't load local tile set")
-            }
-            mapLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
-        } else {
-            let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
-            let maxZoom = Int32(18)
-            
-            guard let tileSource = MaplyRemoteTileSource(
-                baseURL: "http://tile.stamen.com/terrain/",
-                ext: "png",
-                minZoom: 0,
-                maxZoom: maxZoom) else {
-                    print("Can't create a remote tile source")
-                    return
-            }
-            tileSource.cacheDir = tilesCacheDir
-            mapLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
-            mapVC!.add(mapLayer)
+            globeVC.add(globeLayer)
         }
         
         /*
@@ -182,91 +112,163 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
          }
          */
         
-        globeVC!.height = 0.5
-        globeVC!.keepNorthUp = true
-        globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        
-        mapVC!.height = 1
-        mapVC!.viewWrap = true
-        mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        
-        displayView.bringSubviewToFront(mapTypeButton)
+        globeVC.height = 0.5
+        globeVC.keepNorthUp = true
+        globeVC.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         view.bringSubviewToFront(toolbar)
         
     }
     
-    func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
-        if let selectedObject = selectedObj as? MaplyScreenMarker {
-            addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
+    func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
+        guard let selectedScreenMarker = selectedObj as? MaplyScreenMarker else {
+            print("selected object was not a MaplyScreenMarker")
+            return
         }
-        markerComponents.removeFirst()
+        globeVC.animate(toPosition: coord, time: 0.5)
+        
+        guard let newSelectedMarkerIndex = mapmarkersIndex(for: selectedScreenMarker) else {
+            print("Could not find mapMarkers index for the selected screen marker")
+            return
+        }
+        
+        let mapMarker = mapMarkers[newSelectedMarkerIndex]
+        guard let selectedComponent = mapMarker.component else {
+            print("MapMarker did not have a component")
+            return
+        }
+        
+        // Check if this marker is already selected
+        guard currentSelectedMarkerIndex != newSelectedMarkerIndex else { return }
+        
+        //check if a different marker is currently selected
+        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
+            let currentSelectedMapMarker = mapMarkers[currentSelectedMarkerIndex]
+            
+            let redMarker = MaplyScreenMarker()
+            redMarker.size = CGSize(width: 18, height: 36)
+            redMarker.image = UIImage(named: "Red-Pin")
+            redMarker.loc = currentSelectedMapMarker.screenMarker.loc
+            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
+            
+            globeVC.remove(currentSelectedMapMarker.component!)
+            currentSelectedMapMarker.screenMarker = redMarker
+            currentSelectedMapMarker.component = component
+        }
+        
+        let greenMarker = MaplyScreenMarker()
+        greenMarker.size = CGSize(width: 18, height: 36)
+        greenMarker.image = UIImage(named: "Green-Pin")
+        greenMarker.loc = mapMarker.screenMarker.loc
+        let component = viewC.addScreenMarkers([greenMarker], desc: nil)
+        
+        globeVC.remove(selectedComponent)
+        mapMarker.screenMarker = greenMarker
+        mapMarker.component = component
+        
+        currentSelectedMarkerIndex = newSelectedMarkerIndex
         
         defaultToolbar.isHidden = true
         pinEditorToolbar.isHidden = false
         addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
     }
     
-    func maplyViewController(_ viewC: MaplyViewController, didSelect selectedObj: NSObject) {
-        if let selectedObject = selectedObj as? MaplyScreenMarker {
-            addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
-        }
+    @objc func annotationButtonTapped() {
+        let marker = MapMarker(info: markerInfo)
+        marker.screenMarker.size = CGSize(width: 18, height: 36)
+        marker.screenMarker.image = UIImage(named: "Green-Pin")
+        marker.screenMarker.loc = lastTappedCoordinate
+        marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
+        mapMarkers.append(marker)
+        currentSelectedMarkerIndex = (mapMarkers.count - 1)
+        
+        globeVC.clearAnnotations()
+        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
         defaultToolbar.isHidden = true
         pinEditorToolbar.isHidden = false
-        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
-    }
-    
-    private func addMapAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
-        mapVC!.clearAnnotations()
-        
-        let a = MaplyAnnotation()
-        a.title = title
-        a.subTitle = subtitle
-        mapVC!.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
-    } 
-    
-    private func addGlobeAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
-        globeVC!.clearAnnotations()
-        
-        let a = MaplyAnnotation()
-        a.title = title
-        a.subTitle = subtitle
-        
-        globeVC!.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
-        let title = "Add Pin Here?"
-        let subtitle = ""
-        addGlobeAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
-        lastTappedCoordinate = coord
-        defaultToolbar.isHidden = true
+        globeVC.clearAnnotations()
+        //button annotation
+        let annotation = MaplyAnnotation()
+        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 30))
+        button.setTitle("Add Pin Here?", for: .normal)
+        button.titleLabel!.font = UIFont(name: "Futura", size: 13.657)
+        button.setTitleColor(.gray, for: .normal)
+        button.addTarget(self, action: #selector(annotationButtonTapped), for: .touchUpInside)
+        annotation.contentView = button
+        annotation.contentView.isUserInteractionEnabled = true
+        
+        globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
+        
+        globeVC.animate(toPosition: coord, time: 0.5)
         pinEditorToolbar.isHidden = false
+        defaultToolbar.isHidden = true
+        lastTappedCoordinate = coord
         addAndRemovePinButton.setTitle("Add Pin", for: .normal)
+        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
+            let marker = mapMarkers[currentSelectedMarkerIndex]
+            guard let selectedComponent = marker.component else {
+                print("marker didn't have component")
+                return
+            }
+            let redMarker = MaplyScreenMarker()
+            redMarker.size = CGSize(width: 18, height: 36)
+            redMarker.image = UIImage(named: "Red-Pin")
+            redMarker.loc = marker.screenMarker.loc
+            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
+            
+            globeVC.remove(selectedComponent)
+            marker.component = component
+            marker.screenMarker = redMarker
+            self.currentSelectedMarkerIndex = nil
+        }
     }
     
-    func maplyViewController(_ viewC: MaplyViewController, didTapAt coord: MaplyCoordinate) {
-        let title = "Add Pin Here?"
-        let subtitle = ""
-        addMapAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
-        lastTappedCoordinate = coord
-        defaultToolbar.isHidden = true
-        pinEditorToolbar.isHidden = false
-        addAndRemovePinButton.setTitle("Add Pin", for: .normal)
+    func globeViewControllerDidTapOutside(_ viewC: WhirlyGlobeViewController) {
+        globeVC.clearAnnotations()
+        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
+            let marker = mapMarkers[currentSelectedMarkerIndex]
+            guard let selectedComponent = marker.component else {
+                print("marker didn't have component")
+                return
+            }
+            let redMarker = MaplyScreenMarker()
+            redMarker.size = CGSize(width: 18, height: 36)
+            redMarker.image = UIImage(named: "Red-Pin")
+            redMarker.loc = marker.screenMarker.loc
+            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
+            
+            globeVC.remove(selectedComponent)
+            marker.component = component
+            marker.screenMarker = redMarker
+            self.currentSelectedMarkerIndex = nil
+            pinEditorToolbar.isHidden = false
+            defaultToolbar.isHidden = true
+        }
     }
     
     func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
         if userMotion {
-            globeVC!.clearAnnotations()
+            globeVC.clearAnnotations()
             defaultToolbar.isHidden = false
             pinEditorToolbar.isHidden = true
-        }
-    }
-    
-    func maplyViewControllerDidStartMoving(_ viewC: MaplyViewController, userMotion: Bool) {
-        if userMotion {
-            mapVC!.clearAnnotations()
-            defaultToolbar.isHidden = false
-            pinEditorToolbar.isHidden = true
+            if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
+                let marker = mapMarkers[currentSelectedMarkerIndex]
+                guard let selectedComponent = marker.component else {
+                    print("marker didn't have component")
+                    return
+                }
+                let redMarker = MaplyScreenMarker()
+                redMarker.size = CGSize(width: 18, height: 36)
+                redMarker.image = UIImage(named: "Red-Pin")
+                redMarker.loc = marker.screenMarker.loc
+                let component = globeVC.addScreenMarkers([redMarker], desc: nil)
+                globeVC.remove(selectedComponent)
+                marker.component = component
+                marker.screenMarker = redMarker
+                self.currentSelectedMarkerIndex = nil
+            }
         }
     }
     
@@ -284,31 +286,48 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBAction func addAndRemovePinButtonTapped(_ sender: Any) {
         if addAndRemovePinButton.titleLabel?.text == "Add Pin" {
-            let redPin = UIImage(named: "Red-Pin")
-            let redPinMarker = MaplyScreenMarker()
-            redPinMarker.image = redPin
-            redPinMarker.loc = lastTappedCoordinate
-            redPinMarker.size = CGSize(width: 17.9, height: 36.4)
+            let marker = MapMarker(info: markerInfo)
+            marker.screenMarker.size = CGSize(width: 18, height: 36)
+            marker.screenMarker.image = UIImage(named: "Green-Pin")
+            marker.screenMarker.loc = lastTappedCoordinate
+            marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
+            mapMarkers.append(marker)
+            currentSelectedMarkerIndex = (mapMarkers.count - 1)
             
-            if globeIsVisible {
-                globeVC!.clearAnnotations()
-                let marker = globeVC!.addScreenMarkers([redPinMarker], desc: nil)
-                if let marker = marker {
-                    markerComponents.append(marker)
-                }
-                markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
-            } else if !globeIsVisible {
-                mapVC!.clearAnnotations()
-                mapVC!.addScreenMarkers([redPinMarker], desc: nil)
-                markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
-            }
-            defaultToolbar.isHidden = false
-            pinEditorToolbar.isHidden = true
+            globeVC.clearAnnotations()
+            addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
+            defaultToolbar.isHidden = true
+            pinEditorToolbar.isHidden = false
         } else if addAndRemovePinButton.titleLabel?.text == "Remove Pin" {
-            
+            guard let currentSelectedMarkerIndex = currentSelectedMarkerIndex else {
+                print("Remove Pin was selected without currentSelectedMarkerIndex having a value.")
+                return
+            }
+            let marker = mapMarkers[currentSelectedMarkerIndex]
+            guard let component = marker.component else {
+                print("marker didn't have component")
+                return
+            }
+            globeVC.remove(component)
+            mapMarkers.remove(at: currentSelectedMarkerIndex)
+            self.currentSelectedMarkerIndex = nil
+            pinEditorToolbar.isHidden = true
+            defaultToolbar.isHidden = false
         }
     }
     
+    func mapmarkersIndex(for screenMarker: MaplyScreenMarker) -> Int? {
+        
+        for index in 0...mapMarkers.count - 1 {
+            let marker = mapMarkers[index]
+            
+            if screenMarker === marker.screenMarker {
+                return index
+            }
+        }
+        
+        return nil
+    }
     
     //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     //        if let location = locations.first {
