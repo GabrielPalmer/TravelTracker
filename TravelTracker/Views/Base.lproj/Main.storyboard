@@ -273,6 +273,9 @@
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
                                                         <rect key="frame" x="0.0" y="0.0" width="117.5" height="34"/>
                                                         <state key="normal" title="Add/Remove"/>
+                                                        <connections>
+                                                            <action selector="addAndRemovePinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="lZJ-8G-Fzu"/>
+                                                        </connections>
                                                     </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-J1-XaE">
                                                         <rect key="frame" x="117.5" y="0.0" width="133.5" height="34"/>
@@ -351,7 +354,7 @@
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
                                         <state key="normal" title="Switch"/>
                                         <connections>
-                                            <action selector="testButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
+                                            <action selector="mapTypeButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="Gkc-rq-hJ4"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -375,13 +378,16 @@
                         <viewLayoutGuide key="safeArea" id="NhB-Wf-Cxi"/>
                     </view>
                     <connections>
+                        <outlet property="addAndRemovePinButton" destination="EEc-XO-RZt" id="lnU-1W-YSz"/>
                         <outlet property="addCommentButton" destination="xWC-J1-XaE" id="Gwl-Yu-04h"/>
                         <outlet property="addPictureButton" destination="j6y-kh-Zov" id="itS-yf-qMU"/>
                         <outlet property="addPinButton" destination="EVl-iG-uH9" id="gVU-vn-H1o"/>
+                        <outlet property="defaultToolbar" destination="ov9-dA-Gi8" id="6Se-yU-Ag4"/>
                         <outlet property="displayView" destination="yA8-8W-A8l" id="6ox-7d-xGt"/>
                         <outlet property="friendsButton" destination="0jY-69-XSg" id="Tqi-7A-m6S"/>
+                        <outlet property="mapTypeButton" destination="e3C-tg-auO" id="hEg-ti-6S2"/>
+                        <outlet property="pinEditorToolbar" destination="8zp-YK-iPZ" id="0CS-6B-6Td"/>
                         <outlet property="settingsButton" destination="gl1-ao-A4L" id="89r-Op-nGI"/>
-                        <outlet property="testButton" destination="e3C-tg-auO" id="hEg-ti-6S2"/>
                         <outlet property="toolbar" destination="sud-dN-29S" id="lyR-YU-utz"/>
                         <segue destination="HY6-kv-FhX" kind="presentation" identifier="friendsSegue" id="44h-5e-Jde"/>
                     </connections>

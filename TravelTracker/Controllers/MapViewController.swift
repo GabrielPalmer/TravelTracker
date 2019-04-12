@@ -9,22 +9,22 @@
 import UIKit
 import WhirlyGlobeMaplyComponent
 import CoreLocation
+//// Add comment to pin with alert controller ////
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate {
     
+    private var globeVC: WhirlyGlobeViewController? //myViewC
+    private var mapVC: MaplyViewController?
+    
     var markerArray: [Marker] = []
-    var markerIsSelected: Bool = false
     var globeIsVisible: Bool = true
-    
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
-    
+    var currentMarker: Marker?
+    var markerComponents: [MaplyComponentObject] = []
     var latitude: Float = 40.419774
     var longitude: Float = -111.885743
     
     @IBOutlet weak var displayView: UIView!
-    
-    private var globeVC: WhirlyGlobeViewController? //myViewC
-    private var mapVC: MaplyViewController?
     
     @IBOutlet weak var toolbar: UIView!
     
@@ -38,44 +38,49 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var settingsButton: UIButton!
     
+    @IBOutlet weak var pinEditorToolbar: UIView!
     
+    @IBOutlet weak var defaultToolbar: UIView!
     
-    @IBOutlet weak var testButton: UIButton!
+    @IBOutlet weak var addAndRemovePinButton: UIButton!
     
-    @IBAction func testButtonTapped(_ sender: Any) {
+    @IBOutlet weak var mapTypeButton: UIButton!
+    
+    @IBAction func mapTypeButtonTapped(_ sender: Any) {
         if globeIsVisible {
             globeIsVisible = !globeIsVisible
-            testButton.setTitle("Globe", for: .normal)
-            testButton.setTitleColor(UIColor.white, for: .normal)
-            testButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
+            mapTypeButton.setTitle("Globe", for: .normal)
+            mapTypeButton.setTitleColor(UIColor.white, for: .normal)
+            mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
             globeVC!.view.isHidden = true
             mapVC!.view.isHidden = false
         } else if !globeIsVisible {
             globeIsVisible = !globeIsVisible
-            testButton.setTitle("Map", for: .normal)
-            testButton.setTitleColor(UIColor.white, for: .normal)
-            testButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
+            mapTypeButton.setTitle("Map", for: .normal)
+            mapTypeButton.setTitleColor(UIColor.white, for: .normal)
+            mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.8)
             mapVC!.view.isHidden = true
             globeVC!.view.isHidden = false
         }
     }
     
     override var prefersStatusBarHidden: Bool {
+        // Makes it so the ugly top of the iphone xr look pretty
         return true
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        // Get location
-        //        locationManager.delegate = self
-        //        locationManager.requestLocation()
-        //        //
+        
+        defaultToolbar.isHidden = false
+        pinEditorToolbar.isHidden = true
+        
         toolbar.backgroundColor = UIColor.clear
         
-        testButton.layer.cornerRadius = 5
-        testButton.setTitle("Map", for: .normal)
-        testButton.setTitleColor(UIColor.white, for: .normal)
-        testButton.backgroundColor = UIColor.gray.withAlphaComponent(0.85)
+        mapTypeButton.layer.cornerRadius = 5
+        mapTypeButton.setTitle("Map", for: .normal)
+        mapTypeButton.setTitleColor(UIColor.white, for: .normal)
+        mapTypeButton.backgroundColor = UIColor.gray.withAlphaComponent(0.85)
         
         mapVC = MaplyViewController(mapType: .typeFlat)
         displayView.addSubview(mapVC!.view)
@@ -177,60 +182,37 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
          }
          */
         
-        //Testing Markers
-        /* Mark Zuckerburg
-         let mark = UIImage(named: "Mark")
-         let markMarker = MaplyScreenMarker()
-         markMarker.image = mark
-         markMarker.loc = MaplyCoordinateMakeWithDegrees(-122.4192, 37.7793)
-         markMarker.size = CGSize(width: 40, height: 40)
-         */
-        let redPin = UIImage(named: "Red-Pin")
-        let redPinMarker = MaplyScreenMarker()
-        redPinMarker.image = redPin
-        redPinMarker.loc = MaplyCoordinateMakeWithDegrees(-111.885743, 40.419774)
-        redPinMarker.size = CGSize(width: 17.9, height: 36.4)
-        
-        
-        //
-        
         globeVC!.height = 0.5
         globeVC!.keepNorthUp = true
         globeVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        globeVC!.addScreenMarkers([redPinMarker], desc: nil)
-        //globeVC!.addScreenMarkers([markMarker], desc: nil)
         
         mapVC!.height = 1
         mapVC!.viewWrap = true
         mapVC!.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
-        mapVC!.addScreenMarkers([redPinMarker], desc: nil)
-        //mapVC!.addScreenMarkers([markMarker], desc: nil)
         
-        displayView.bringSubviewToFront(testButton)
+        displayView.bringSubviewToFront(mapTypeButton)
         view.bringSubviewToFront(toolbar)
         
     }
     
-    //    func getSimulationPoint() -> MaplyLocationTrackerSimulationPoint {
-    //        return MaplyLocationTrackerSimulationPoint(lonDeg: longitude, latDeg: latitude, headingDeg: 180.0)
-    //    }
-    
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject) {
-        if let selectedObject = selectedObj as? MaplyVectorObject {
-            let loc = selectedObject.centroid()
-            addGlobeAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
-        } else if let selectedObject = selectedObj as? MaplyScreenMarker {
+        if let selectedObject = selectedObj as? MaplyScreenMarker {
             addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
+        markerComponents.removeFirst()
+        
+        defaultToolbar.isHidden = true
+        pinEditorToolbar.isHidden = false
+        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
     }
     
     func maplyViewController(_ viewC: MaplyViewController, didSelect selectedObj: NSObject) {
-        if let selectedObject = selectedObj as? MaplyVectorObject {
-            let loc = selectedObject.centroid()
-            addGlobeAnnotationWithTitle(title: "selected", subtitle: selectedObject.userObject as! String, loc: loc)
-        } else if let selectedObject = selectedObj as? MaplyScreenMarker {
+        if let selectedObject = selectedObj as? MaplyScreenMarker {
             addGlobeAnnotationWithTitle(title: "selected", subtitle: "marker", loc: selectedObject.loc)
         }
+        defaultToolbar.isHidden = true
+        pinEditorToolbar.isHidden = false
+        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
     }
     
     private func addMapAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
@@ -239,9 +221,8 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         let a = MaplyAnnotation()
         a.title = title
         a.subTitle = subtitle
-        
         mapVC!.addAnnotation(a, forPoint: loc, offset: CGPoint.zero)
-    }
+    } 
     
     private func addGlobeAnnotationWithTitle(title: String, subtitle: String, loc: MaplyCoordinate) {
         globeVC!.clearAnnotations()
@@ -258,6 +239,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         let subtitle = ""
         addGlobeAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
         lastTappedCoordinate = coord
+        defaultToolbar.isHidden = true
+        pinEditorToolbar.isHidden = false
+        addAndRemovePinButton.setTitle("Add Pin", for: .normal)
     }
     
     func maplyViewController(_ viewC: MaplyViewController, didTapAt coord: MaplyCoordinate) {
@@ -265,6 +249,25 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         let subtitle = ""
         addMapAnnotationWithTitle(title: title, subtitle: subtitle, loc: coord)
         lastTappedCoordinate = coord
+        defaultToolbar.isHidden = true
+        pinEditorToolbar.isHidden = false
+        addAndRemovePinButton.setTitle("Add Pin", for: .normal)
+    }
+    
+    func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
+        if userMotion {
+            globeVC!.clearAnnotations()
+            defaultToolbar.isHidden = false
+            pinEditorToolbar.isHidden = true
+        }
+    }
+    
+    func maplyViewControllerDidStartMoving(_ viewC: MaplyViewController, userMotion: Bool) {
+        if userMotion {
+            mapVC!.clearAnnotations()
+            defaultToolbar.isHidden = false
+            pinEditorToolbar.isHidden = true
+        }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
@@ -276,22 +279,36 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     @IBAction func addPinButtonTapped(_ sender: Any) {
-        let redPin = UIImage(named: "Red-Pin")
-        let redPinMarker = MaplyScreenMarker()
-        redPinMarker.image = redPin
-        redPinMarker.loc = lastTappedCoordinate
-        redPinMarker.size = CGSize(width: 17.9, height: 36.4)
         
-        if globeIsVisible {
-            globeVC!.clearAnnotations()
-            globeVC!.addScreenMarkers([redPinMarker], desc: nil)
-            markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
-        } else if !globeIsVisible {
-            mapVC!.clearAnnotations()
-            mapVC!.addScreenMarkers([redPinMarker], desc: nil)
-            markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
+    }
+    
+    @IBAction func addAndRemovePinButtonTapped(_ sender: Any) {
+        if addAndRemovePinButton.titleLabel?.text == "Add Pin" {
+            let redPin = UIImage(named: "Red-Pin")
+            let redPinMarker = MaplyScreenMarker()
+            redPinMarker.image = redPin
+            redPinMarker.loc = lastTappedCoordinate
+            redPinMarker.size = CGSize(width: 17.9, height: 36.4)
+            
+            if globeIsVisible {
+                globeVC!.clearAnnotations()
+                let marker = globeVC!.addScreenMarkers([redPinMarker], desc: nil)
+                if let marker = marker {
+                    markerComponents.append(marker)
+                }
+                markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
+            } else if !globeIsVisible {
+                mapVC!.clearAnnotations()
+                mapVC!.addScreenMarkers([redPinMarker], desc: nil)
+                markerArray.append(Marker(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
+            }
+            defaultToolbar.isHidden = false
+            pinEditorToolbar.isHidden = true
+        } else if addAndRemovePinButton.titleLabel?.text == "Remove Pin" {
+            
         }
     }
+    
     
     //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
     //        if let location = locations.first {
@@ -304,5 +321,3 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     //    }
     
 }
-
-// globeVC!.stopLocationTracking()
