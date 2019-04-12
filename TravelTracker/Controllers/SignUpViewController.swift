@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Network
 
 class SignUpViewController: UITableViewController, UITextFieldDelegate {
 
@@ -16,6 +17,8 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var confirmTextField: UITextField!
     @IBOutlet weak var createButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
+    
+    let monitor = NWPathMonitor()
     
     var validTextFields: [Bool] = [false, false, false, false]
     
@@ -30,6 +33,22 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         createButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
         createButton.isEnabled = false
         errorLabel.isHidden = true
+        
+        monitor.pathUpdateHandler = { path in
+            print("network connection changed")
+            DispatchQueue.main.async {
+                if path.status == .satisfied {
+                    self.errorLabel.isHidden = true
+                } else {
+                    self.createButton.isEnabled = false
+                    self.errorLabel.text = "No internet connection"
+                    self.errorLabel.isHidden = false
+                }
+            }
+        }
+        
+        let queue = DispatchQueue(label: "signUpMonitor")
+        monitor.start(queue: queue)
         
     }
     
@@ -115,7 +134,7 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM ").inverted
             return string.rangeOfCharacter(from: invalidCharacters) == nil
         } else {
-            let invalidCharacters = CharacterSet(charactersIn: "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
+            let invalidCharacters = CharacterSet(charactersIn: "_0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
             return string.rangeOfCharacter(from: invalidCharacters) == nil
         }
     }
@@ -130,11 +149,15 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         
         guard let username = userNameTextField.text, username.trimmingCharacters(in: .whitespaces).count >= 5 else {
             createButton.isEnabled = false
+            errorLabel.text = "Username must be at least five characters"
+            errorLabel.isHidden = false
             return
         }
         
         guard let password = passwordTextField.text, password.trimmingCharacters(in: .whitespaces).count >= 5 else {
             createButton.isEnabled = false
+            errorLabel.text = "Password must be at least five characters"
+            errorLabel.isHidden = false
             return
         }
         
