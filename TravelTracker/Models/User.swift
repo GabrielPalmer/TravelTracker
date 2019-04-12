@@ -12,7 +12,7 @@ class User {
     let name: String
     let username: String
     let password: String
-    var markers: [Marker] = []
+    var markers: [MapMarker] = []
     
     init(name: String, username: String, password: String) {
         self.name = name
