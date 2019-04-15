@@ -12,6 +12,10 @@ import FirebaseFirestore
 class FirebaseController {
     
     static var currentUser: User?
+    static var friends: [User] = []
+    
+    static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    static let setsArchiveURL = documentsDirectory.appendingPathComponent("currentUser").appendingPathExtension("plist")
     
     static func createUser(name: String, username: String, password: String, completion: @escaping (User?) -> Void) {
         Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
@@ -69,6 +73,17 @@ class FirebaseController {
     
     static func saveUserAsCurrent(user: User) {
         FirebaseController.currentUser = user
+        
+//        do {
+//            let propertyListEncoder = PropertyListEncoder()
+//            let encodedUser = try propertyListEncoder.encode(user)
+//            try encodedUser.write(to: FavoritesController.setsArchiveURL, options: .noFileProtection)
+//            print("updated favorites")
+//        } catch {
+//            print("failed to save favorites")
+//            print(error)
+//        }
+        
     }
     
 //    static func signInCurrentUser() -> User {

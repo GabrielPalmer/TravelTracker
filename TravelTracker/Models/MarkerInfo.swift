@@ -23,4 +23,5 @@ class MarkerInfo {
         self.xCoord = xCoord
         self.yCoord = yCoord
     }
+    
 }
