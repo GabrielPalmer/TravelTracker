@@ -25,7 +25,8 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         passwordTextField.delegate = self
         
         signInButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
-        signInButton.isEnabled = false
+        /// Change back isEnabled to false
+        signInButton.isEnabled = true
         errorLabel.isHidden = true
         
         monitor.pathUpdateHandler = { path in
@@ -91,7 +92,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         }
         
         FirebaseController.signIn(username: username, password: password) { (user) in
-            <#code#>
+            
         }
         
     }
