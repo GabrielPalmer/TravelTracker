@@ -64,6 +64,7 @@
                     <connections>
                         <segue destination="cLL-qk-vHs" kind="show" identifier="signUpSegue" id="g6V-AH-1tU"/>
                         <segue destination="szu-94-zvT" kind="show" identifier="signInSegue" id="sh6-dL-MOI"/>
+                        <segue destination="gSl-fU-ypg" kind="presentation" identifier="autoSignInSegue" id="M17-2d-B1A"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -587,6 +588,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cEY-Uc-4Vy"/>
+        <segue reference="M17-2d-B1A"/>
     </inferredMetricsTieBreakers>
 </document>
