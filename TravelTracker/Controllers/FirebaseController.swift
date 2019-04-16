@@ -14,80 +14,112 @@ class FirebaseController {
     static var currentUser: User?
     static var friends: [User] = []
     
-    static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let setsArchiveURL = documentsDirectory.appendingPathComponent("currentUser").appendingPathExtension("plist")
-    
-    static func createUser(name: String, username: String, password: String, completion: @escaping (User?) -> Void) {
+    static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
+        
+        //checks if the their username is already taken otherwise creates a user
         Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
             guard let snapshot = snapshot else {
-                completion(nil)
+                completion(false)
                 return
             }
             
             guard snapshot.documents.count < 1 else {
-                completion(nil)
+                completion(false)
                 return
             }
             
             Firestore.firestore().collection("users").addDocument(data: [
                 "name" : name,
                 "username" : username,
-                "password" : password
+                "password" : password,
+                "friends" : []
                 ])
             
             let user = User(name: name, username: username, password: password)
+            FirebaseController.currentUser = user
+            saveCurrentUser(user: user)
+            completion(true)
             
-            completion(user)
+        }
+        
+    }
+    
+    static func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
+        
+        Firestore.firestore().collection("users").whereField("username", isEqualTo: username).whereField("password", isEqualTo: password).getDocuments { (snapshot, error) in
+            guard let snapshot = snapshot else {
+                completion(false)
+                return
+            }
             
-            saveUserAsCurrent(user: user)
+            guard snapshot.documents.count > 0,
+                let data = snapshot.documents.first?.data(),
+                let name = data["name"] as? String,
+                let usernames = data["friends"] as? [String] else {
+                    
+                    completion(false)
+                    return
+            }
             
+            let user = User(name: name, username: username, password: password)
+            currentUser = user
+            saveCurrentUser(user: user)
+            fetchFriendsInfo(usernames: usernames)
+            
+            completion(true)
+            return
+        }
+        
+    }
+    
+    // saves the current user for auto sign
+    static func saveCurrentUser(user: User) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(user.username, forKey: "username")
+        userDefaults.set(user.password, forKey: "password")
+        
+    }
+    
+    // auto sign in function
+    static func signInSavedUser(completion: @escaping (Bool) -> Void) {
+        let userDefaults = UserDefaults.standard
+        guard let username = userDefaults.string(forKey: "username"),
+            let password = userDefaults.string(forKey: "password") else {
+                completion(false)
+                return
+        }
+        
+        Firestore.firestore().collection("users").whereField("username", isEqualTo: username).whereField("password", isEqualTo: password).getDocuments { (snapshot, error) in
+            guard let snapshot = snapshot else {
+                completion(false)
+                return
+            }
+            
+            guard snapshot.documents.count > 0,
+                let data = snapshot.documents.first?.data(),
+                let name = data["name"] as? String,
+                let usernames = data["friends"] as? [String] else {
+                    
+                    completion(false)
+                    return
+            }
+            
+            currentUser = User(name: name, username: username, password: password)
+            fetchFriendsInfo(usernames: usernames)
+            
+            completion(true)
             return
             
         }
         
     }
     
-    static func signIn(username: String, password: String, completion: @escaping (User?) -> Void) {
+    static func fetchFriendsInfo(usernames: [String]) {
         
-        Firestore.firestore().collection("users").whereField("username", isEqualTo: username).whereField("password", isEqualTo: password).getDocuments { (snapshot, error) in
-            guard let snapshot = snapshot else {
-                completion(nil)
-                return
-            }
-            
-            if snapshot.documents.count > 0, let name = snapshot.documents.first?.data()["name"] as? String {
-                let user = User(name: name, username: username, password: password)
-                
-                completion(user)
-                
-                saveUserAsCurrent(user: user)
-            } else {
-                completion(nil)
-                return
-            }
-            
-            
-        }
+        
+
+        
         
     }
-    
-    static func saveUserAsCurrent(user: User) {
-        FirebaseController.currentUser = user
-        
-//        do {
-//            let propertyListEncoder = PropertyListEncoder()
-//            let encodedUser = try propertyListEncoder.encode(user)
-//            try encodedUser.write(to: FavoritesController.setsArchiveURL, options: .noFileProtection)
-//            print("updated favorites")
-//        } catch {
-//            print("failed to save favorites")
-//            print(error)
-//        }
-        
-    }
-    
-//    static func signInCurrentUser() -> User {
-//        
-//    }
     
 }

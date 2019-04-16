@@ -91,7 +91,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
-        FirebaseController.signIn(username: username, password: password) { (user) in
+        FirebaseController.signIn(username: username, password: password) { (success) in
             
         }
         

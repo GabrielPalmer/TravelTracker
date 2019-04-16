@@ -175,7 +175,7 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
-        FirebaseController.createUser(name: name, username: username, password: password) { (user) in
+        FirebaseController.createUser(name: name, username: username, password: password) { (success) in
             
         }
         

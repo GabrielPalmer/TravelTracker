@@ -24,4 +24,13 @@ class MarkerInfo {
         self.yCoord = yCoord
     }
     
+//    private init(id: String, date: Date, xCoord: Float, yCoord: Float, image: UIImage?, comment: String?) {
+//        self.id = id
+//        self.date = date
+//        self.xCoord = xCoord
+//        self.yCoord = yCoord
+//        self.image = image
+//        self.comment = comment
+//    }
+    
 }
