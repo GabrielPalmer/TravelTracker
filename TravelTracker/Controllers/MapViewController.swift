@@ -9,11 +9,14 @@
 import UIKit
 import WhirlyGlobeMaplyComponent
 import CoreLocation
+import Network
 //// Add comment to pin with alert controller ////
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
+    let networkPath: NWPathMonitor = NWPathMonitor()
+    var hasConnection: Bool = true
     
     var mapMarkers: [MapMarker] = []
     var globeIsVisible: Bool = true
@@ -43,7 +46,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var defaultToolbar: UIView!
     
-    @IBOutlet weak var addAndRemovePinButton: UIButton!
+    @IBOutlet weak var removePinButton: UIButton!
     
     @IBOutlet weak var markerDetailView: UIView!
     
@@ -61,6 +64,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerDetailView.isHidden = true
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
+        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         
         toolbar.backgroundColor = UIColor.clear
         
@@ -77,16 +81,30 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.height = 0.5
         globeVC.autoMoveToTap = false
         
+        //        networkPath.pathUpdateHandler = { path in
+        //            if path.status == .satisfied {
+        //                self.hasConnection = true
+        //            } else {
+        //                self.hasConnection = false
+        //            }
+        //        }
         //GLOBE
         // mousebird.github.io/WhirlyGlobe/tutorial/ios/remote_image_layer.html
-        let useLocalTiles = false
         let globeLayer: MaplyQuadImageTilesLayer
         
-        if useLocalTiles {
-            guard let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres") else {
-                print("Can't load local tile set")
+        if !hasConnection {
+            if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
+                let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
+                layer.handleEdges = true
+                layer.coverPoles = true
+                layer.requireElev = false
+                layer.waitLoad = false
+                layer.drawPriority = 0
+                layer.singleLevelLoading = false
+                globeVC.add(layer)
+            } else {
+                fatalError()
             }
-            globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
         } else {
             let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
             let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
@@ -105,25 +123,11 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             globeVC.add(globeLayer)
         }
         
-        /*
-         if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-         let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-         layer.handleEdges = (globeVC != nil)
-         layer.coverPoles = (globeVC != nil)
-         layer.requireElev = false
-         layer.waitLoad = false
-         layer.drawPriority = 0
-         layer.singleLevelLoading = false
-         globeVC!.add(layer)
-         }
-         */
-        
         globeVC.height = 0.5
         globeVC.keepNorthUp = true
         globeVC.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         view.bringSubviewToFront(toolbar)
         view.bringSubviewToFront(markerDetailView)
-        
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
@@ -144,8 +148,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             print("MapMarker did not have a component")
             return
         }
-        
-        updateMarkerEditor(mapMarker)
         
         // Check if this marker is already selected
         guard currentSelectedMarkerIndex != newSelectedMarkerIndex else { return }
@@ -179,11 +181,12 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
-        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
+        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+        updateMarkerEditor(mapMarker)
     }
     
     @objc func annotationButtonTapped() {
-        let marker = MapMarker(info: markerInfo)
+        let marker = MapMarker(info: MarkerInfo(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
         marker.screenMarker.size = CGSize(width: 18, height: 36)
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = lastTappedCoordinate
@@ -191,9 +194,8 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
-        
+        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         globeVC.clearAnnotations()
-        addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
     }
@@ -212,10 +214,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         ////////
         globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
         globeVC.animate(toPosition: coord, time: 0.5)
-        markerEditorToolbar.isHidden = false
-        defaultToolbar.isHidden = true
+        markerEditorToolbar.isHidden = true
+        defaultToolbar.isHidden = false
         lastTappedCoordinate = coord
-        addAndRemovePinButton.setTitle("Add Pin", for: .normal)
         if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
             let marker = mapMarkers[currentSelectedMarkerIndex]
             guard let selectedComponent = marker.component else {
@@ -294,22 +295,8 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         
     }
     
-    @IBAction func addAndRemovePinButtonTapped(_ sender: Any) {
-        if addAndRemovePinButton.titleLabel?.text == "Add Pin" {
-            let marker = MapMarker(info: markerInfo)
-            marker.screenMarker.size = CGSize(width: 18, height: 36)
-            marker.screenMarker.image = UIImage(named: "Green-Pin")
-            marker.screenMarker.loc = lastTappedCoordinate
-            marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
-            mapMarkers.append(marker)
-            currentSelectedMarkerIndex = (mapMarkers.count - 1)
-            updateMarkerEditor(marker)
-            
-            globeVC.clearAnnotations()
-            addAndRemovePinButton.setTitle("Remove Pin", for: .normal)
-            defaultToolbar.isHidden = true
-            markerEditorToolbar.isHidden = false
-        } else if addAndRemovePinButton.titleLabel?.text == "Remove Pin" {
+    @IBAction func removePinButtonTapped(_ sender: Any) {
+        if removePinButton.titleLabel?.text == "Remove Pin" {
             guard let currentSelectedMarkerIndex = currentSelectedMarkerIndex else {
                 print("Remove Pin was selected without currentSelectedMarkerIndex having a value.")
                 return
@@ -399,7 +386,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func imagePickerController(_ _picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-
+        
         guard let selectedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {fatalError()}
         guard let currentMarker = currentSelectedMarkerIndex else { return }
         mapMarkers[currentMarker].info.image = selectedImage
@@ -410,26 +397,26 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     func updateMarkerEditor(_ marker: MapMarker) {
         if marker.info.image == nil && marker.info.comment == nil {
-            addCommentButton.setTitle("Add Comment", for: .normal)
-            addPictureButton.setTitle("Add Picture", for: .normal)
+            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = true
         } else if marker.info.image == nil && marker.info.comment != nil {
-            addCommentButton.setTitle("Edit Comment", for: .normal)
-            addPictureButton.setTitle("Add Picture", for: .normal)
+            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerCommentLabel.isHidden = false
             markerCommentLabel.text = marker.info.comment
             markerImageView.isHidden = true
         } else if marker.info.comment == nil && marker.info.image != nil {
-            addCommentButton.setTitle("Add Comment", for: .normal)
-            addPictureButton.setTitle("Edit Picture", for: .normal)
+            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
             markerCommentLabel.isHidden = true
             markerImageView.image = marker.info.image
         } else {
-            addCommentButton.setTitle("Edit Comment", for: .normal)
-            addPictureButton.setTitle("Edit Picture", for: .normal)
+            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
             markerCommentLabel.isHidden = false

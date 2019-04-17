@@ -271,23 +271,51 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="HoU-GN-iRr">
                                                 <rect key="frame" x="8" y="8" width="359" height="34"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
-                                                        <rect key="frame" x="0.0" y="0.0" width="117.5" height="34"/>
-                                                        <state key="normal" title="Add/Remove"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
+                                                        <rect key="frame" x="0.0" y="0.0" width="84" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Remove">
+                                                                    <attributes>
+                                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                         <connections>
-                                                            <action selector="addAndRemovePinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="lZJ-8G-Fzu"/>
+                                                            <action selector="removePinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="lZJ-8G-Fzu"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-J1-XaE">
-                                                        <rect key="frame" x="117.5" y="0.0" width="133.5" height="34"/>
-                                                        <state key="normal" title="Add Comment"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-J1-XaE">
+                                                        <rect key="frame" x="84" y="0.0" width="152" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Add Comment">
+                                                                    <attributes>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                         <connections>
                                                             <action selector="addCommentButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="6e3-1i-KSc"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="j6y-kh-Zov">
-                                                        <rect key="frame" x="251" y="0.0" width="108" height="34"/>
-                                                        <state key="normal" title="Add Picture"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j6y-kh-Zov">
+                                                        <rect key="frame" x="236" y="0.0" width="123" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Add Picture">
+                                                                    <attributes>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                         <connections>
                                                             <action selector="addPictureButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="B79-Eb-wDj"/>
                                                         </connections>
@@ -309,20 +337,47 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="w9k-o3-nvr">
                                                 <rect key="frame" x="8" y="8" width="359" height="34"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
-                                                        <rect key="frame" x="0.0" y="0.0" width="78" height="34"/>
-                                                        <state key="normal" title="Pin"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
+                                                        <rect key="frame" x="0.0" y="0.0" width="81.5" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Pin">
+                                                                    <attributes>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                         <connections>
                                                             <action selector="addPinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="psS-4p-1uy"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
-                                                        <rect key="frame" x="78" y="0.0" width="132.5" height="34"/>
-                                                        <state key="normal" title="Friends"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
+                                                        <rect key="frame" x="81.5" y="0.0" width="133.5" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Friends">
+                                                                    <attributes>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
-                                                        <rect key="frame" x="210.5" y="0.0" width="148.5" height="34"/>
-                                                        <state key="normal" title="Settings"/>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
+                                                        <rect key="frame" x="215" y="0.0" width="144" height="34"/>
+                                                        <state key="normal">
+                                                            <attributedString key="attributedTitle">
+                                                                <fragment content="Settings">
+                                                                    <attributes>
+                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
+                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                                    </attributes>
+                                                                </fragment>
+                                                            </attributedString>
+                                                        </state>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -399,7 +454,6 @@
                         <viewLayoutGuide key="safeArea" id="NhB-Wf-Cxi"/>
                     </view>
                     <connections>
-                        <outlet property="addAndRemovePinButton" destination="EEc-XO-RZt" id="lnU-1W-YSz"/>
                         <outlet property="addCommentButton" destination="xWC-J1-XaE" id="Gwl-Yu-04h"/>
                         <outlet property="addPictureButton" destination="j6y-kh-Zov" id="itS-yf-qMU"/>
                         <outlet property="addPinButton" destination="EVl-iG-uH9" id="gVU-vn-H1o"/>
@@ -410,6 +464,7 @@
                         <outlet property="markerDetailView" destination="G6h-2J-pKO" id="FIZ-wo-yov"/>
                         <outlet property="markerEditorToolbar" destination="8zp-YK-iPZ" id="ExL-SV-btL"/>
                         <outlet property="markerImageView" destination="UDd-7X-8dM" id="xtK-2C-1fg"/>
+                        <outlet property="removePinButton" destination="EEc-XO-RZt" id="lnU-1W-YSz"/>
                         <outlet property="settingsButton" destination="gl1-ao-A4L" id="89r-Op-nGI"/>
                         <outlet property="toolbar" destination="sud-dN-29S" id="lyR-YU-utz"/>
                         <segue destination="HY6-kv-FhX" kind="presentation" identifier="friendsSegue" id="44h-5e-Jde"/>
