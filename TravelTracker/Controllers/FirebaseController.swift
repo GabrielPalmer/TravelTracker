@@ -28,7 +28,7 @@ class FirebaseController {
                 return
             }
             
-            Firestore.firestore().collection("users").addDocument(data: [
+            Firestore.firestore().collection("users").document(username).setData([
                 "name" : name,
                 "username" : username,
                 "password" : password,
@@ -36,7 +36,7 @@ class FirebaseController {
                 ])
             
             let user = User(name: name, username: username, password: password)
-            FirebaseController.currentUser = user
+            currentUser = user
             saveCurrentUser(user: user)
             completion(true)
             
@@ -64,7 +64,9 @@ class FirebaseController {
             let user = User(name: name, username: username, password: password)
             currentUser = user
             saveCurrentUser(user: user)
-            fetchFriendsInfo(usernames: usernames)
+            fetchFriendsInfo(usernames: usernames, completion: {
+                
+            })
             
             completion(true)
             return
@@ -105,7 +107,9 @@ class FirebaseController {
             }
             
             currentUser = User(name: name, username: username, password: password)
-            fetchFriendsInfo(usernames: usernames)
+//            fetchFriendsInfo(usernames: usernames, completion: {
+//                <#code#>
+//            })
             
             completion(true)
             return
@@ -114,10 +118,37 @@ class FirebaseController {
         
     }
     
-    static func fetchFriendsInfo(usernames: [String]) {
+    static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
+        
+        if usernames.count == 0 {
+            return
+        }
+        
+        func fetchUserForUsername(_ username: String, completion: @escaping (User?) -> Void) {
+            Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
+                guard let snapshot = snapshot, snapshot.documents.count > 0 else {
+                    completion(nil)
+                    return
+                }
+                
+                Firestore.firestore().collection("users").document("").collection("markers")
+            }
+        }
+        
+        let group = DispatchGroup()
         
         
-
+        for username in usernames {
+            
+            fetchUserForUsername(username) { (user) in
+              
+            }
+            
+            
+        }
+        
+        group.wait()
+        
         
         
     }

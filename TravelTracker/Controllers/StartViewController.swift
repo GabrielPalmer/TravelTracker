@@ -9,6 +9,12 @@
 import UIKit
 
 class StartViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        //check connection for auto sign in
+    }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
         

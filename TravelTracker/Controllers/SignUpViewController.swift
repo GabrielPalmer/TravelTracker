@@ -175,6 +175,8 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
+        //check for to long entries here
+        
         FirebaseController.createUser(name: name, username: username, password: password) { (success) in
             
         }

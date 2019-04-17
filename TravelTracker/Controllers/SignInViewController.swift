@@ -75,8 +75,6 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
     
     @IBAction func signInButtonTapped(_ sender: Any) {
         
-        performSegue(withIdentifier: "fromSignIn", sender: nil)
-        
         guard let username = userNameTextField.text, !username.trimmingCharacters(in: .whitespaces).isEmpty else {
             signInButton.isEnabled = false
             errorLabel.text = "Username must be at least five characters"
