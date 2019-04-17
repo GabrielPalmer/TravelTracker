@@ -13,11 +13,13 @@ class MapMarker {
     let info: MarkerInfo
     var screenMarker: MaplyScreenMarker
     var component: MaplyComponentObject?
-    let id: String
     
     init(info: MarkerInfo) {
         self.info = info
         self.screenMarker = MaplyScreenMarker()
-        id = UUID().uuidString
+    }
+    
+    func printMarker() {
+        print("id \(info.id)\n comment \(info.comment)\n xCoord \(info.xCoord)\n yCoord \(info.yCoord)")
     }
 }
