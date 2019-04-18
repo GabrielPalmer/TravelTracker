@@ -14,6 +14,7 @@ class FirebaseController {
     static var currentUser: User?
     static var friends: [User] = []
     
+    //for the sign up view controller
     static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         //checks if the their username is already taken otherwise creates a user
@@ -44,32 +45,27 @@ class FirebaseController {
         
     }
     
+    //for the sign in view controller
     static func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
         
-        Firestore.firestore().collection("users").whereField("username", isEqualTo: username).whereField("password", isEqualTo: password).getDocuments { (snapshot, error) in
-            guard let snapshot = snapshot else {
+        Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+            if let document = document,
+                let data = document.data(),
+                password == data["password"] as? String,
+                let name = data["name"] as? String,
+                let usernames = data["friends"] as? [String] {
+                
+                let user = User(name: name, username: username, password: password)
+                currentUser = user
+                saveCurrentUser(user: user)
+                fetchFriendsInfo(usernames: usernames, completion: {
+                    
+                })
+                
+            } else {
                 completion(false)
                 return
             }
-            
-            guard snapshot.documents.count > 0,
-                let data = snapshot.documents.first?.data(),
-                let name = data["name"] as? String,
-                let usernames = data["friends"] as? [String] else {
-                    
-                    completion(false)
-                    return
-            }
-            
-            let user = User(name: name, username: username, password: password)
-            currentUser = user
-            saveCurrentUser(user: user)
-            fetchFriendsInfo(usernames: usernames, completion: {
-                
-            })
-            
-            completion(true)
-            return
         }
         
     }
@@ -91,29 +87,22 @@ class FirebaseController {
                 return
         }
         
-        Firestore.firestore().collection("users").whereField("username", isEqualTo: username).whereField("password", isEqualTo: password).getDocuments { (snapshot, error) in
-            guard let snapshot = snapshot else {
+        Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+            if let document = document,
+                let data = document.data(),
+                password == data["password"] as? String,
+                let name = data["name"] as? String,
+                let usernames = data["friends"] as? [String] {
+                
+                currentUser = User(name: name, username: username, password: password)
+                fetchFriendsInfo(usernames: usernames, completion: {
+                    
+                })
+                
+            } else {
                 completion(false)
                 return
             }
-            
-            guard snapshot.documents.count > 0,
-                let data = snapshot.documents.first?.data(),
-                let name = data["name"] as? String,
-                let usernames = data["friends"] as? [String] else {
-                    
-                    completion(false)
-                    return
-            }
-            
-            currentUser = User(name: name, username: username, password: password)
-//            fetchFriendsInfo(usernames: usernames, completion: {
-//                <#code#>
-//            })
-            
-            completion(true)
-            return
-            
         }
         
     }
@@ -125,31 +114,53 @@ class FirebaseController {
         }
         
         func fetchUserForUsername(_ username: String, completion: @escaping (User?) -> Void) {
-            Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
-                guard let snapshot = snapshot, snapshot.documents.count > 0 else {
+            Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+                guard let name = document?.data()?["name"] as? String else {
                     completion(nil)
                     return
                 }
                 
-                Firestore.firestore().collection("users").document("").collection("markers")
+                let user = User(name: name, username: username, password: "")
+                
+              
+                Firestore.firestore().collection("users").document(username).collection("markers").getDocuments(completion: { (snapshot, error) in
+                    guard let snapshot = snapshot else {
+                        completion(nil)
+                        return
+                    }
+                    
+                    for document in snapshot.documents {
+                        if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                            user.markers.append(markerInfo)
+                        }
+                    }
+                    
+                    completion(user)
+                    return
+                    
+                })
             }
         }
         
         let group = DispatchGroup()
         
-        
         for username in usernames {
             
+            group.enter()
+            
             fetchUserForUsername(username) { (user) in
-              
+                if let user = user {
+                    FirebaseController.friends.append(user)
+                }
+                group.leave()
             }
             
             
         }
         
         group.wait()
-        
-        
+        completion()
+        return
         
     }
     
