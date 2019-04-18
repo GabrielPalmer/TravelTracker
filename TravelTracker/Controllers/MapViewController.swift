@@ -61,7 +61,12 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let safeGuide = self.view.safeAreaLayoutGuide
+        markerCommentLabel.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
+        markerCommentLabel.textColor = UIColor(red: 0.4588, green: 1, blue: 0.4588, alpha: 1.0) /* #75ff75 */
+        markerImageView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
         markerDetailView.isHidden = true
+        markerDetailView.backgroundColor = UIColor.gray.withAlphaComponent(0.25)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
         addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
@@ -127,7 +132,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.keepNorthUp = true
         globeVC.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         view.bringSubviewToFront(toolbar)
-        view.bringSubviewToFront(markerDetailView)
+        displayView.bringSubviewToFront(markerDetailView)
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
@@ -202,6 +207,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
         globeVC.clearAnnotations()
+        markerDetailView.isHidden = true
         //button annotation
         let annotation = MaplyAnnotation()
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 10))
@@ -238,6 +244,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     func globeViewControllerDidTapOutside(_ viewC: WhirlyGlobeViewController) {
         globeVC.clearAnnotations()
+        markerDetailView.isHidden = true
         if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
             let marker = mapMarkers[currentSelectedMarkerIndex]
             guard let selectedComponent = marker.component else {
@@ -262,6 +269,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
         if userMotion {
             globeVC.clearAnnotations()
+            markerDetailView.isHidden = true
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
             if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
@@ -309,6 +317,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             globeVC.remove(component)
             mapMarkers.remove(at: currentSelectedMarkerIndex)
             self.currentSelectedMarkerIndex = nil
+            markerDetailView.isHidden = true
             markerEditorToolbar.isHidden = true
             defaultToolbar.isHidden = false
         }
