@@ -408,13 +408,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="617"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G6h-2J-pKO">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="123.5"/>
+                                        <rect key="frame" x="10" y="0.0" width="355" height="123.5"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="UDd-7X-8dM">
-                                                <rect key="frame" x="6" y="6" width="187.5" height="111.5"/>
+                                                <rect key="frame" x="6" y="6" width="177.5" height="111.5"/>
                                             </imageView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Comment" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yZf-Mg-fsh">
-                                                <rect key="frame" x="199.5" y="6" width="169.5" height="22.5"/>
+                                                <rect key="frame" x="189.5" y="6" width="159.5" height="22.5"/>
                                                 <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -434,9 +434,9 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="G6h-2J-pKO" firstAttribute="leading" secondItem="yA8-8W-A8l" secondAttribute="leading" id="GnP-Wv-RfH"/>
-                                    <constraint firstAttribute="trailing" secondItem="G6h-2J-pKO" secondAttribute="trailing" id="e6s-Gz-JI2"/>
-                                    <constraint firstItem="G6h-2J-pKO" firstAttribute="top" secondItem="yA8-8W-A8l" secondAttribute="top" id="gLN-Ip-qpm"/>
+                                    <constraint firstItem="G6h-2J-pKO" firstAttribute="leading" secondItem="yA8-8W-A8l" secondAttribute="leading" constant="10" id="DdY-9l-Kl5"/>
+                                    <constraint firstItem="G6h-2J-pKO" firstAttribute="top" secondItem="yA8-8W-A8l" secondAttribute="top" id="I1q-JN-2yU"/>
+                                    <constraint firstAttribute="trailing" secondItem="G6h-2J-pKO" secondAttribute="trailing" constant="10" id="wKe-gf-Okd"/>
                                     <constraint firstItem="G6h-2J-pKO" firstAttribute="height" secondItem="yA8-8W-A8l" secondAttribute="height" multiplier="0.2" id="zUK-be-yeV"/>
                                 </constraints>
                             </view>

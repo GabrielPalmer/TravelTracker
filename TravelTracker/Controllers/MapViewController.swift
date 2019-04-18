@@ -62,15 +62,17 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     override func viewDidLoad() {
         super.viewDidLoad()
         let safeGuide = self.view.safeAreaLayoutGuide
-        markerCommentLabel.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
-        markerCommentLabel.textColor = UIColor(red: 0.4588, green: 1, blue: 0.4588, alpha: 1.0) /* #75ff75 */
-        markerImageView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
+        markerDetailView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
+        markerCommentLabel.textColor = UIColor.gray
+//        markerCommentLabel.textColor = UIColor(red: 0.4588, green: 1, blue: 0.4588, alpha: 1.0) /* #75ff75 */
         markerDetailView.isHidden = true
-        markerDetailView.backgroundColor = UIColor.gray.withAlphaComponent(0.25)
+        markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
         addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-        
+        markerDetailView.layer.cornerRadius = 25
+        markerImageView.layer.cornerRadius = 25
+        markerImageView.layer.masksToBounds = true
         toolbar.backgroundColor = UIColor.clear
         
         displayView.addSubview(globeVC.view)
