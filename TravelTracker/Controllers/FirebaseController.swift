@@ -33,13 +33,13 @@ class FirebaseController {
                 "name" : name,
                 "username" : username,
                 "password" : password,
-                "friends" : []
-                ])
-            
-            let user = User(name: name, username: username, password: password)
-            currentUser = user
-            saveCurrentUser(user: user)
-            completion(true)
+                "friends" : [String]()
+                ], completion: { (error) in
+                    let user = User(name: name, username: username, password: password)
+                    currentUser = user
+                    saveCurrentUser(user: user)
+                    completion(true)
+            })
             
         }
         
@@ -58,9 +58,10 @@ class FirebaseController {
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
-                fetchFriendsInfo(usernames: usernames, completion: {
-                    
-                })
+//                fetchFriendsInfo(usernames: usernames, completion: {
+//                    completion(true)
+//                    return
+//                })
                 
             } else {
                 completion(false)
@@ -95,9 +96,10 @@ class FirebaseController {
                 let usernames = data["friends"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
-                fetchFriendsInfo(usernames: usernames, completion: {
-                    
-                })
+//                fetchFriendsInfo(usernames: usernames, completion: {
+//                    completion(true)
+//                    return
+//                })
                 
             } else {
                 completion(false)
@@ -110,6 +112,7 @@ class FirebaseController {
     static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
         
         if usernames.count == 0 {
+            completion()
             return
         }
         

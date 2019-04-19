@@ -11,10 +11,17 @@ import UIKit
 
 class StartViewController: UIViewController {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
-        //check connection for auto sign in
+        FirebaseController.signInSavedUser { (success) in
+            DispatchQueue.main.async {
+                if success {
+                    self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
+                }
+            }
+
+        }
     }
 
     @IBAction func buttonTapped(_ sender: UIButton) {
