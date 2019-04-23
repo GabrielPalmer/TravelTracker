@@ -30,10 +30,3 @@ extension UIButton {
         self.setBackgroundImage(image(withColor: color), for: state)
     }
 }
-
-enum ImageEncodingQuality: CGFloat {
-    case png = 0
-    case jpegLow = 0.2
-    case jpegMid = 0.5
-    case jpegHigh = 0.75
-}
