@@ -58,10 +58,10 @@ class FirebaseController {
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
-//                fetchFriendsInfo(usernames: usernames, completion: {
-//                    completion(true)
-//                    return
-//                })
+                fetchFriendsInfo(usernames: usernames, completion: {
+                    completion(true)
+                    return
+                })
                 
             } else {
                 completion(false)
@@ -96,10 +96,10 @@ class FirebaseController {
                 let usernames = data["friends"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
-//                fetchFriendsInfo(usernames: usernames, completion: {
-//                    completion(true)
-//                    return
-//                })
+                fetchFriendsInfo(usernames: usernames, completion: {
+                    completion(true)
+                    return
+                })
                 
             } else {
                 completion(false)
@@ -111,38 +111,12 @@ class FirebaseController {
     
     static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
         
+        completion()
+        return
+        
         if usernames.count == 0 {
             completion()
             return
-        }
-        
-        func fetchUserForUsername(_ username: String, completion: @escaping (User?) -> Void) {
-            Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
-                guard let name = document?.data()?["name"] as? String else {
-                    completion(nil)
-                    return
-                }
-                
-                let user = User(name: name, username: username, password: "")
-                
-              
-                Firestore.firestore().collection("users").document(username).collection("markers").getDocuments(completion: { (snapshot, error) in
-                    guard let snapshot = snapshot else {
-                        completion(nil)
-                        return
-                    }
-                    
-                    for document in snapshot.documents {
-                        if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
-                            user.markers.append(markerInfo)
-                        }
-                    }
-                    
-                    completion(user)
-                    return
-                    
-                })
-            }
         }
         
         let group = DispatchGroup()
@@ -151,11 +125,35 @@ class FirebaseController {
             
             group.enter()
             
-            fetchUserForUsername(username) { (user) in
-                if let user = user {
+            Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+                
+                if let name = document?.data()?["name"] as? String {
+                    
+                    let user = User(name: name, username: username, password: "")
                     FirebaseController.friends.append(user)
+
+                    Firestore.firestore().collection("users").document(username).collection("markers").getDocuments(completion: { (snapshot, error) in
+                        
+                        if let snapshot = snapshot {
+                            for document in snapshot.documents {
+                                if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                                    user.markers.append(markerInfo)
+                                }
+                            }
+                            
+                            group.leave()
+                            
+                        } else {
+                            group.leave()
+                        }
+                        
+                    })
+                    
+                } else {
+                    group.leave()
                 }
-                group.leave()
+                
+                
             }
             
             
