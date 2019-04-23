@@ -111,57 +111,54 @@ class FirebaseController {
     
     static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
         
-        completion()
-        return
-        
         if usernames.count == 0 {
             completion()
             return
         }
         
-        let group = DispatchGroup()
-        
-        for username in usernames {
+        DispatchQueue.global().async {
+            let group = DispatchGroup()
             
-            group.enter()
-            
-            Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+            for username in usernames {
+                group.enter()
                 
-                if let name = document?.data()?["name"] as? String {
-                    
-                    let user = User(name: name, username: username, password: "")
-                    FirebaseController.friends.append(user)
-
-                    Firestore.firestore().collection("users").document(username).collection("markers").getDocuments(completion: { (snapshot, error) in
-                        
-                        if let snapshot = snapshot {
-                            for document in snapshot.documents {
-                                if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
-                                    user.markers.append(markerInfo)
-                                }
+                Firestore.firestore().collection("users").document(username).getDocument(completion: { (document, error) in
+                    if let name = document?.data()?["name"] as? String {
+                        let user = User(name: name, username: username, password: "")
+                        FirebaseController.friends.append(user)
+                        group.leave()
+                    } else {
+                        group.leave()
+                    }
+                })
+            }
+            
+            group.wait()
+            
+            for friend in FirebaseController.friends {
+                group.enter()
+                
+                Firestore.firestore().collection("users").document(friend.username).collection("markers").getDocuments(completion: { (snapshot, error) in
+                    if let documents = snapshot?.documents {
+                        for document in documents {
+                            if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                                friend.markers.append(markerInfo)
                             }
-                            
-                            group.leave()
-                            
-                        } else {
-                            group.leave()
                         }
                         
-                    })
-                    
-                } else {
-                    group.leave()
-                }
-                
+                        group.leave()
+                        
+                    } else {
+                        group.leave()
+                    }
+                })
                 
             }
             
-            
+            group.wait()
+            completion()
+            return
         }
-        
-        group.wait()
-        completion()
-        return
         
     }
     
