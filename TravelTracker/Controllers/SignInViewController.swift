@@ -17,16 +17,18 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var errorLabel: UILabel!
     
     let monitor = NWPathMonitor()
+    let invalidCharacters = CharacterSet(charactersIn: "_0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        tableView.allowsSelection = false
         
         userNameTextField.delegate = self
         passwordTextField.delegate = self
         
         signInButton.setBackgroundColor(UIColor.lightGray, for: .disabled)
-        /// Change back isEnabled to false
-        signInButton.isEnabled = true
+        signInButton.isEnabled = false
         errorLabel.isHidden = true
         
         monitor.pathUpdateHandler = { path in
@@ -45,11 +47,6 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         monitor.start(queue: queue)
         
     }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
  
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if userNameTextField.isFirstResponder {
@@ -65,34 +62,33 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         
         signInButton.isEnabled = !userNameTextField.text!.isEmpty && !passwordTextField.text!.isEmpty
         
-            if let text = passwordTextField.text {
-              signInButton.isEnabled = text.count >= 5
-            }
-        
-        let invalidCharacters = CharacterSet(charactersIn: "_0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM").inverted
         return string.rangeOfCharacter(from: invalidCharacters) == nil
     }
     
     @IBAction func signInButtonTapped(_ sender: Any) {
         
-        performSegue(withIdentifier: "fromSignIn", sender: nil)
-        
         guard let username = userNameTextField.text, !username.trimmingCharacters(in: .whitespaces).isEmpty else {
             signInButton.isEnabled = false
-            errorLabel.text = "Username must be at least five characters"
+            errorLabel.text = "Please enter a username"
             errorLabel.isHidden = false
             return
         }
-        
         guard let password = passwordTextField.text, !password.trimmingCharacters(in: .whitespaces).isEmpty else {
             signInButton.isEnabled = false
-            errorLabel.text = "Password must be at least five characters"
+            errorLabel.text = "Please enter a password"
             errorLabel.isHidden = false
             return
         }
         
-        FirebaseController.signIn(username: username, password: password) { (user) in
-            
+        FirebaseController.signIn(username: username, password: password) { (success) in
+            DispatchQueue.main.async {
+                if success {
+                    self.performSegue(withIdentifier: "fromUserCreator", sender: nil)
+                } else {
+                    self.errorLabel.text = "Username or password is incorrect"
+                    self.errorLabel.isHidden = false
+                }
+            }
         }
         
     }
