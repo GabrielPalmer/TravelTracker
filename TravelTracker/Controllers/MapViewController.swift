@@ -12,7 +12,7 @@ import CoreLocation
 import Network
 //// Add comment to pin with alert controller ////
 
-class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
     let networkPath: NWPathMonitor = NWPathMonitor()
@@ -61,17 +61,20 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        markerCommentLabel.superview?.layer.cornerRadius = 25
         let safeGuide = self.view.safeAreaLayoutGuide
         markerDetailView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
+        markerCommentLabel.adjustsFontSizeToFitWidth = true
+        markerCommentLabel.minimumScaleFactor = 5
         markerCommentLabel.textColor = UIColor.gray
 //        markerCommentLabel.textColor = UIColor(red: 0.4588, green: 1, blue: 0.4588, alpha: 1.0) /* #75ff75 */
         markerDetailView.isHidden = true
         markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
+        markerCommentLabel.superview?.backgroundColor = UIColor.black.withAlphaComponent(1)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
         addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         markerDetailView.layer.cornerRadius = 25
-        markerImageView.layer.cornerRadius = 25
         markerImageView.layer.masksToBounds = true
         toolbar.backgroundColor = UIColor.clear
         
@@ -258,13 +261,20 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             redMarker.image = UIImage(named: "Red-Pin")
             redMarker.loc = marker.screenMarker.loc
             let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-            
+///////////////// Add this code to make the marker for the other users ////////////////////////
+//            let whiteMarker = MaplyScreenMarker()
+//            whiteMarker.size = CGSize(width: 18, height: 36)
+//            whiteMarker.image = UIImage(named: "White-Pin")
+//            whiteMarker.color = UIColor.random()
+//            whiteMarker.loc = marker.screenMarker.loc
+//            let component = globeVC.addScreenMarkers([whiteMarker], desc: nil)
+///////////////////////////////////////////////////////////////////////////////////////////////
             globeVC.remove(selectedComponent)
             marker.component = component
             marker.screenMarker = redMarker
             self.currentSelectedMarkerIndex = nil
-            markerEditorToolbar.isHidden = false
-            defaultToolbar.isHidden = true
+            markerEditorToolbar.isHidden = true
+            defaultToolbar.isHidden = false
         }
     }
     
@@ -343,6 +353,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addTextField { (textField) in
+            textField.delegate = self
             textField.placeholder = "Add comment here."
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
@@ -415,7 +426,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
-            markerCommentLabel.isHidden = false
+            markerCommentLabel.superview?.isHidden = false
             markerCommentLabel.text = marker.info.comment
             markerImageView.isHidden = true
         } else if marker.info.comment == nil && marker.info.image != nil {
@@ -423,16 +434,24 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
-            markerCommentLabel.isHidden = true
+            markerCommentLabel.superview?.isHidden = true
             markerImageView.image = marker.info.image
         } else {
             addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
-            markerCommentLabel.isHidden = false
+            markerCommentLabel.superview?.isHidden = false
             markerImageView.image = marker.info.image
             markerCommentLabel.text = marker.info.comment
+        }
+    }
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let text = textField.text, text.count > 200 {
+            return false
+        } else {
+            return true
         }
     }
     
@@ -446,3 +465,4 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     //        print("Failed to find the user's location: \(error.localizedDescription)")
     //    }
 }
+
