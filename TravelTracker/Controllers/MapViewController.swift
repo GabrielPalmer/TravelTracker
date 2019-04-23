@@ -261,13 +261,20 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             redMarker.image = UIImage(named: "Red-Pin")
             redMarker.loc = marker.screenMarker.loc
             let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-            
+///////////////// Add this code to make the marker for the other users ////////////////////////
+//            let whiteMarker = MaplyScreenMarker()
+//            whiteMarker.size = CGSize(width: 18, height: 36)
+//            whiteMarker.image = UIImage(named: "White-Pin")
+//            whiteMarker.color = UIColor.random()
+//            whiteMarker.loc = marker.screenMarker.loc
+//            let component = globeVC.addScreenMarkers([whiteMarker], desc: nil)
+///////////////////////////////////////////////////////////////////////////////////////////////
             globeVC.remove(selectedComponent)
             marker.component = component
             marker.screenMarker = redMarker
             self.currentSelectedMarkerIndex = nil
-            markerEditorToolbar.isHidden = false
-            defaultToolbar.isHidden = true
+            markerEditorToolbar.isHidden = true
+            defaultToolbar.isHidden = false
         }
     }
     
@@ -458,3 +465,4 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     //        print("Failed to find the user's location: \(error.localizedDescription)")
     //    }
 }
+
