@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA8142251B6CD0062D762 /* FirebaseController.swift */; };
+		747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA81A2252636F0062D762 /* OtherExtensions.swift */; };
 		7497F00E224A625000824123 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00D224A625000824123 /* StartViewController.swift */; };
 		7497F010224A626C00824123 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00F224A626C00824123 /* SignInViewController.swift */; };
 		7497F012224A628000824123 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F011224A628000824123 /* SignUpViewController.swift */; };
@@ -17,6 +18,9 @@
 		7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F024224A68B400824123 /* TabBarAnimationExtension.swift */; };
 		7497F02B224BBACE00824123 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02A224BBACE00824123 /* GoogleService-Info.plist */; };
 		7497F02D224BBAFF00824123 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */; };
+		749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749C243F2260CCE900CFF2BF /* MarkerInfo.swift */; };
+		74C37CE9225AF32600DB865C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C37CE8225AF32600DB865C /* User.swift */; };
+		74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C37CEA225AF47A00DB865C /* MapMarker.swift */; };
 		74E485B32249119100788691 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B22249119100788691 /* AppDelegate.swift */; };
 		74E485B52249119100788691 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B42249119100788691 /* MapViewController.swift */; };
 		74E485B82249119100788691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E485B62249119100788691 /* Main.storyboard */; };
@@ -52,6 +56,7 @@
 /* Begin PBXFileReference section */
 		338698D1B467768FEDA81DE0 /* Pods-TravelTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTracker.debug.xcconfig"; path = "Target Support Files/Pods-TravelTracker/Pods-TravelTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		747FA8142251B6CD0062D762 /* FirebaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
+		747FA81A2252636F0062D762 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
 		7497F00D224A625000824123 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		7497F00F224A626C00824123 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		7497F011224A628000824123 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
@@ -61,6 +66,9 @@
 		7497F024224A68B400824123 /* TabBarAnimationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAnimationExtension.swift; sourceTree = "<group>"; };
 		7497F02A224BBACE00824123 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
+		749C243F2260CCE900CFF2BF /* MarkerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerInfo.swift; sourceTree = "<group>"; };
+		74C37CE8225AF32600DB865C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		74C37CEA225AF47A00DB865C /* MapMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		74E485AF2249119100788691 /* TravelTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E485B22249119100788691 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74E485B42249119100788691 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +111,7 @@
 				74E485B62249119100788691 /* Main.storyboard */,
 				74E485BB2249119300788691 /* LaunchScreen.storyboard */,
 				7497F024224A68B400824123 /* TabBarAnimationExtension.swift */,
+				747FA81A2252636F0062D762 /* OtherExtensions.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -130,6 +139,16 @@
 			path = "Friends Tab Bar";
 			sourceTree = "<group>";
 		};
+		74C37CE5225AF2EE00DB865C /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				74C37CE8225AF32600DB865C /* User.swift */,
+				74C37CEA225AF47A00DB865C /* MapMarker.swift */,
+				749C243F2260CCE900CFF2BF /* MarkerInfo.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		74E485A62249119100788691 = {
 			isa = PBXGroup;
 			children = (
@@ -154,6 +173,7 @@
 				74E485B22249119100788691 /* AppDelegate.swift */,
 				7497F008224A616100824123 /* Views */,
 				7497F00B224A616F00824123 /* Controllers */,
+				74C37CE5225AF2EE00DB865C /* Models */,
 				74E485B92249119300788691 /* Assets.xcassets */,
 				7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */,
 				74E485BE2249119300788691 /* Info.plist */,
@@ -353,13 +373,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */,
 				747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */,
 				7497F010224A626C00824123 /* SignInViewController.swift in Sources */,
 				7497F017224A666600824123 /* RequestsViewController.swift in Sources */,
+				74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */,
+				749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */,
 				7497F019224A66A800824123 /* SearchViewController.swift in Sources */,
 				7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */,
 				74E485B52249119100788691 /* MapViewController.swift in Sources */,
 				74E485B32249119100788691 /* AppDelegate.swift in Sources */,
+				74C37CE9225AF32600DB865C /* User.swift in Sources */,
 				7497F00E224A625000824123 /* StartViewController.swift in Sources */,
 				7497F015224A663E00824123 /* FriendsViewController.swift in Sources */,
 				7497F012224A628000824123 /* SignUpViewController.swift in Sources */,
