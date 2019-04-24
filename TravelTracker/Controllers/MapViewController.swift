@@ -61,31 +61,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Setup your own Pins \\
-        for marker in FirebaseController.currentUser!.markers {
-            let mapMarker = MapMarker(info: marker)
-            mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
-            mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
-            mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
-            mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
-        }
-        ////////////|\\\\\\\\\\\\
-        // Setup Friends Pins \\
-        for friend in FirebaseController.friends {
-            print(friend.name)
-            print(friend.markers)
-            let pinColor = UIColor.random()
-            for marker in friend.markers {
-                let mapMarker = MapMarker(info: marker)
-                mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
-                mapMarker.screenMarker.image = UIImage(named: "White-Pin")
-                mapMarker.screenMarker.color = pinColor
-                mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
-                mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
-                mapMarker.user = friend
-            }
-        }
-        ////////////|\\\\\\\\\\\\
         markerCommentLabel.superview?.layer.cornerRadius = 25
         markerCommentLabel.adjustsFontSizeToFitWidth = true
         markerCommentLabel.minimumScaleFactor = 5
@@ -160,6 +135,34 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
         view.bringSubviewToFront(toolbar)
         displayView.bringSubviewToFront(markerDetailView)
+        
+        // Setup Own Pins \\
+        
+        for marker in FirebaseController.currentUser!.markers {
+            let mapMarker = MapMarker(info: marker)
+            mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+            mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
+            mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+            mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+            mapMarkers.append(mapMarker)
+        }
+        
+        // Setup Friends Pins \\
+        
+        for friend in FirebaseController.friends {
+            print(friend.name)
+            print(friend.markers)
+            for marker in friend.markers {
+                let mapMarker = MapMarker(info: marker)
+                mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                mapMarker.screenMarker.color = friend.color
+                mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+                mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+                mapMarker.user = friend
+                mapMarkers.append(mapMarker)
+            }
+        }
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didSelect selectedObj: NSObject, atLoc coord: MaplyCoordinate, onScreen screenPt: CGPoint) {
@@ -185,19 +188,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         guard currentSelectedMarkerIndex != newSelectedMarkerIndex else { return }
         
         //check if a different marker is currently selected
-        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
-            let currentSelectedMapMarker = mapMarkers[currentSelectedMarkerIndex]
-            
-            let redMarker = MaplyScreenMarker()
-            redMarker.size = CGSize(width: 18, height: 36)
-            redMarker.image = UIImage(named: "Red-Pin")
-            redMarker.loc = currentSelectedMapMarker.screenMarker.loc
-            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-            
-            globeVC.remove(currentSelectedMapMarker.component!)
-            currentSelectedMapMarker.screenMarker = redMarker
-            currentSelectedMapMarker.component = component
-        }
+        deselectCurrentMarker()
         
         let greenMarker = MaplyScreenMarker()
         greenMarker.size = CGSize(width: 18, height: 36)
@@ -214,11 +205,11 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
             removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            updateMarkerEditor(mapMarker)
         } else {
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
         }
+        updateMarkerEditor(mapMarker)
     }
     
     @objc func annotationButtonTapped() {
@@ -227,6 +218,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = lastTappedCoordinate
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
+        marker.user = FirebaseController.currentUser
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
@@ -256,46 +248,15 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerEditorToolbar.isHidden = true
         defaultToolbar.isHidden = false
         lastTappedCoordinate = coord
-        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
-            let marker = mapMarkers[currentSelectedMarkerIndex]
-            guard let selectedComponent = marker.component else {
-                print("marker didn't have component")
-                return
-            }
-            let redMarker = MaplyScreenMarker()
-            redMarker.size = CGSize(width: 18, height: 36)
-            redMarker.image = UIImage(named: "Red-Pin")
-            redMarker.loc = marker.screenMarker.loc
-            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-            
-            globeVC.remove(selectedComponent)
-            marker.component = component
-            marker.screenMarker = redMarker
-            self.currentSelectedMarkerIndex = nil
-        }
+        deselectCurrentMarker()
     }
     
     func globeViewControllerDidTapOutside(_ viewC: WhirlyGlobeViewController) {
         globeVC.clearAnnotations()
         markerDetailView.isHidden = true
-        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
-            let marker = mapMarkers[currentSelectedMarkerIndex]
-            guard let selectedComponent = marker.component else {
-                print("marker didn't have component")
-                return
-            }
-            let redMarker = MaplyScreenMarker()
-            redMarker.size = CGSize(width: 18, height: 36)
-            redMarker.image = UIImage(named: "Red-Pin")
-            redMarker.loc = marker.screenMarker.loc
-            let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-            globeVC.remove(selectedComponent)
-            marker.component = component
-            marker.screenMarker = redMarker
-            self.currentSelectedMarkerIndex = nil
-            markerEditorToolbar.isHidden = true
-            defaultToolbar.isHidden = false
-        }
+        deselectCurrentMarker()
+        markerEditorToolbar.isHidden = true
+        defaultToolbar.isHidden = false
     }
     
     func globeViewControllerDidStartMoving(_ viewC: WhirlyGlobeViewController, userMotion: Bool) {
@@ -304,22 +265,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             markerDetailView.isHidden = true
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
-            if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
-                let marker = mapMarkers[currentSelectedMarkerIndex]
-                guard let selectedComponent = marker.component else {
-                    print("marker didn't have component")
-                    return
-                }
-                let redMarker = MaplyScreenMarker()
-                redMarker.size = CGSize(width: 18, height: 36)
-                redMarker.image = UIImage(named: "Red-Pin")
-                redMarker.loc = marker.screenMarker.loc
-                let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-                globeVC.remove(selectedComponent)
-                marker.component = component
-                marker.screenMarker = redMarker
-                self.currentSelectedMarkerIndex = nil
-            }
+            deselectCurrentMarker()
         }
     }
     
@@ -475,6 +421,31 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             return false
         } else {
             return true
+        }
+    }
+    
+    func deselectCurrentMarker() {
+        if let currentSelectedMarkerIndex = currentSelectedMarkerIndex {
+            let mapMarker = mapMarkers[currentSelectedMarkerIndex]
+            guard let selectedComponent = mapMarker.component else {
+                print("marker didn't have component")
+                return
+            }
+            let screenMarker = MaplyScreenMarker()
+            screenMarker.size = CGSize(width: 18, height: 36)
+            if mapMarker.user === FirebaseController.currentUser {
+                screenMarker.image = UIImage(named: "Red-Pin")
+            } else {
+                screenMarker.image = UIImage(named: "White-Pin")
+                screenMarker.color = mapMarker.user?.color
+            }
+            screenMarker.loc = mapMarker.screenMarker.loc
+            let component = globeVC.addScreenMarkers([screenMarker], desc: nil)
+            
+            globeVC.remove(selectedComponent)
+            mapMarker.component = component
+            mapMarker.screenMarker = screenMarker
+            self.currentSelectedMarkerIndex = nil
         }
     }
     
