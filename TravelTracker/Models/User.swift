@@ -12,11 +12,13 @@ class User {
     let name: String
     let username: String
     let password: String
+    let color: UIColor
     var markers: [MarkerInfo] = []
     
     init(name: String, username: String, password: String) {
         self.name = name
         self.username = username
         self.password = password
+        color = UIColor.random()
     }
 }
