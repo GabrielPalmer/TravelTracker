@@ -61,13 +61,23 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Setup Friends Pins \\
+        for friend in FirebaseController.friends {
+            let pinColor = UIColor.random()
+            for marker in friend.markers {
+                let mapMarker = MapMarker(info: marker)
+                mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                mapMarker.screenMarker.color = pinColor
+                mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+                mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+            }
+        }
+        ////////////|\\\\\\\\\\\\
         markerCommentLabel.superview?.layer.cornerRadius = 25
-        let safeGuide = self.view.safeAreaLayoutGuide
-        markerDetailView.topAnchor.constraint(equalTo: safeGuide.topAnchor).isActive = true
         markerCommentLabel.adjustsFontSizeToFitWidth = true
         markerCommentLabel.minimumScaleFactor = 5
         markerCommentLabel.textColor = UIColor.gray
-//        markerCommentLabel.textColor = UIColor(red: 0.4588, green: 1, blue: 0.4588, alpha: 1.0) /* #75ff75 */
         markerDetailView.isHidden = true
         markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
         markerCommentLabel.superview?.backgroundColor = UIColor.black.withAlphaComponent(1)
@@ -261,14 +271,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             redMarker.image = UIImage(named: "Red-Pin")
             redMarker.loc = marker.screenMarker.loc
             let component = globeVC.addScreenMarkers([redMarker], desc: nil)
-///////////////// Add this code to make the marker for the other users ////////////////////////
-//            let whiteMarker = MaplyScreenMarker()
-//            whiteMarker.size = CGSize(width: 18, height: 36)
-//            whiteMarker.image = UIImage(named: "White-Pin")
-//            whiteMarker.color = UIColor.random()
-//            whiteMarker.loc = marker.screenMarker.loc
-//            let component = globeVC.addScreenMarkers([whiteMarker], desc: nil)
-///////////////////////////////////////////////////////////////////////////////////////////////
             globeVC.remove(selectedComponent)
             marker.component = component
             marker.screenMarker = redMarker
