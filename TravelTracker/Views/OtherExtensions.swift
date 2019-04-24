@@ -37,3 +37,11 @@ extension UIColor {
     }
 }
 
+extension Date {
+    func formatAsString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "M/dd/yyyy"
+        return dateFormatter.string(from: self)
+    }
+}
+

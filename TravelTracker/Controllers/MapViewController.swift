@@ -14,7 +14,7 @@ import Network
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
+    let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController()
     let networkPath: NWPathMonitor = NWPathMonitor()
     var hasConnection: Bool = true
     
@@ -203,12 +203,12 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
             removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date)")
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date.formatAsString())")
             
         } else {
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
-            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date)")
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date.formatAsString())")
         }
         updateMarkerEditor(mapMarker)
     }
@@ -229,7 +229,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerEditorToolbar.isHidden = false
         FirebaseController.updateMapMarkers(marker, type: .add)
         FirebaseController.currentUser?.markers.append(marker.info)
-        nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date)")
+        nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
