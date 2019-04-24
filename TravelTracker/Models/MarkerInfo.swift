@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 class MarkerInfo {
     
@@ -26,11 +27,13 @@ class MarkerInfo {
     
     init?(id: String, firebaseDict: Dictionary<String, Any>) {
         self.id = id
-        date = Date() //incomplete implementation
+        
         
         guard let xCoord = firebaseDict["xCoord"] as? Float,
-            let yCoord = firebaseDict["xCoord"] as? Float else { return nil }
+            let yCoord = firebaseDict["xCoord"] as? Float,
+            let date = firebaseDict["date"] as? Timestamp else { return nil }
         
+        self.date = date.dateValue()
         self.xCoord = xCoord
         self.yCoord = yCoord
         comment = firebaseDict["comment"] as? String
