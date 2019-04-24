@@ -19,9 +19,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     var hasConnection: Bool = true
     
     var mapMarkers: [MapMarker] = []
-    var globeIsVisible: Bool = true
     
-    var markerInfo: MarkerInfo = MarkerInfo(xCoord: 0, yCoord: 0)
     var currentSelectedMarkerIndex: Int?
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
     
@@ -49,6 +47,8 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     @IBOutlet weak var removePinButton: UIButton!
     
     @IBOutlet weak var markerDetailView: UIView!
+    
+    @IBOutlet weak var nameDateLabel: UILabel!
     
     @IBOutlet weak var markerCommentLabel: UILabel!
     
@@ -150,8 +150,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         // Setup Friends Pins \\
         
         for friend in FirebaseController.friends {
-            print(friend.name)
-            print(friend.markers)
             for marker in friend.markers {
                 let mapMarker = MapMarker(info: marker)
                 mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
@@ -205,9 +203,12 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
             removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date)")
+            
         } else {
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date)")
         }
         updateMarkerEditor(mapMarker)
     }
@@ -228,6 +229,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerEditorToolbar.isHidden = false
         FirebaseController.updateMapMarkers(marker, type: .add)
         FirebaseController.currentUser?.markers.append(marker.info)
+        nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date)")
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
@@ -433,12 +435,14 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             }
             let screenMarker = MaplyScreenMarker()
             screenMarker.size = CGSize(width: 18, height: 36)
+            
             if mapMarker.user === FirebaseController.currentUser {
                 screenMarker.image = UIImage(named: "Red-Pin")
             } else {
                 screenMarker.image = UIImage(named: "White-Pin")
                 screenMarker.color = mapMarker.user?.color
             }
+            
             screenMarker.loc = mapMarker.screenMarker.loc
             let component = globeVC.addScreenMarkers([screenMarker], desc: nil)
             
