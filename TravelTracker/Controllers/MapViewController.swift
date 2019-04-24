@@ -12,7 +12,7 @@ import CoreLocation
 import Network
 //// Add comment to pin with alert controller ////
 
-class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, MaplyViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
     let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
     let networkPath: NWPathMonitor = NWPathMonitor()
@@ -61,8 +61,19 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Setup your own Pins \\
+        for marker in FirebaseController.currentUser!.markers {
+            let mapMarker = MapMarker(info: marker)
+            mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+            mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
+            mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+            mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+        }
+        ////////////|\\\\\\\\\\\\
         // Setup Friends Pins \\
         for friend in FirebaseController.friends {
+            print(friend.name)
+            print(friend.markers)
             let pinColor = UIColor.random()
             for marker in friend.markers {
                 let mapMarker = MapMarker(info: marker)
@@ -71,6 +82,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
                 mapMarker.screenMarker.color = pinColor
                 mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
                 mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+                mapMarker.user = friend
             }
         }
         ////////////|\\\\\\\\\\\\
@@ -218,6 +230,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
+        FirebaseController.currentUser?.markers.append(marker.info)
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
