@@ -29,7 +29,7 @@ class MarkerInfo {
         self.id = id
         
         guard let xCoord = firebaseDict["xCoord"] as? Double,
-            let yCoord = firebaseDict["xCoord"] as? Double,
+            let yCoord = firebaseDict["yCoord"] as? Double,
             let date = firebaseDict["date"] as? Timestamp else { return nil }
         
         self.date = date.dateValue()
