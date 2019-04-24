@@ -210,11 +210,15 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         mapMarker.component = component
         
         currentSelectedMarkerIndex = newSelectedMarkerIndex
-        
-        defaultToolbar.isHidden = true
-        markerEditorToolbar.isHidden = false
-        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-        updateMarkerEditor(mapMarker)
+        if mapMarker.user === FirebaseController.currentUser {
+            defaultToolbar.isHidden = true
+            markerEditorToolbar.isHidden = false
+            removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            updateMarkerEditor(mapMarker)
+        } else {
+            defaultToolbar.isHidden = false
+            markerEditorToolbar.isHidden = true
+        }
     }
     
     @objc func annotationButtonTapped() {
@@ -230,6 +234,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
+        FirebaseController.updateMapMarkers(marker, type: .add)
         FirebaseController.currentUser?.markers.append(marker.info)
     }
     
@@ -342,6 +347,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
                 return
             }
             globeVC.remove(component)
+            FirebaseController.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
             mapMarkers.remove(at: currentSelectedMarkerIndex)
             self.currentSelectedMarkerIndex = nil
             markerDetailView.isHidden = true
@@ -376,6 +382,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             guard let currentMarker = self.currentSelectedMarkerIndex else { return }
             self.mapMarkers[currentMarker].info.comment = comment
             self.updateMarkerEditor(self.mapMarkers[currentMarker])
+            FirebaseController.updateMapMarkers(self.mapMarkers[currentMarker], type: .update)
         }))
         self.present(alert, animated: true)
     }
@@ -428,6 +435,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         guard let currentMarker = currentSelectedMarkerIndex else { return }
         mapMarkers[currentMarker].info.image = selectedImage
         updateMarkerEditor(mapMarkers[currentMarker])
+        FirebaseController.updateMapMarkers(mapMarkers[currentMarker], type: .update)
         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
