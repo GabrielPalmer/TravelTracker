@@ -13,6 +13,7 @@ class MapMarker {
     let info: MarkerInfo
     var screenMarker: MaplyScreenMarker
     var component: MaplyComponentObject?
+    var user: User?
     
     init(info: MarkerInfo) {
         self.info = info

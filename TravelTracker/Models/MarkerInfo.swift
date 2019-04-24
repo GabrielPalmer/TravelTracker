@@ -24,4 +24,18 @@ class MarkerInfo {
         self.yCoord = yCoord
     }
     
+    init?(id: String, firebaseDict: Dictionary<String, Any>) {
+        self.id = id
+        date = Date() //incomplete implementation
+        
+        guard let xCoord = firebaseDict["xCoord"] as? Float,
+            let yCoord = firebaseDict["xCoord"] as? Float else { return nil }
+        
+        self.xCoord = xCoord
+        self.yCoord = yCoord
+        comment = firebaseDict["comment"] as? String
+        //images unsaved currently
+        
+    }
+    
 }
