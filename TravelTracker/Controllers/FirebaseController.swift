@@ -14,6 +14,12 @@ class FirebaseController {
     static var currentUser: User?
     static var friends: [User] = []
     
+    enum UpdateType {
+        case add
+        case update
+        case delete
+    }
+    
     //for the sign up view controller
     static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
         
@@ -87,6 +93,8 @@ class FirebaseController {
                 completion(false)
                 return
         }
+        
+        print("\nSigned in as \(username)\n")
         
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
             if let document = document,
@@ -162,4 +170,7 @@ class FirebaseController {
         
     }
     
+    static func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
+        
+    }
 }
