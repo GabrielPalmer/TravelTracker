@@ -149,6 +149,7 @@ class FirebaseController {
                 Firestore.firestore().collection("users").document(friend.username).collection("markers").getDocuments(completion: { (snapshot, error) in
                     if let documents = snapshot?.documents {
                         for document in documents {
+                            print(document.data())
                             if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
                                 friend.markers.append(markerInfo)
                             }
