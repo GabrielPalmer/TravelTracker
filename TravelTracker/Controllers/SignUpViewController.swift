@@ -175,7 +175,7 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func passwordTextFieldEditingChanged(_ sender: UITextField) {
-        if let text = sender.text, text.count >= 5 {
+        if let text = sender.text, text.count >= 0 {
             validTextFields[2] = true
         } else {
             validTextFields[2] = false

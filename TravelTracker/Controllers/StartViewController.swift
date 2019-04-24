@@ -7,19 +7,11 @@
 //
 
 import UIKit
-import FirebaseFirestore
 
 class StartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-//        Firestore.firestore().collection("users").document("bombtastical").collection("markers").document(UUID().uuidString).setData([
-//            "comment" : "Test Comment 4",
-//            "date" : Timestamp(date: Date()),
-//            "xCoord" : 35.7612,
-//            "yCoord" : 42.9769
-//            ])
         
         FirebaseController.signInSavedUser { (success) in
             DispatchQueue.main.async {
@@ -27,7 +19,6 @@ class StartViewController: UIViewController {
                     self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
                 }
             }
-
         }
     }
 
