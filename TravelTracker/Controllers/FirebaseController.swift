@@ -172,19 +172,19 @@ class FirebaseController {
     
     static func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
         
-        guard let name = FirebaseController.currentUser?.name else { return }
+        guard let username = FirebaseController.currentUser?.username else { return }
         
         DispatchQueue.global().async {
             switch type {
             case .add:
-                Firestore.firestore().collection("users").document(name).collection("markers").document(marker.info.id).setData([
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).setData([
                     "comment" : marker.info.comment as Any,
                     "date" : Timestamp(date: marker.info.date),
                     "xCoord" : marker.info.xCoord,
                     "yCoord" : marker.info.yCoord
                     ])
             case .update:
-                Firestore.firestore().collection("users").document(name).collection("markers").document(marker.info.id).updateData([
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).updateData([
                     "comment" : marker.info.comment as Any
                     ])
             case .delete:

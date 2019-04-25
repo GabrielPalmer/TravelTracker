@@ -83,7 +83,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
         FirebaseController.signIn(username: username, password: password) { (success) in
             DispatchQueue.main.async {
                 if success {
-                    self.performSegue(withIdentifier: "fromUserCreator", sender: nil)
+                    self.performSegue(withIdentifier: "fromSignIn", sender: nil)
                 } else {
                     self.errorLabel.text = "Username or password is incorrect"
                     self.errorLabel.isHidden = false
