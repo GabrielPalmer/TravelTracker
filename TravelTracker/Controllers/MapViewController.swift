@@ -14,19 +14,18 @@ import Network
 
 class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
     
-    let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController() //myViewC
+    let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController()
     let networkPath: NWPathMonitor = NWPathMonitor()
     var hasConnection: Bool = true
     
     var mapMarkers: [MapMarker] = []
-    var globeIsVisible: Bool = true
     
-    var markerInfo: MarkerInfo = MarkerInfo(xCoord: 0, yCoord: 0)
     var currentSelectedMarkerIndex: Int?
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
     
     var latitude: Float = 40.419774
     var longitude: Float = -111.885743
+    var fontSize: Int = 18
     
     @IBOutlet weak var displayView: UIView!
     
@@ -50,7 +49,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var markerDetailView: UIView!
     
-    @IBOutlet weak var markerCommentLabel: UILabel!
+    @IBOutlet weak var nameDateLabel: UILabel!
+    
+    @IBOutlet weak var markerCommentLabel: UITextView!
     
     @IBOutlet weak var markerImageView: UIImageView!
     
@@ -61,9 +62,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        markerCommentLabel.showsVerticalScrollIndicator = true
+        markerCommentLabel.indicatorStyle = .white
         markerCommentLabel.superview?.layer.cornerRadius = 25
-        markerCommentLabel.adjustsFontSizeToFitWidth = true
-        markerCommentLabel.minimumScaleFactor = 5
         markerCommentLabel.textColor = UIColor.gray
         markerDetailView.isHidden = true
         markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
@@ -150,8 +151,6 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         // Setup Friends Pins \\
         
         for friend in FirebaseController.friends {
-            print(friend.name)
-            print(friend.markers)
             for marker in friend.markers {
                 let mapMarker = MapMarker(info: marker)
                 mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
@@ -205,9 +204,12 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
             removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date.formatAsString())")
+            
         } else {
             defaultToolbar.isHidden = false
             markerEditorToolbar.isHidden = true
+            nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date.formatAsString())")
         }
         updateMarkerEditor(mapMarker)
     }
@@ -228,6 +230,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerEditorToolbar.isHidden = false
         FirebaseController.updateMapMarkers(marker, type: .add)
         FirebaseController.currentUser?.markers.append(marker.info)
+        nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
@@ -417,7 +420,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text, text.count > 200 {
+        if let text = textField.text, text.count > 1000 {
             return false
         } else {
             return true
@@ -433,12 +436,14 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             }
             let screenMarker = MaplyScreenMarker()
             screenMarker.size = CGSize(width: 18, height: 36)
+            
             if mapMarker.user === FirebaseController.currentUser {
                 screenMarker.image = UIImage(named: "Red-Pin")
             } else {
                 screenMarker.image = UIImage(named: "White-Pin")
                 screenMarker.color = mapMarker.user?.color
             }
+            
             screenMarker.loc = mapMarker.screenMarker.loc
             let component = globeVC.addScreenMarkers([screenMarker], desc: nil)
             
