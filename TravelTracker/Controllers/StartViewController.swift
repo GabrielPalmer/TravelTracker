@@ -13,10 +13,14 @@ class StartViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        view.isHidden = true
+        
         FirebaseController.signInSavedUser { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
+                } else {
+                    self.view.isHidden = false
                 }
             }
         }

@@ -149,7 +149,6 @@ class FirebaseController {
                 Firestore.firestore().collection("users").document(friend.username).collection("markers").getDocuments(completion: { (snapshot, error) in
                     if let documents = snapshot?.documents {
                         for document in documents {
-                            print(document.data())
                             if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
                                 friend.markers.append(markerInfo)
                             }
@@ -173,5 +172,25 @@ class FirebaseController {
     
     static func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
         
+        guard let name = FirebaseController.currentUser?.name else { return }
+        
+        DispatchQueue.global().async {
+            switch type {
+            case .add:
+                Firestore.firestore().collection("users").document(name).collection("markers").document(marker.info.id).setData([
+                    "comment" : marker.info.comment as Any,
+                    "date" : Timestamp(date: marker.info.date),
+                    "xCoord" : marker.info.xCoord,
+                    "yCoord" : marker.info.yCoord
+                    ])
+            case .update:
+                Firestore.firestore().collection("users").document(name).collection("markers").document(marker.info.id).updateData([
+                    "comment" : marker.info.comment as Any
+                    ])
+            case .delete:
+                Firestore.firestore().collection("users").document(marker.info.id).delete()
+            }
+        }
     }
+    
 }
