@@ -64,7 +64,7 @@ class FirebaseController {
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
-                fetchFriendsInfo(usernames: usernames, completion: {
+                fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -104,7 +104,7 @@ class FirebaseController {
                 let usernames = data["friends"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
-                fetchFriendsInfo(usernames: usernames, completion: {
+                fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -117,7 +117,7 @@ class FirebaseController {
         
     }
     
-    static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
+    static func fetchMarkerInfo(usernames: [String], completion: @escaping () -> Void) {
         
         if usernames.count == 0 {
             completion()
@@ -126,6 +126,25 @@ class FirebaseController {
         
         DispatchQueue.global().async {
             let group = DispatchGroup()
+            
+            group.enter()
+            
+            if let yourUsername = FirebaseController.currentUser?.username {
+                Firestore.firestore().collection("users").document(yourUsername).collection("markers").getDocuments(completion: { (snapshot, error) in
+                    if let documents = snapshot?.documents {
+                        for document in documents {
+                            if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                                FirebaseController.currentUser?.markers.append(markerInfo)
+                            }
+                        }
+                        
+                        group.leave()
+                        
+                    } else {
+                        group.leave()
+                    }
+                })
+            }
             
             for username in usernames {
                 group.enter()
