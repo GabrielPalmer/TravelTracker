@@ -346,49 +346,28 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ov9-dA-Gi8">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="w9k-o3-nvr">
-                                                <rect key="frame" x="8" y="8" width="398" height="34"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="w9k-o3-nvr">
+                                                <rect key="frame" x="8" y="3" width="398" height="47"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
-                                                        <rect key="frame" x="0.0" y="0.0" width="90.333333333333329" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Pin">
-                                                                    <attributes>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EVl-iG-uH9">
+                                                        <rect key="frame" x="0.0" y="0.0" width="132.66666666666666" height="47"/>
+                                                        <state key="normal" image="Pin-My-Location">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="addPinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="psS-4p-1uy"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
-                                                        <rect key="frame" x="90.333333333333314" y="0.0" width="148" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Friends">
-                                                                    <attributes>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0jY-69-XSg">
+                                                        <rect key="frame" x="132.66666666666669" y="0.0" width="132.66666666666669" height="47"/>
+                                                        <state key="normal" image="Friends-Icon">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
-                                                        <rect key="frame" x="238.33333333333337" y="0.0" width="159.66666666666663" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Settings">
-                                                                    <attributes>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gl1-ao-A4L">
+                                                        <rect key="frame" x="265.33333333333331" y="0.0" width="132.66666666666669" height="47"/>
+                                                        <state key="normal" image="Settings">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                     </button>
                                                 </subviews>
@@ -397,9 +376,9 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="trailing" secondItem="w9k-o3-nvr" secondAttribute="trailing" constant="8" id="Ake-bE-jmX"/>
-                                            <constraint firstItem="w9k-o3-nvr" firstAttribute="top" secondItem="ov9-dA-Gi8" secondAttribute="top" constant="8" id="CQ0-Ee-Egp"/>
+                                            <constraint firstItem="w9k-o3-nvr" firstAttribute="top" secondItem="ov9-dA-Gi8" secondAttribute="top" constant="3" id="CQ0-Ee-Egp"/>
                                             <constraint firstItem="w9k-o3-nvr" firstAttribute="leading" secondItem="ov9-dA-Gi8" secondAttribute="leading" constant="8" id="cUU-6M-BD4"/>
-                                            <constraint firstAttribute="bottom" secondItem="w9k-o3-nvr" secondAttribute="bottom" constant="8" id="ncJ-z8-DPo"/>
+                                            <constraint firstAttribute="bottom" secondItem="w9k-o3-nvr" secondAttribute="bottom" id="ncJ-z8-DPo"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -729,6 +708,11 @@
             <point key="canvasLocation" x="1884" y="438"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Friends-Icon" width="352" height="292"/>
+        <image name="Pin-My-Location" width="208.5" height="331.5"/>
+        <image name="Settings" width="375" height="375"/>
+    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cEY-Uc-4Vy"/>
     </inferredMetricsTieBreakers>

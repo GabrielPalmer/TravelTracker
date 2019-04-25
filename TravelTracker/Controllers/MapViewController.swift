@@ -62,6 +62,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        settingsButton.imageView?.contentMode = .scaleAspectFit
+        friendsButton.imageView?.contentMode = .scaleAspectFit
+        addPinButton.imageView?.contentMode = .scaleAspectFit
         markerCommentLabel.showsVerticalScrollIndicator = true
         markerCommentLabel.indicatorStyle = .white
         markerCommentLabel.superview?.layer.cornerRadius = 25
@@ -71,7 +74,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         markerCommentLabel.superview?.backgroundColor = UIColor.black.withAlphaComponent(1)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
-        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+//        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         markerDetailView.layer.cornerRadius = 25
         markerImageView.layer.masksToBounds = true
         toolbar.backgroundColor = UIColor.clear
@@ -145,6 +148,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
             mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
             mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+            mapMarker.user = FirebaseController.currentUser
             mapMarkers.append(mapMarker)
         }
         
