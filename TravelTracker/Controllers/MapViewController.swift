@@ -25,6 +25,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     var latitude: Float = 40.419774
     var longitude: Float = -111.885743
+    var fontSize: Int = 18
     
     @IBOutlet weak var displayView: UIView!
     
@@ -50,7 +51,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var nameDateLabel: UILabel!
     
-    @IBOutlet weak var markerCommentLabel: UILabel!
+    @IBOutlet weak var markerCommentLabel: UITextView!
     
     @IBOutlet weak var markerImageView: UIImageView!
     
@@ -61,9 +62,9 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        markerCommentLabel.showsVerticalScrollIndicator = true
+        markerCommentLabel.indicatorStyle = .white
         markerCommentLabel.superview?.layer.cornerRadius = 25
-        markerCommentLabel.adjustsFontSizeToFitWidth = true
-        markerCommentLabel.minimumScaleFactor = 5
         markerCommentLabel.textColor = UIColor.gray
         markerDetailView.isHidden = true
         markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
@@ -419,7 +420,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text, text.count > 200 {
+        if let text = textField.text, text.count > 1000 {
             return false
         } else {
             return true
