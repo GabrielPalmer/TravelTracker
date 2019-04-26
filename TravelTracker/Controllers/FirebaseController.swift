@@ -20,7 +20,6 @@ class FirebaseController {
         case delete
     }
     
-    //for the sign up view controller
     static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         //checks if the their username is already taken otherwise creates a user
@@ -51,7 +50,6 @@ class FirebaseController {
         
     }
     
-    //for the sign in view controller
     static func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
@@ -200,14 +198,14 @@ class FirebaseController {
                     "comment" : marker.info.comment as Any,
                     "date" : Timestamp(date: marker.info.date),
                     "xCoord" : marker.info.xCoord,
-                    "yCoord" : marker.info.yCoord
+                    "yCoord" : marker.info.yCoord,
                     ])
             case .update:
                 Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).updateData([
-                    "comment" : marker.info.comment as Any
+                    "comment" : marker.info.comment as Any,
                     ])
             case .delete:
-                Firestore.firestore().collection("users").document(marker.info.id).delete()
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).delete()
             }
         }
     }
