@@ -263,6 +263,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print(locations.last!)
         if !trackingFinished {
             guard let lastLocation = locations.last else { return }
             lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.latitude), y: Float(lastLocation.coordinate.longitude))
@@ -301,7 +302,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         let marker = MapMarker(info: MarkerInfo(xCoord: lastTrackedLocation!.x, yCoord: lastTrackedLocation!.y))
         marker.screenMarker.size = CGSize(width: 18, height: 36)
         marker.screenMarker.image = UIImage(named: "Green-Pin")
-        marker.screenMarker.loc = lastTappedCoordinate
+        marker.screenMarker.loc = MaplyCoordinate(x: lastTrackedLocation!.x, y: lastTrackedLocation!.y)
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
         marker.user = FirebaseController.currentUser
         mapMarkers.append(marker)
@@ -315,6 +316,8 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         FirebaseController.currentUser?.markers.append(marker.info)
         nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
         globeVC.animate(toPosition: MaplyCoordinate(x: marker.info.xCoord, y: marker.info.yCoord), time: 0.5)
+        pinCurrentLocation.isEnabled = true
+        pinCurrentLocation.imageView?.alpha = 1.0
     }
     
     @IBAction func pinCurrentLocationButtonTapped(_ sender: Any) {
