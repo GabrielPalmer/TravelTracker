@@ -80,7 +80,6 @@ class FirebaseController {
         let userDefaults = UserDefaults.standard
         userDefaults.set(user.username, forKey: "username")
         userDefaults.set(user.password, forKey: "password")
-        
     }
     
     // auto sign in function
@@ -113,6 +112,13 @@ class FirebaseController {
             }
         }
         
+    }
+    
+    static func signOutSavedUser() {
+        let userDefaults = UserDefaults.standard
+        
+        userDefaults.set(nil, forKey: "username")
+        userDefaults.set(nil, forKey: "password")
     }
     
     static func fetchMarkerInfo(usernames: [String], completion: @escaping () -> Void) {
