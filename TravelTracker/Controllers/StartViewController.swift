@@ -10,8 +10,8 @@ import UIKit
 
 class StartViewController: UIViewController {
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
         view.isHidden = true
         
@@ -38,5 +38,12 @@ class StartViewController: UIViewController {
         }
         
     }
+    
+    @IBAction func unwindFromSettings(sender: UIStoryboardSegue) {
+        FirebaseController.signOutSavedUser()
+        view.isHidden = false
+        
+    }
+    
     
 }
