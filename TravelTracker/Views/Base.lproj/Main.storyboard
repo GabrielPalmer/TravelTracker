@@ -372,6 +372,9 @@
                                                         <state key="normal" image="Settings">
                                                             <attributedString key="attributedTitle"/>
                                                         </state>
+                                                        <connections>
+                                                            <action selector="settingsButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="BS0-J0-74g"/>
+                                                        </connections>
                                                     </button>
                                                 </subviews>
                                             </stackView>
@@ -730,7 +733,11 @@
                         <viewLayoutGuide key="safeArea" id="s5Z-Qw-ORu"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="izo-ne-Eea">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="BnL-lL-KJp"/>
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="BnL-lL-KJp">
+                            <connections>
+                                <segue destination="LM4-O7-6Ak" kind="unwind" unwindAction="unwindToGlobeVCWithSender:" id="eKI-DA-OHe"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="LM4-O7-6Ak" kind="unwind" identifier="unwindFromSettings" unwindAction="unwindFromSettingsWithSender:" id="AoR-Lp-L7I"/>
@@ -780,14 +787,14 @@
     </scenes>
     <resources>
         <image name="Friends-Icon" width="352" height="292"/>
-        <image name="Friends-TabBar-Dark" width="25" height="25"/>
-        <image name="Friends-TabBar-Light" width="25" height="25"/>
-        <image name="Mail-Dark" width="25" height="25"/>
-        <image name="Mail-Light" width="25" height="25"/>
-        <image name="Pin-My-Location" width="208" height="331"/>
-        <image name="Request-Dark" width="25" height="25"/>
-        <image name="Request-Light" width="25" height="25"/>
-        <image name="Settings" width="240" height="308"/>
+        <image name="Friends-TabBar-Dark" width="37.5" height="37.5"/>
+        <image name="Friends-TabBar-Light" width="37.5" height="37.5"/>
+        <image name="Mail-Dark" width="37.5" height="37.5"/>
+        <image name="Mail-Light" width="37.5" height="37.5"/>
+        <image name="Pin-My-Location" width="208.5" height="331.5"/>
+        <image name="Request-Dark" width="37.5" height="37.5"/>
+        <image name="Request-Light" width="37.5" height="37.5"/>
+        <image name="Settings" width="240.5" height="308.5"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="cEY-Uc-4Vy"/>
