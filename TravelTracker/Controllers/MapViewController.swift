@@ -268,10 +268,9 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(locations.last!)
         if !trackingFinished {
             guard let lastLocation = locations.last else { return }
-            lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.latitude), y: Float(lastLocation.coordinate.longitude))
+            lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.longitude)*(Float.pi/180), y: Float(lastLocation.coordinate.latitude)*(Float.pi/180))
             trackingFinished = true
         }
     }
