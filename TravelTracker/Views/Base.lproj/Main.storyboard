@@ -495,7 +495,7 @@
                         <outlet property="removePinButton" destination="EEc-XO-RZt" id="lnU-1W-YSz"/>
                         <outlet property="settingsButton" destination="gl1-ao-A4L" id="89r-Op-nGI"/>
                         <outlet property="toolbar" destination="sud-dN-29S" id="lyR-YU-utz"/>
-                        <segue destination="RKi-Ap-Nyr" kind="show" identifier="settingsSegue" id="itY-Iw-C5c"/>
+                        <segue destination="pNs-rp-xhe" kind="show" identifier="settingsSegue" id="itY-Iw-C5c"/>
                         <segue destination="Mcr-9v-3qA" kind="presentation" identifier="friendsSegue" id="Fl7-fB-tFN"/>
                     </connections>
                 </viewController>
@@ -517,7 +517,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jpl-XV-oyB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5772" y="796"/>
+            <point key="canvasLocation" x="6711.1999999999998" y="795.6521739130435"/>
         </scene>
         <!--Request a Friend-->
         <scene sceneID="Vrs-kk-jPa">
@@ -719,7 +719,7 @@
             </objects>
             <point key="canvasLocation" x="1884" y="438"/>
         </scene>
-        <!--Settings View Controller-->
+        <!--Settings-->
         <scene sceneID="HQv-aM-DTc">
             <objects>
                 <viewController id="RKi-Ap-Nyr" customClass="SettingsViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
@@ -729,6 +729,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="s5Z-Qw-ORu"/>
                     </view>
+                    <navigationItem key="navigationItem" title="Settings" id="izo-ne-Eea">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="BnL-lL-KJp"/>
+                    </navigationItem>
                     <connections>
                         <segue destination="LM4-O7-6Ak" kind="unwind" identifier="unwindFromSettings" unwindAction="unwindFromSettingsWithSender:" id="AoR-Lp-L7I"/>
                     </connections>
@@ -736,7 +739,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Yd-oM-BGd" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <exit id="LM4-O7-6Ak" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2838" y="828"/>
+            <point key="canvasLocation" x="3776.8000000000002" y="827.13643178410803"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="WFn-o6-zkP">
@@ -755,6 +758,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Uzy-6W-S2l" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3919" y="27"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="rwt-oA-IwJ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="pNs-rp-xhe" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Scp-pa-FZO">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="RKi-Ap-Nyr" kind="relationship" relationship="rootViewController" id="sEr-qj-wlj"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yzc-Vy-mWj" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2837.5999999999999" y="827.13643178410803"/>
         </scene>
     </scenes>
     <resources>
