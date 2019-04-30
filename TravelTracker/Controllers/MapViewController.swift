@@ -224,24 +224,29 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
-        globeVC.clearAnnotations()
-        markerDetailView.isHidden = true
-        //button annotation
-        let annotation = MaplyAnnotation()
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 10))
-        button.setTitle("Add Pin Here?", for: .normal)
-        button.titleLabel!.font = UIFont(name: "Futura", size: 13.657)
-        button.setTitleColor(.blue, for: .normal)
-        button.addTarget(self, action: #selector(annotationButtonTapped), for: .touchUpInside)
-        annotation.contentView = button
-        annotation.contentView.isUserInteractionEnabled = true
-        ////////
-        globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
-        globeVC.animate(toPosition: coord, time: 0.5)
+        if globeVC.annotations()?.count == 0 {
+            globeVC.clearAnnotations()
+            markerDetailView.isHidden = true
+            //button annotation
+            let annotation = MaplyAnnotation()
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 10))
+            button.setTitle("Add Pin Here?", for: .normal)
+            button.titleLabel!.font = UIFont(name: "Futura", size: 13.657)
+            button.setTitleColor(.blue, for: .normal)
+            button.addTarget(self, action: #selector(annotationButtonTapped), for: .touchUpInside)
+            annotation.contentView = button
+            annotation.contentView.isUserInteractionEnabled = true
+            ////////
+            globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
+            globeVC.animate(toPosition: coord, time: 0.5)
+            lastTappedCoordinate = coord
+            deselectCurrentMarker()
+        } else {
+            globeVC.clearAnnotations()
+            globeVC.animate(toPosition: coord, time: 0.5)
+        }
         markerEditorToolbar.isHidden = true
         defaultToolbar.isHidden = false
-        lastTappedCoordinate = coord
-        deselectCurrentMarker()
     }
     
     func globeViewControllerDidTapOutside(_ viewC: WhirlyGlobeViewController) {
@@ -263,10 +268,9 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print(locations.last!)
         if !trackingFinished {
             guard let lastLocation = locations.last else { return }
-            lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.latitude), y: Float(lastLocation.coordinate.longitude))
+            lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.longitude)*(Float.pi/180), y: Float(lastLocation.coordinate.latitude)*(Float.pi/180))
             trackingFinished = true
         }
     }
