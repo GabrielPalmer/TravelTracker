@@ -327,6 +327,14 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         trackingFinished = false
     }
     
+    @IBAction func friendsButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "friendsSegue", sender: nil)
+    }
+    
+    @IBAction func unwindFromFriendsTabs(sender: UIStoryboardSegue) {
+        
+    }
+    
     @IBAction func removePinButtonTapped(_ sender: Any) {
         if removePinButton.titleLabel?.text == "Remove Pin" {
             guard let currentSelectedMarkerIndex = currentSelectedMarkerIndex else {
