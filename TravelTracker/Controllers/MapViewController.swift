@@ -331,11 +331,15 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         trackingFinished = false
     }
     
+    @IBAction func settingsButtonTapped(_ sender: Any) {
+        performSegue(withIdentifier: "settingsSegue", sender: nil)
+    }
+    
     @IBAction func friendsButtonTapped(_ sender: Any) {
         performSegue(withIdentifier: "friendsSegue", sender: nil)
     }
     
-    @IBAction func unwindFromFriendsTabs(sender: UIStoryboardSegue) {
+    @IBAction func unwindToGlobeVC(sender: UIStoryboardSegue) {
         
     }
     
