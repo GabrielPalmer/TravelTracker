@@ -561,7 +561,7 @@
                     <navigationItem key="navigationItem" id="VSC-Yf-U8g">
                         <barButtonItem key="leftBarButtonItem" title="Back" id="lp2-1f-q2x">
                             <connections>
-                                <segue destination="W2V-K1-ong" kind="unwind" unwindAction="unwindFromFriendsTabsWithSender:" id="Ost-Ym-Tse"/>
+                                <segue destination="W2V-K1-ong" kind="unwind" unwindAction="unwindToGlobeVCWithSender:" id="Ost-Ym-Tse"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
