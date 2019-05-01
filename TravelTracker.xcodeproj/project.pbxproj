@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		380729472279E12C00A02EE5 /* FriendsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 380729462279E12C00A02EE5 /* FriendsTableViewCell.swift */; };
 		747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA8142251B6CD0062D762 /* FirebaseController.swift */; };
 		747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747FA81A2252636F0062D762 /* OtherExtensions.swift */; };
 		7497F00E224A625000824123 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00D224A625000824123 /* StartViewController.swift */; };
@@ -56,6 +57,7 @@
 
 /* Begin PBXFileReference section */
 		338698D1B467768FEDA81DE0 /* Pods-TravelTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TravelTracker.debug.xcconfig"; path = "Target Support Files/Pods-TravelTracker/Pods-TravelTracker.debug.xcconfig"; sourceTree = "<group>"; };
+		380729462279E12C00A02EE5 /* FriendsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsTableViewCell.swift; sourceTree = "<group>"; };
 		747FA8142251B6CD0062D762 /* FirebaseController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseController.swift; sourceTree = "<group>"; };
 		747FA81A2252636F0062D762 /* OtherExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherExtensions.swift; sourceTree = "<group>"; };
 		7497F00D224A625000824123 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				7497F014224A663E00824123 /* FriendsViewController.swift */,
+				380729462279E12C00A02EE5 /* FriendsTableViewCell.swift */,
 				7497F016224A666600824123 /* RequestsViewController.swift */,
 				7497F018224A66A800824123 /* SearchViewController.swift */,
 			);
@@ -379,6 +382,7 @@
 				747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */,
 				747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */,
 				7497F010224A626C00824123 /* SignInViewController.swift in Sources */,
+				380729472279E12C00A02EE5 /* FriendsTableViewCell.swift in Sources */,
 				7497F017224A666600824123 /* RequestsViewController.swift in Sources */,
 				74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */,
 				749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */,
