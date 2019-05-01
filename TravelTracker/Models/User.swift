@@ -14,6 +14,7 @@ class User {
     let password: String
     let color: UIColor
     var markers: [MarkerInfo] = []
+    var pinsVisible: Bool = true
     
     init(name: String, username: String, password: String) {
         self.name = name

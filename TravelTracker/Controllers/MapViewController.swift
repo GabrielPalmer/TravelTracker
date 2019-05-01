@@ -332,15 +332,53 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     @IBAction func settingsButtonTapped(_ sender: Any) {
+        deselectCurrentMarker()
         performSegue(withIdentifier: "settingsSegue", sender: nil)
     }
     
     @IBAction func friendsButtonTapped(_ sender: Any) {
+        deselectCurrentMarker()
         performSegue(withIdentifier: "friendsSegue", sender: nil)
     }
     
     @IBAction func unwindToGlobeVC(sender: UIStoryboardSegue) {
-        
+        if let source = sender.source as? UITabBarController,
+            let viewControllers = source.viewControllers,
+            let friendVC = viewControllers[0] as? FriendsViewController {
+            var deletedMapMarkers: [Int] = []
+            let changedUsers: [User] = friendVC.changedUsers
+            for user in changedUsers {
+                if !user.pinsVisible {
+                    for index in 0...(mapMarkers.count - 1) {
+                        let mapMarker = mapMarkers[index]
+                        if mapMarker.user === user {
+                            guard let component = mapMarker.component else { return }
+                            globeVC.remove(component)
+                            deletedMapMarkers.append(index)
+                        }
+                    }
+                } else {
+                    for marker in user.markers {
+                        let mapMarker = MapMarker(info: marker)
+                        mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                        if user === FirebaseController.currentUser {
+                            mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
+                        } else {
+                            mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                            mapMarker.screenMarker.color = user.color
+                        }
+                        mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+                        mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+                        mapMarker.user = user
+                        mapMarkers.append(mapMarker)
+                    }
+                }
+            }
+            if !deletedMapMarkers.isEmpty {
+                mapMarkers.remove(at: deletedMapMarkers)
+            }
+            friendVC.changedUsers.removeAll()
+        }
     }
     
     @IBAction func removePinButtonTapped(_ sender: Any) {
@@ -520,14 +558,13 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         }
     }
     
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //        if let location = locations.first {
-    //            print("Found user's location: \(location)")
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        if let destination = segue.destination as? UINavigationController,
+    //            let tabBar = destination.viewControllers[0] as? UITabBarController,
+    //            let viewControllers = tabBar.viewControllers,
+    //            let friendsVC = viewControllers[0] as? FriendsViewController {
+    //            friendsVC.seguedFromGlobeVC()
     //        }
-    //    }
-    //
-    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    //        print("Failed to find the user's location: \(error.localizedDescription)")
     //    }
 }
 
