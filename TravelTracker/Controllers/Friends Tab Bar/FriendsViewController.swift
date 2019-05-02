@@ -46,7 +46,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             let user = FirebaseController.currentUser!
             cell.nameLabel.text = user.name
             cell.usernameLabel.text = user.username
-            cell.pinsVisible.text = "Pins Visible \(user.markers.count)"
+            cell.pinsVisible.text = "Pins Visible (\(user.markers.count))"
             cell.friendsSwitch.isOn = user.pinsVisible
             cell.friendsSwitch.tag = -1
             cell.friendsSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
@@ -55,7 +55,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             let friend = FirebaseController.friends[indexPath.row]
             cell.nameLabel.text = friend.name
             cell.usernameLabel.text = friend.username
-            cell.pinsVisible.text = "Pins Visible \(friend.markers.count)"
+            cell.pinsVisible.text = "Pins Visible (\(friend.markers.count))"
             cell.friendsSwitch.isOn = friend.pinsVisible
             cell.friendsSwitch.tag = indexPath.row
             cell.friendsSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)

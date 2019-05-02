@@ -399,6 +399,13 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             markerDetailView.isHidden = true
             markerEditorToolbar.isHidden = true
             defaultToolbar.isHidden = false
+            var deletedMarkers: [Int] = []
+            for index in 0...(FirebaseController.currentUser!.markers.count - 1) {
+                if FirebaseController.currentUser!.markers[index].id == marker.info.id {
+                    deletedMarkers.append(index)
+                }
+            }
+            FirebaseController.currentUser!.markers.remove(at: deletedMarkers)
         }
     }
     
