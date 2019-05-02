@@ -45,3 +45,21 @@ extension Date {
     }
 }
 
+extension Array {
+    mutating func remove(at indexes: [Int]) {
+        var mutableIndexes = indexes
+        
+        //stops index out of range crash by checking for duplicates
+        for _ in 0...indexes.count - 1 {
+            let value = mutableIndexes.removeFirst()
+            if mutableIndexes.contains(value) {
+                print("\n\nWARNING: duplicate indexes were detected in Array extension remove(at indexes: [Int])\n\n")
+                return
+            }
+        }
+        
+        for index in indexes.sorted(by: >) {
+            remove(at: index)
+        }
+    }
+}
