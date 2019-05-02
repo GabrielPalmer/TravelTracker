@@ -12,25 +12,33 @@ import CoreLocation
 import Network
 //// Add comment to pin with alert controller ////
 
-class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
+class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, CLLocationManagerDelegate {
     
     let globeVC: WhirlyGlobeViewController = WhirlyGlobeViewController()
     let networkPath: NWPathMonitor = NWPathMonitor()
-    var hasConnection: Bool = true
+    let locationManager = CLLocationManager()
+    var trackingFinished = false
+    var lastTrackedLocation: MaplyCoordinate? = nil {
+        didSet{
+            if lastTrackedLocation != nil {
+                setPinToCurrentLocation()
+            } else {
+                print("Something")
+            }
+            stopLocationTracking()
+        }
+    }
     
     var mapMarkers: [MapMarker] = []
     
     var currentSelectedMarkerIndex: Int?
     var lastTappedCoordinate: MaplyCoordinate = MaplyCoordinate(x: 0, y: 0)
     
-    var latitude: Float = 40.419774
-    var longitude: Float = -111.885743
-    
     @IBOutlet weak var displayView: UIView!
     
     @IBOutlet weak var toolbar: UIView!
     
-    @IBOutlet weak var addPinButton: UIButton!
+    @IBOutlet weak var pinCurrentLocation: UIButton!
     
     @IBOutlet weak var addCommentButton: UIButton!
     
@@ -50,7 +58,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     @IBOutlet weak var nameDateLabel: UILabel!
     
-    @IBOutlet weak var markerCommentLabel: UILabel!
+    @IBOutlet weak var markerCommentLabel: UITextView!
     
     @IBOutlet weak var markerImageView: UIImageView!
     
@@ -61,16 +69,19 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        settingsButton.imageView?.contentMode = .scaleAspectFit
+        friendsButton.imageView?.contentMode = .scaleAspectFit
+        pinCurrentLocation.imageView?.contentMode = .scaleAspectFit
+        markerCommentLabel.showsVerticalScrollIndicator = true
+        markerCommentLabel.indicatorStyle = .white
         markerCommentLabel.superview?.layer.cornerRadius = 25
-        markerCommentLabel.adjustsFontSizeToFitWidth = true
-        markerCommentLabel.minimumScaleFactor = 5
         markerCommentLabel.textColor = UIColor.gray
         markerDetailView.isHidden = true
         markerDetailView.backgroundColor = UIColor.black.withAlphaComponent(1)
         markerCommentLabel.superview?.backgroundColor = UIColor.black.withAlphaComponent(1)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
-        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+        //        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         markerDetailView.layer.cornerRadius = 25
         markerImageView.layer.masksToBounds = true
         toolbar.backgroundColor = UIColor.clear
@@ -88,48 +99,27 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         globeVC.height = 0.5
         globeVC.autoMoveToTap = false
         
-        //        networkPath.pathUpdateHandler = { path in
-        //            if path.status == .satisfied {
-        //                self.hasConnection = true
-        //            } else {
-        //                self.hasConnection = false
-        //            }
-        //        }
         //GLOBE
         // mousebird.github.io/WhirlyGlobe/tutorial/ios/remote_image_layer.html
+        
         let globeLayer: MaplyQuadImageTilesLayer
         
-        if !hasConnection {
-            if let tileSource = MaplyMBTileSource(mbTiles: "geography-class_medres"),
-                let layer = MaplyQuadImageTilesLayer(tileSource: tileSource) {
-                layer.handleEdges = true
-                layer.coverPoles = true
-                layer.requireElev = false
-                layer.waitLoad = false
-                layer.drawPriority = 0
-                layer.singleLevelLoading = false
-                globeVC.add(layer)
-            } else {
-                fatalError()
-            }
-        } else {
-            let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
-            let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
-            let maxZoom = Int32(18)
-            
-            guard let tileSource = MaplyRemoteTileSource(
-                baseURL: "http://tile.stamen.com/terrain/",
-                ext: "png",
-                minZoom: 0,
-                maxZoom: maxZoom) else {
-                    print("Can't create a remote tile source")
-                    return
-            }
-            tileSource.cacheDir = tilesCacheDir
-            globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
-            globeVC.add(globeLayer)
-        }
         
+        let baseCacheDir = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true)[0]
+        let tilesCacheDir = "\(baseCacheDir)/stamentiles/"
+        let maxZoom = Int32(18)
+        
+        guard let tileSource = MaplyRemoteTileSource(
+            baseURL: "http://tile.stamen.com/terrain/",
+            ext: "png",
+            minZoom: 0,
+            maxZoom: maxZoom) else {
+                print("Can't create a remote tile source")
+                return
+        }
+        tileSource.cacheDir = tilesCacheDir
+        globeLayer = MaplyQuadImageTilesLayer(tileSource: tileSource)!
+        globeVC.add(globeLayer)
         globeVC.height = 0.5
         globeVC.keepNorthUp = true
         globeVC.animate(toPosition: MaplyCoordinateMakeWithDegrees(260.6704803, 30.5023056), time: 1.0)
@@ -141,9 +131,11 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         for marker in FirebaseController.currentUser!.markers {
             let mapMarker = MapMarker(info: marker)
             mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+            mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
             mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
             mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+            mapMarker.user = FirebaseController.currentUser
             mapMarkers.append(mapMarker)
         }
         
@@ -154,6 +146,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
                 let mapMarker = MapMarker(info: marker)
                 mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
                 mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
                 mapMarker.screenMarker.color = friend.color
                 mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
                 mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
@@ -190,6 +183,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         
         let greenMarker = MaplyScreenMarker()
         greenMarker.size = CGSize(width: 18, height: 36)
+        greenMarker.offset = CGPoint(x: 0, y: 17)
         greenMarker.image = UIImage(named: "Green-Pin")
         greenMarker.loc = mapMarker.screenMarker.loc
         let component = viewC.addScreenMarkers([greenMarker], desc: nil)
@@ -216,6 +210,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     @objc func annotationButtonTapped() {
         let marker = MapMarker(info: MarkerInfo(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
         marker.screenMarker.size = CGSize(width: 18, height: 36)
+        marker.screenMarker.offset = CGPoint(x: 0, y: 17)
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = lastTappedCoordinate
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
@@ -233,24 +228,29 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func globeViewController(_ viewC: WhirlyGlobeViewController, didTapAt coord: MaplyCoordinate) {
-        globeVC.clearAnnotations()
-        markerDetailView.isHidden = true
-        //button annotation
-        let annotation = MaplyAnnotation()
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 10))
-        button.setTitle("Add Pin Here?", for: .normal)
-        button.titleLabel!.font = UIFont(name: "Futura", size: 13.657)
-        button.setTitleColor(.blue, for: .normal)
-        button.addTarget(self, action: #selector(annotationButtonTapped), for: .touchUpInside)
-        annotation.contentView = button
-        annotation.contentView.isUserInteractionEnabled = true
-        ////////
-        globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
-        globeVC.animate(toPosition: coord, time: 0.5)
+        if globeVC.annotations()?.count == 0 {
+            globeVC.clearAnnotations()
+            markerDetailView.isHidden = true
+            //button annotation
+            let annotation = MaplyAnnotation()
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: 90, height: 10))
+            button.setTitle("Add Pin Here?", for: .normal)
+            button.titleLabel!.font = UIFont(name: "Futura", size: 13.657)
+            button.setTitleColor(.blue, for: .normal)
+            button.addTarget(self, action: #selector(annotationButtonTapped), for: .touchUpInside)
+            annotation.contentView = button
+            annotation.contentView.isUserInteractionEnabled = true
+            ////////
+            globeVC.addAnnotation(annotation, forPoint: coord, offset: .zero)
+            globeVC.animate(toPosition: coord, time: 0.5)
+            lastTappedCoordinate = coord
+            deselectCurrentMarker()
+        } else {
+            globeVC.clearAnnotations()
+            globeVC.animate(toPosition: coord, time: 0.5)
+        }
         markerEditorToolbar.isHidden = true
         defaultToolbar.isHidden = false
-        lastTappedCoordinate = coord
-        deselectCurrentMarker()
     }
     
     func globeViewControllerDidTapOutside(_ viewC: WhirlyGlobeViewController) {
@@ -271,16 +271,120 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         }
     }
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if !trackingFinished {
+            guard let lastLocation = locations.last else { return }
+            lastTrackedLocation = MaplyCoordinate(x: Float(lastLocation.coordinate.longitude)*(Float.pi/180), y: Float(lastLocation.coordinate.latitude)*(Float.pi/180))
+            trackingFinished = true
+        }
+    }
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
+        lastTrackedLocation = nil
+        return
     }
     
-    func locationManager(_ manager: CLLocationManager, didChange status: CLAuthorizationStatus) {
-        
+    func stopLocationTracking() {
+        locationManager.stopUpdatingLocation()
     }
     
-    @IBAction func addPinButtonTapped(_ sender: Any) {
-        
+    func startReceivingLocationChanges() {
+        let authorizationStatus = CLLocationManager.authorizationStatus()
+        if authorizationStatus != .authorizedWhenInUse && authorizationStatus != .authorizedAlways {
+            // User has not authorized access to location information.
+            return
+        }
+        // Do not start services that aren't available.
+        if !CLLocationManager.locationServicesEnabled() {
+            // Location services is not available.
+            return
+        }
+        // Configure and start the service.
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        locationManager.distanceFilter = 100.0 // In meters
+        locationManager.delegate = self
+        locationManager.startUpdatingLocation()
+    }
+    
+    func setPinToCurrentLocation() {
+        let marker = MapMarker(info: MarkerInfo(xCoord: lastTrackedLocation!.x, yCoord: lastTrackedLocation!.y))
+        marker.screenMarker.size = CGSize(width: 18, height: 36)
+        marker.screenMarker.offset = CGPoint(x: 0, y: 17)
+        marker.screenMarker.image = UIImage(named: "Green-Pin")
+        marker.screenMarker.loc = MaplyCoordinate(x: lastTrackedLocation!.x, y: lastTrackedLocation!.y)
+        marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
+        marker.user = FirebaseController.currentUser
+        mapMarkers.append(marker)
+        currentSelectedMarkerIndex = (mapMarkers.count - 1)
+        updateMarkerEditor(marker)
+        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+        globeVC.clearAnnotations()
+        defaultToolbar.isHidden = true
+        markerEditorToolbar.isHidden = false
+        FirebaseController.updateMapMarkers(marker, type: .add)
+        FirebaseController.currentUser?.markers.append(marker.info)
+        nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
+        globeVC.animate(toPosition: MaplyCoordinate(x: marker.info.xCoord, y: marker.info.yCoord), time: 0.5)
+        pinCurrentLocation.isEnabled = true
+        pinCurrentLocation.imageView?.alpha = 1.0
+    }
+    
+    @IBAction func pinCurrentLocationButtonTapped(_ sender: Any) {
+        startReceivingLocationChanges()
+        pinCurrentLocation.isEnabled = false
+        pinCurrentLocation.imageView?.alpha = 0.5
+        trackingFinished = false
+    }
+    
+    @IBAction func settingsButtonTapped(_ sender: Any) {
+        deselectCurrentMarker()
+        performSegue(withIdentifier: "settingsSegue", sender: nil)
+    }
+    
+    @IBAction func friendsButtonTapped(_ sender: Any) {
+        deselectCurrentMarker()
+        performSegue(withIdentifier: "friendsSegue", sender: nil)
+    }
+    
+    @IBAction func unwindToGlobeVC(sender: UIStoryboardSegue) {
+        if let source = sender.source as? UITabBarController,
+            let viewControllers = source.viewControllers,
+            let friendVC = viewControllers[0] as? FriendsViewController {
+            var deletedMapMarkers: [Int] = []
+            let changedUsers: [User] = friendVC.changedUsers
+            for user in changedUsers {
+                if !user.pinsVisible {
+                    for index in 0...(mapMarkers.count - 1) {
+                        let mapMarker = mapMarkers[index]
+                        if mapMarker.user === user {
+                            guard let component = mapMarker.component else { return }
+                            globeVC.remove(component)
+                            deletedMapMarkers.append(index)
+                        }
+                    }
+                } else {
+                    for marker in user.markers {
+                        let mapMarker = MapMarker(info: marker)
+                        mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                        mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
+                        if user === FirebaseController.currentUser {
+                            mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
+                        } else {
+                            mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                            mapMarker.screenMarker.color = user.color
+                        }
+                        mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+                        mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+                        mapMarker.user = user
+                        mapMarkers.append(mapMarker)
+                    }
+                }
+            }
+            if !deletedMapMarkers.isEmpty {
+                mapMarkers.remove(at: deletedMapMarkers)
+            }
+            friendVC.changedUsers.removeAll()
+        }
     }
     
     @IBAction func removePinButtonTapped(_ sender: Any) {
@@ -294,13 +398,20 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
                 print("marker didn't have component")
                 return
             }
-            globeVC.remove(component)
             FirebaseController.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
+            globeVC.remove(component)
             mapMarkers.remove(at: currentSelectedMarkerIndex)
             self.currentSelectedMarkerIndex = nil
             markerDetailView.isHidden = true
             markerEditorToolbar.isHidden = true
             defaultToolbar.isHidden = false
+            var deletedMarkers: [Int] = []
+            for index in 0...(FirebaseController.currentUser!.markers.count - 1) {
+                if FirebaseController.currentUser!.markers[index].id == marker.info.id {
+                    deletedMarkers.append(index)
+                }
+            }
+            FirebaseController.currentUser!.markers.remove(at: deletedMarkers)
         }
     }
     
@@ -318,19 +429,26 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     @IBAction func addCommentButtonTapped(_ sender: Any) {
-        let alert = UIAlertController(title: "Add a comment to this pin?", message: nil, preferredStyle: .alert)
+        guard let currentMarkerIndex = self.currentSelectedMarkerIndex else { return }
+        let mapMarker = mapMarkers[currentMarkerIndex]
+        let alert = UIAlertController(title: mapMarker.info.comment == nil ? "Add a comment" : "Edit Comment", message: nil, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
         alert.addTextField { (textField) in
+            textField.text = mapMarker.info.comment
             textField.delegate = self
             textField.placeholder = "Add comment here."
         }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { (action) in
-            guard let comment = alert.textFields?.first?.text else { return }
-            guard let currentMarker = self.currentSelectedMarkerIndex else { return }
-            self.mapMarkers[currentMarker].info.comment = comment
-            self.updateMarkerEditor(self.mapMarkers[currentMarker])
-            FirebaseController.updateMapMarkers(self.mapMarkers[currentMarker], type: .update)
+            if let comment = alert.textFields?.first?.text, !comment.isEmpty {
+                mapMarker.info.comment = comment
+                self.updateMarkerEditor(mapMarker)
+                FirebaseController.updateMapMarkers(mapMarker, type: .update)
+            } else {
+                mapMarker.info.comment = nil
+                self.updateMarkerEditor(mapMarker)
+                FirebaseController.updateMapMarkers(mapMarker, type: .update)
+            }
         }))
         self.present(alert, animated: true)
     }
@@ -419,7 +537,7 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if let text = textField.text, text.count > 200 {
+        if let text = textField.text, text.count > 1000 {
             return false
         } else {
             return true
@@ -438,8 +556,10 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
             
             if mapMarker.user === FirebaseController.currentUser {
                 screenMarker.image = UIImage(named: "Red-Pin")
+                screenMarker.offset = CGPoint(x: 0, y: 17)
             } else {
                 screenMarker.image = UIImage(named: "White-Pin")
+                screenMarker.offset = CGPoint(x: 0, y: 17)
                 screenMarker.color = mapMarker.user?.color
             }
             
@@ -453,14 +573,13 @@ class MapViewController: UIViewController, MaplyLocationTrackerDelegate, WhirlyG
         }
     }
     
-    //    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-    //        if let location = locations.first {
-    //            print("Found user's location: \(location)")
+    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    //        if let destination = segue.destination as? UINavigationController,
+    //            let tabBar = destination.viewControllers[0] as? UITabBarController,
+    //            let viewControllers = tabBar.viewControllers,
+    //            let friendsVC = viewControllers[0] as? FriendsViewController {
+    //            friendsVC.seguedFromGlobeVC()
     //        }
-    //    }
-    //
-    //    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-    //        print("Failed to find the user's location: \(error.localizedDescription)")
     //    }
 }
 

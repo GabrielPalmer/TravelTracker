@@ -2,12 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "redPin-1.png",
+      "filename" : "request dark-1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "redPin.png",
+      "filename" : "request dark.png",
       "scale" : "2x"
     },
     {

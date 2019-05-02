@@ -10,13 +10,17 @@ import UIKit
 
 class StartViewController: UIViewController {
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.isHidden = true
         
         FirebaseController.signInSavedUser { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
+                } else {
+                    self.view.isHidden = false
                 }
             }
         }
@@ -34,5 +38,12 @@ class StartViewController: UIViewController {
         }
         
     }
+    
+    @IBAction func unwindFromSettings(sender: UIStoryboardSegue) {
+        FirebaseController.signOutSavedUser()
+        view.isHidden = false
+        
+    }
+    
     
 }

@@ -20,7 +20,6 @@ class FirebaseController {
         case delete
     }
     
-    //for the sign up view controller
     static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         //checks if the their username is already taken otherwise creates a user
@@ -51,7 +50,6 @@ class FirebaseController {
         
     }
     
-    //for the sign in view controller
     static func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
@@ -64,7 +62,7 @@ class FirebaseController {
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
-                fetchFriendsInfo(usernames: usernames, completion: {
+                fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -82,7 +80,6 @@ class FirebaseController {
         let userDefaults = UserDefaults.standard
         userDefaults.set(user.username, forKey: "username")
         userDefaults.set(user.password, forKey: "password")
-        
     }
     
     // auto sign in function
@@ -104,7 +101,7 @@ class FirebaseController {
                 let usernames = data["friends"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
-                fetchFriendsInfo(usernames: usernames, completion: {
+                fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -117,7 +114,14 @@ class FirebaseController {
         
     }
     
-    static func fetchFriendsInfo(usernames: [String], completion: @escaping () -> Void) {
+    static func signOutSavedUser() {
+        let userDefaults = UserDefaults.standard
+        
+        userDefaults.set(nil, forKey: "username")
+        userDefaults.set(nil, forKey: "password")
+    }
+    
+    static func fetchMarkerInfo(usernames: [String], completion: @escaping () -> Void) {
         
         if usernames.count == 0 {
             completion()
@@ -126,6 +130,25 @@ class FirebaseController {
         
         DispatchQueue.global().async {
             let group = DispatchGroup()
+            
+            group.enter()
+            
+            if let yourUsername = FirebaseController.currentUser?.username {
+                Firestore.firestore().collection("users").document(yourUsername).collection("markers").getDocuments(completion: { (snapshot, error) in
+                    if let documents = snapshot?.documents {
+                        for document in documents {
+                            if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                                FirebaseController.currentUser?.markers.append(markerInfo)
+                            }
+                        }
+                        
+                        group.leave()
+                        
+                    } else {
+                        group.leave()
+                    }
+                })
+            }
             
             for username in usernames {
                 group.enter()
@@ -149,7 +172,6 @@ class FirebaseController {
                 Firestore.firestore().collection("users").document(friend.username).collection("markers").getDocuments(completion: { (snapshot, error) in
                     if let documents = snapshot?.documents {
                         for document in documents {
-                            print(document.data())
                             if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
                                 friend.markers.append(markerInfo)
                             }
@@ -173,5 +195,25 @@ class FirebaseController {
     
     static func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
         
+        guard let username = FirebaseController.currentUser?.username else { return }
+        
+        DispatchQueue.global().async {
+            switch type {
+            case .add:
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).setData([
+                    "comment" : marker.info.comment as Any,
+                    "date" : Timestamp(date: marker.info.date),
+                    "xCoord" : marker.info.xCoord,
+                    "yCoord" : marker.info.yCoord,
+                    ])
+            case .update:
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).updateData([
+                    "comment" : marker.info.comment as Any,
+                    ])
+            case .delete:
+                Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).delete()
+            }
+        }
     }
+    
 }

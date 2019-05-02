@@ -1,14 +1,14 @@
 //
-//  SearchViewController.swift
+//  SettingsViewController.swift
 //  TravelTracker
 //
-//  Created by Gabriel Blaine Palmer on 3/26/19.
+//  Created by Gabriel Blaine Palmer on 4/29/19.
 //  Copyright © 2019 Gabriel Blaine Palmer. All rights reserved.
 //
 
 import UIKit
 
-class SearchViewController: UIViewController {
+class SettingsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

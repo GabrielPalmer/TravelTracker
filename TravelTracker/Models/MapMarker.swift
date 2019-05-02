@@ -21,6 +21,6 @@ class MapMarker {
     }
     
     func printMarker() {
-        print("id \(info.id)\n comment \(info.comment)\n xCoord \(info.xCoord)\n yCoord \(info.yCoord)")
+        print("id \(info.id)\n comment \(info.comment ?? "nil")\n xCoord \(info.xCoord)\n yCoord \(info.yCoord)")
     }
 }
