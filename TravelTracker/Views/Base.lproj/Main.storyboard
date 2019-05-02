@@ -506,7 +506,7 @@
         <!--Your Requests-->
         <scene sceneID="aBW-Tx-IKm">
             <objects>
-                <viewController id="VUT-xo-v7B" customClass="SearchViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VUT-xo-v7B" customClass="UsersRequestsViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RUC-5S-PkL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -517,23 +517,78 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jpl-XV-oyB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6711.1999999999998" y="795.6521739130435"/>
+            <point key="canvasLocation" x="6705" y="799"/>
         </scene>
         <!--Request a Friend-->
         <scene sceneID="Vrs-kk-jPa">
             <objects>
-                <viewController id="KHh-eg-nd6" customClass="RequestsViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="KHh-eg-nd6" customClass="RequestFriendsViewController" customModule="TravelTracker" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xl5-sP-uVC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" placeholder="Username" translatesAutoresizingMaskIntoConstraints="NO" id="Lt9-cR-ikh">
+                                <rect key="frame" x="0.0" y="64" width="375" height="56"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Yr-LM-4lm">
+                                <rect key="frame" x="0.0" y="120" width="375" height="498"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="sentRequestCell" rowHeight="41" id="OfH-3b-AYS">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="41"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="OfH-3b-AYS" id="9jB-VJ-0LR">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="40.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="(username) was requested as a friend" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HOd-Mg-qkV">
+                                                    <rect key="frame" x="6" y="10" width="305" height="20.5"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IhJ-52-LaA">
+                                                    <rect key="frame" x="317" y="6" width="52" height="28"/>
+                                                    <color key="backgroundColor" red="1" green="0.27084463504492007" blue="0.10606032985791769" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="28" id="h4M-vJ-kFH"/>
+                                                        <constraint firstAttribute="width" constant="52" id="pte-8Q-39k"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Cancel">
+                                                        <color key="titleColor" red="1" green="0.93725490199999995" blue="0.1960784314" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="IhJ-52-LaA" firstAttribute="leading" secondItem="HOd-Mg-qkV" secondAttribute="trailing" constant="6" id="7od-yP-tk7"/>
+                                                <constraint firstAttribute="trailing" secondItem="IhJ-52-LaA" secondAttribute="trailing" constant="6" id="NcW-bi-xKo"/>
+                                                <constraint firstItem="HOd-Mg-qkV" firstAttribute="leading" secondItem="9jB-VJ-0LR" secondAttribute="leading" constant="6" id="RiF-23-KIE"/>
+                                                <constraint firstItem="HOd-Mg-qkV" firstAttribute="centerY" secondItem="IhJ-52-LaA" secondAttribute="centerY" id="aNL-Uu-sxD"/>
+                                                <constraint firstItem="IhJ-52-LaA" firstAttribute="top" secondItem="9jB-VJ-0LR" secondAttribute="top" constant="6" id="f4L-Jd-RdJ"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="0Yr-LM-4lm" firstAttribute="top" secondItem="Lt9-cR-ikh" secondAttribute="bottom" id="LGm-yW-DxU"/>
+                            <constraint firstItem="0Yr-LM-4lm" firstAttribute="leading" secondItem="qJf-tH-wec" secondAttribute="leading" id="OnL-GI-ZHk"/>
+                            <constraint firstItem="qJf-tH-wec" firstAttribute="bottom" secondItem="0Yr-LM-4lm" secondAttribute="bottom" id="QKh-IC-P0Z"/>
+                            <constraint firstItem="qJf-tH-wec" firstAttribute="trailing" secondItem="0Yr-LM-4lm" secondAttribute="trailing" id="QcC-2L-zKI"/>
+                            <constraint firstItem="Lt9-cR-ikh" firstAttribute="leading" secondItem="qJf-tH-wec" secondAttribute="leading" id="eV1-bD-kg1"/>
+                            <constraint firstItem="Lt9-cR-ikh" firstAttribute="trailing" secondItem="qJf-tH-wec" secondAttribute="trailing" id="grB-HA-GTb"/>
+                            <constraint firstItem="Lt9-cR-ikh" firstAttribute="top" secondItem="qJf-tH-wec" secondAttribute="top" id="og1-dd-Mas"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="qJf-tH-wec"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Request a Friend" image="Request-Light" selectedImage="Request-Dark" id="l0e-vG-cex"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XSL-EG-Jve" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5772" y="30"/>
+            <point key="canvasLocation" x="5772" y="29.23538230884558"/>
         </scene>
         <!--Friends-->
         <scene sceneID="pw4-9R-0OT">
