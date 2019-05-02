@@ -14,8 +14,8 @@
 		7497F010224A626C00824123 /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F00F224A626C00824123 /* SignInViewController.swift */; };
 		7497F012224A628000824123 /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F011224A628000824123 /* SignUpViewController.swift */; };
 		7497F015224A663E00824123 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F014224A663E00824123 /* FriendsViewController.swift */; };
-		7497F017224A666600824123 /* RequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F016224A666600824123 /* RequestsViewController.swift */; };
-		7497F019224A66A800824123 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F018224A66A800824123 /* SearchViewController.swift */; };
+		7497F017224A666600824123 /* UsersRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F016224A666600824123 /* UsersRequestsViewController.swift */; };
+		7497F019224A66A800824123 /* RequestFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F018224A66A800824123 /* RequestFriendsViewController.swift */; };
 		7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F024224A68B400824123 /* TabBarAnimationExtension.swift */; };
 		7497F02B224BBACE00824123 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02A224BBACE00824123 /* GoogleService-Info.plist */; };
 		7497F02D224BBAFF00824123 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */; };
@@ -64,8 +64,8 @@
 		7497F00F224A626C00824123 /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
 		7497F011224A628000824123 /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		7497F014224A663E00824123 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
-		7497F016224A666600824123 /* RequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsViewController.swift; sourceTree = "<group>"; };
-		7497F018224A66A800824123 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		7497F016224A666600824123 /* UsersRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRequestsViewController.swift; sourceTree = "<group>"; };
+		7497F018224A66A800824123 /* RequestFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFriendsViewController.swift; sourceTree = "<group>"; };
 		7497F024224A68B400824123 /* TabBarAnimationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAnimationExtension.swift; sourceTree = "<group>"; };
 		7497F02A224BBACE00824123 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
@@ -138,9 +138,9 @@
 			isa = PBXGroup;
 			children = (
 				7497F014224A663E00824123 /* FriendsViewController.swift */,
+				7497F016224A666600824123 /* UsersRequestsViewController.swift */,
+				7497F018224A66A800824123 /* RequestFriendsViewController.swift */,
 				380729462279E12C00A02EE5 /* FriendsTableViewCell.swift */,
-				7497F016224A666600824123 /* RequestsViewController.swift */,
-				7497F018224A66A800824123 /* SearchViewController.swift */,
 			);
 			path = "Friends Tab Bar";
 			sourceTree = "<group>";
@@ -382,11 +382,11 @@
 				747FA81B2252636F0062D762 /* OtherExtensions.swift in Sources */,
 				747FA8152251B6CD0062D762 /* FirebaseController.swift in Sources */,
 				7497F010224A626C00824123 /* SignInViewController.swift in Sources */,
+				7497F017224A666600824123 /* UsersRequestsViewController.swift in Sources */,
 				380729472279E12C00A02EE5 /* FriendsTableViewCell.swift in Sources */,
-				7497F017224A666600824123 /* RequestsViewController.swift in Sources */,
 				74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */,
 				749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */,
-				7497F019224A66A800824123 /* SearchViewController.swift in Sources */,
+				7497F019224A66A800824123 /* RequestFriendsViewController.swift in Sources */,
 				7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */,
 				74DA3FB322774A3D00B29E93 /* SettingsViewController.swift in Sources */,
 				74E485B52249119100788691 /* MapViewController.swift in Sources */,

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RequestsViewController: UIViewController {
+class UsersRequestsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
