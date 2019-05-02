@@ -616,7 +616,7 @@
                                                     <rect key="frame" x="311" y="33" width="51" height="31"/>
                                                 </switch>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QVq-BE-fKW">
-                                                    <rect key="frame" x="15" y="41.5" width="250" height="22.5"/>
+                                                    <rect key="frame" x="15" y="41.5" width="225" height="22.5"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Username">
                                                             <attributes>
@@ -640,7 +640,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNj-ha-ogQ">
-                                                    <rect key="frame" x="15" y="0.0" width="250" height="22.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="225" height="22.5"/>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Name">
                                                             <attributes>
@@ -661,10 +661,10 @@
                                                 <constraint firstItem="c1Q-we-2WT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jNj-ha-ogQ" secondAttribute="trailing" constant="8" id="PzE-dt-MeR"/>
                                                 <constraint firstItem="S95-1O-COr" firstAttribute="trailing" secondItem="Vi2-fM-89T" secondAttribute="trailingMargin" id="bS3-6I-KCB"/>
                                                 <constraint firstItem="QVq-BE-fKW" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leadingMargin" id="czj-Ew-qN9"/>
-                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="2/3" id="eav-3n-cIm"/>
+                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="18/30" id="eav-3n-cIm"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="S95-1O-COr" secondAttribute="bottom" id="gSK-t3-9U1"/>
                                                 <constraint firstItem="jNj-ha-ogQ" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leadingMargin" id="ncF-dQ-cfN"/>
-                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="2/3" id="rQ1-58-Bbz"/>
+                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="18/30" id="rQ1-58-Bbz"/>
                                                 <constraint firstItem="QVq-BE-fKW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jNj-ha-ogQ" secondAttribute="bottom" constant="8" id="wX1-8w-M5F"/>
                                                 <constraint firstItem="S95-1O-COr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QVq-BE-fKW" secondAttribute="trailing" constant="8" id="zRk-mM-EVk"/>
                                             </constraints>

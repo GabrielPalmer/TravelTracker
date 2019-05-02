@@ -131,6 +131,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         for marker in FirebaseController.currentUser!.markers {
             let mapMarker = MapMarker(info: marker)
             mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+            mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
             mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
             mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
@@ -145,6 +146,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                 let mapMarker = MapMarker(info: marker)
                 mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
                 mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
                 mapMarker.screenMarker.color = friend.color
                 mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
                 mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
@@ -181,6 +183,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         
         let greenMarker = MaplyScreenMarker()
         greenMarker.size = CGSize(width: 18, height: 36)
+        greenMarker.offset = CGPoint(x: 0, y: 17)
         greenMarker.image = UIImage(named: "Green-Pin")
         greenMarker.loc = mapMarker.screenMarker.loc
         let component = viewC.addScreenMarkers([greenMarker], desc: nil)
@@ -207,6 +210,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     @objc func annotationButtonTapped() {
         let marker = MapMarker(info: MarkerInfo(xCoord: lastTappedCoordinate.x, yCoord: lastTappedCoordinate.y))
         marker.screenMarker.size = CGSize(width: 18, height: 36)
+        marker.screenMarker.offset = CGPoint(x: 0, y: 17)
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = lastTappedCoordinate
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
@@ -305,6 +309,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     func setPinToCurrentLocation() {
         let marker = MapMarker(info: MarkerInfo(xCoord: lastTrackedLocation!.x, yCoord: lastTrackedLocation!.y))
         marker.screenMarker.size = CGSize(width: 18, height: 36)
+        marker.screenMarker.offset = CGPoint(x: 0, y: 17)
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = MaplyCoordinate(x: lastTrackedLocation!.x, y: lastTrackedLocation!.y)
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
@@ -361,6 +366,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                     for marker in user.markers {
                         let mapMarker = MapMarker(info: marker)
                         mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                        mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
                         if user === FirebaseController.currentUser {
                             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
                         } else {
@@ -550,8 +556,10 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             
             if mapMarker.user === FirebaseController.currentUser {
                 screenMarker.image = UIImage(named: "Red-Pin")
+                screenMarker.offset = CGPoint(x: 0, y: 17)
             } else {
                 screenMarker.image = UIImage(named: "White-Pin")
+                screenMarker.offset = CGPoint(x: 0, y: 17)
                 screenMarker.color = mapMarker.user?.color
             }
             
