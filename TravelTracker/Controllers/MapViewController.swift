@@ -351,6 +351,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             let viewControllers = source.viewControllers,
             let friendVC = viewControllers[0] as? FriendsViewController {
             var deletedMapMarkers: [Int] = []
+            var deletedComponents: [MaplyComponentObject] = []
             let changedUsers: [User] = friendVC.changedUsers
             for user in changedUsers {
                 if !user.pinsVisible {
@@ -358,7 +359,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                         let mapMarker = mapMarkers[index]
                         if mapMarker.user === user {
                             guard let component = mapMarker.component else { return }
-                            globeVC.remove(component)
+                            deletedComponents.append(component)
                             deletedMapMarkers.append(index)
                         }
                     }
@@ -380,8 +381,9 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                     }
                 }
             }
-            if !deletedMapMarkers.isEmpty {
+            if !deletedMapMarkers.isEmpty && !deletedComponents.isEmpty {
                 mapMarkers.remove(at: deletedMapMarkers)
+                globeVC.remove(deletedComponents)
             }
             friendVC.changedUsers.removeAll()
         }

@@ -68,22 +68,20 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     @objc func switchValueChanged(_ sender: UISwitch) {
         let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag]
         var removedIndexes: [Int] = []
-        var addedUsers: [User] = []
         if !changedUsers.isEmpty { 
-            for index in 0...(changedUsers.count - 1) { // Loops the following for as many as changedUsers.count - 1
-                let indexedUser = changedUsers[index] // Sets a variable indexedUser to the user for the current index of the changedUsers array
-                if user.username == indexedUser.username { // If the user's username is the same as the indexedUser's username run the following
-                    removedIndexes.append(index) // Removes the user for the current index of the changeUsers array
-                } else { // If the user's username is not the same as the indexedUser's username run the following
-                    addedUsers.append(indexedUser) // Add the user to the changedUsers array
+            for index in 0...(changedUsers.count - 1) {
+                let indexedUser = changedUsers[index]
+                if user.username == indexedUser.username {
+                    removedIndexes.append(index)
+                } else {
+                    changedUsers.append(user)
                 }
             }
-        } else { // If the changedUsers array is empty run the following
-            changedUsers.append(user) // Add the user to the changedUsers array
-        }
-        changedUsers.remove(at: removedIndexes)
-        for user in addedUsers {
+        } else {
             changedUsers.append(user)
+        }
+        if removedIndexes.count > 0 {
+            changedUsers.remove(at: removedIndexes)
         }
         user.pinsVisible = !user.pinsVisible
         updateVisiblePins()
