@@ -10,17 +10,21 @@ import UIKit
 
 class StartViewController: UIViewController {
     
+    @IBOutlet weak var buttonsView: UIView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.isHidden = true
-        
+        buttonsView.isHidden = true
+        loadingIndicator.color = UIColor.black
+
         FirebaseController.signInSavedUser { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
                 } else {
-                    self.view.isHidden = false
+                    self.buttonsView.isHidden = false
                 }
             }
         }
