@@ -18,6 +18,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        updateVisiblePins()
+        
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -64,20 +66,39 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func switchValueChanged(_ sender: UISwitch) {
-        let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag]
-        if !changedUsers.isEmpty {
-            for index in 0...(changedUsers.count - 1) {
-                let indexedUser = changedUsers[index]
-                if user.username == indexedUser.username {
-                    changedUsers.remove(at: index)
-                } else {
-                    changedUsers.append(user)
+        let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag] // The user is the currentUser if the sender.tag is -1 and if it isn't it's the friend for the sender.tags index
+        var removedIndexes: [Int] = []
+        var addedUsers: [User] = []
+        if !changedUsers.isEmpty { // if the changedUsers array isn't empty run the following
+            for index in 0...(changedUsers.count - 1) { // Loops the following for as many as changedUsers.count - 1
+                let indexedUser = changedUsers[index] // Sets a variable indexedUser to the user for the current index of the changedUsers array
+                if user.username == indexedUser.username { // If the user's username is the same as the indexedUser's username run the following
+                    removedIndexes.append(index) // Removes the user for the current index of the changeUsers array
+                } else { // If the user's username is not the same as the indexedUser's username run the following
+                    addedUsers.append(indexedUser) // Add the user to the changedUsers array
                 }
-                user.pinsVisible = !user.pinsVisible
             }
-        } else {
-            changedUsers.append(user)
-            user.pinsVisible = !user.pinsVisible
+        } else { // If the changedUsers array is empty run the following
+            changedUsers.append(user) // Add the user to the changedUsers array
         }
+        changedUsers.remove(at: removedIndexes)
+        for user in addedUsers {
+            changedUsers.append(user)
+        }
+        user.pinsVisible = !user.pinsVisible
+        updateVisiblePins()
+    }
+    
+    func updateVisiblePins() {
+        var visiblePins: Int = 0
+        for friend in FirebaseController.friends {
+            if friend.pinsVisible == true {
+                visiblePins += friend.markers.count
+            }
+        }
+        if FirebaseController.currentUser!.pinsVisible == true {
+            visiblePins += FirebaseController.currentUser!.markers.count
+        }
+        tabBarController?.navigationItem.title = "Visible Pins: \(visiblePins)"
     }
 }
