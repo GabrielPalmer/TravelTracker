@@ -66,10 +66,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func switchValueChanged(_ sender: UISwitch) {
-        let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag] // The user is the currentUser if the sender.tag is -1 and if it isn't it's the friend for the sender.tags index
+        let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag]
         var removedIndexes: [Int] = []
         var addedUsers: [User] = []
-        if !changedUsers.isEmpty { // if the changedUsers array isn't empty run the following
+        if !changedUsers.isEmpty { 
             for index in 0...(changedUsers.count - 1) { // Loops the following for as many as changedUsers.count - 1
                 let indexedUser = changedUsers[index] // Sets a variable indexedUser to the user for the current index of the changedUsers array
                 if user.username == indexedUser.username { // If the user's username is the same as the indexedUser's username run the following
