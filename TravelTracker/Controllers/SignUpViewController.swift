@@ -110,6 +110,13 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
+        guard name.count <= 50 else {
+            createButton.isEnabled = false
+            errorLabel.text = "Name must be less than 50 characters"
+            errorLabel.isHidden = false
+            return
+        }
+        
         guard let username = userNameTextField.text, username.trimmingCharacters(in: .whitespaces).count >= 5 else {
             createButton.isEnabled = false
             errorLabel.text = "Username must be at least five characters"
@@ -117,9 +124,23 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
+        guard username.count <= 30 else {
+            createButton.isEnabled = false
+            errorLabel.text = "Name must be less than 30 characters"
+            errorLabel.isHidden = false
+            return
+        }
+        
         guard let password = passwordTextField.text, password.trimmingCharacters(in: .whitespaces).count >= 5 else {
             createButton.isEnabled = false
             errorLabel.text = "Password must be at least five characters"
+            errorLabel.isHidden = false
+            return
+        }
+        
+        guard password.count <= 30 else {
+            createButton.isEnabled = false
+            errorLabel.text = "Password must be less than 30 characters"
             errorLabel.isHidden = false
             return
         }
@@ -134,6 +155,13 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         guard username != password else {
             createButton.isEnabled = false
             errorLabel.text = "Username and password cannot be the same"
+            errorLabel.isHidden = false
+            return
+        }
+        
+        guard name != username else {
+            createButton.isEnabled = false
+            errorLabel.text = "Name and username should be different"
             errorLabel.isHidden = false
             return
         }

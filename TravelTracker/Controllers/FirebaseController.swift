@@ -13,6 +13,9 @@ class FirebaseController {
     
     static var currentUser: User?
     static var friends: [User] = []
+    static var friendUsernames: [String] = []
+    static var friendRequests: [String] = []
+    static var sentRequests: [String] = []
     
     enum UpdateType {
         case add
@@ -38,7 +41,9 @@ class FirebaseController {
                 "name" : name,
                 "username" : username,
                 "password" : password,
-                "friends" : [String]()
+                "friends" : [String](),
+                "friendRequests" : [String](),
+                "sentRequests" : [String]()
                 ], completion: { (error) in
                     let user = User(name: name, username: username, password: password)
                     currentUser = user
@@ -57,11 +62,14 @@ class FirebaseController {
                 let data = document.data(),
                 password == data["password"] as? String,
                 let name = data["name"] as? String,
-                let usernames = data["friends"] as? [String] {
+                let usernames = data["friends"] as? [String],
+                let requests = data["friendRequests"] as? [String] {
                 
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
+                friendUsernames = usernames
+                friendRequests = requests
                 fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
@@ -98,9 +106,13 @@ class FirebaseController {
                 let data = document.data(),
                 password == data["password"] as? String,
                 let name = data["name"] as? String,
-                let usernames = data["friends"] as? [String] {
+                let usernames = data["friends"] as? [String],
+                let requests = data["friendRequests"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
+                friendUsernames = usernames
+                friendRequests = requests
+                
                 fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
@@ -214,6 +226,10 @@ class FirebaseController {
                 Firestore.firestore().collection("users").document(username).collection("markers").document(marker.info.id).delete()
             }
         }
+    }
+    
+    static func sendFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
+        completion(false)
     }
     
 }
