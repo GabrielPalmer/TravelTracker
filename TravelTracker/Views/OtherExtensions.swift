@@ -49,6 +49,13 @@ extension Array {
     mutating func remove(at indexes: [Int]) {
         var mutableIndexes = indexes
         
+        guard self.count > 0 else { return }
+        
+        guard indexes.count <= self.count else {
+            print("\n\nWARNING: indexes to delete exceeded array size in Array extension remove(at indexes: [Int])\n\n")
+            return
+        }
+        
         //stops index out of range crash by checking for duplicates
         for _ in 0...indexes.count - 1 {
             let value = mutableIndexes.removeFirst()

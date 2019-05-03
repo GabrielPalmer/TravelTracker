@@ -23,6 +23,7 @@
 		74C37CE9225AF32600DB865C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C37CE8225AF32600DB865C /* User.swift */; };
 		74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C37CEA225AF47A00DB865C /* MapMarker.swift */; };
 		74DA3FB322774A3D00B29E93 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA3FB222774A3D00B29E93 /* SettingsViewController.swift */; };
+		74DA3FBC227C7B8500B29E93 /* SentRequestTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74DA3FBB227C7B8500B29E93 /* SentRequestTableViewCell.swift */; };
 		74E485B32249119100788691 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B22249119100788691 /* AppDelegate.swift */; };
 		74E485B52249119100788691 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E485B42249119100788691 /* MapViewController.swift */; };
 		74E485B82249119100788691 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74E485B62249119100788691 /* Main.storyboard */; };
@@ -73,6 +74,7 @@
 		74C37CE8225AF32600DB865C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		74C37CEA225AF47A00DB865C /* MapMarker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapMarker.swift; sourceTree = "<group>"; };
 		74DA3FB222774A3D00B29E93 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		74DA3FBB227C7B8500B29E93 /* SentRequestTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentRequestTableViewCell.swift; sourceTree = "<group>"; };
 		74E485AF2249119100788691 /* TravelTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TravelTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E485B22249119100788691 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		74E485B42249119100788691 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				7497F016224A666600824123 /* UsersRequestsViewController.swift */,
 				7497F018224A66A800824123 /* RequestFriendsViewController.swift */,
 				380729462279E12C00A02EE5 /* FriendsTableViewCell.swift */,
+				74DA3FBB227C7B8500B29E93 /* SentRequestTableViewCell.swift */,
 			);
 			path = "Friends Tab Bar";
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 				74E485B52249119100788691 /* MapViewController.swift in Sources */,
 				74E485B32249119100788691 /* AppDelegate.swift in Sources */,
 				74C37CE9225AF32600DB865C /* User.swift in Sources */,
+				74DA3FBC227C7B8500B29E93 /* SentRequestTableViewCell.swift in Sources */,
 				7497F00E224A625000824123 /* StartViewController.swift in Sources */,
 				7497F015224A663E00824123 /* FriendsViewController.swift in Sources */,
 				7497F012224A628000824123 /* SignUpViewController.swift in Sources */,
