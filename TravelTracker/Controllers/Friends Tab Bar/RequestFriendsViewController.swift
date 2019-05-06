@@ -12,21 +12,52 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
 
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tableView.delegate = self
         tableView.dataSource = self
+        
+        searchBar.delegate = self
+        searchBar.autocapitalizationType = .none
+        
+        loadingIndicator.isHidden = true
+        loadingIndicator.color = UIColor.black
     }
     
     @objc func cellCancelButtonTapped(_ sender: UIButton) {
+        let username = FirebaseController.sentRequests[sender.tag]
         
+        searchBar.isUserInteractionEnabled = false
+        tableView.isUserInteractionEnabled = false
+        loadingIndicator.isHidden = false
+        
+        FirebaseController.cancelFriendRequest(username: username) { (success) in
+            DispatchQueue.main.async {
+                if success {
+                    self.tableView.reloadData()
+                } else {
+                    let alertController = UIAlertController(title: "Failed to remove friend request", message: nil, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    self.present(alertController, animated: true)
+                }
+                
+                self.searchBar.isUserInteractionEnabled = true
+                self.tableView.isUserInteractionEnabled = true
+                self.loadingIndicator.isHidden = true
+            }
+        }
     }
     
     //===========================================
     // MARK: - Table View Data Source
     //===========================================
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Sent Requests"
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FirebaseController.sentRequests.count
@@ -36,7 +67,12 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
         let cell = tableView.dequeueReusableCell(withIdentifier: "sentRequestCell", for: indexPath) as! SentRequestTableViewCell
         cell.usernameLabel.text = "\(FirebaseController.sentRequests[indexPath.row]) was requested as a friend"
         cell.cancelButton.addTarget(self, action: #selector(cellCancelButtonTapped(_:)), for: .touchUpInside)
+        cell.cancelButton.tag = indexPath.row
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
     }
     
     //===========================================
@@ -44,6 +80,13 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     //===========================================
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        
+        print("search bar button was clicked")
+        
+        searchBar.isUserInteractionEnabled = false
+        tableView.isUserInteractionEnabled = false
+        loadingIndicator.isHidden = false
+        
         guard let searchTerm = searchBar.text, !searchTerm.isEmpty else { return }
         
         guard !FirebaseController.friendUsernames.contains(searchTerm) else {
@@ -54,15 +97,25 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
         }
         
         FirebaseController.sendFriendRequest(username: searchTerm) { (success) in
-            if success {
+            
+            DispatchQueue.main.async {
+                if success {
+                    self.tableView.reloadData()
+                    self.searchBar.text = ""
+                } else {
+                    let alertController = UIAlertController(title: "Could not find anyone with that username", message: nil, preferredStyle: .alert)
+                    alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+                    self.present(alertController, animated: true)
+                }
                 
-            } else {
-                let alertController = UIAlertController(title: "Could not find anyone with that username", message: nil, preferredStyle: .alert)
-                alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
-                self.present(alertController, animated: true)
+                self.searchBar.isUserInteractionEnabled = true
+                self.tableView.isUserInteractionEnabled = true
+                self.loadingIndicator.isHidden = true
             }
         }
         
     }
+    
+    
 
 }

@@ -63,13 +63,17 @@ class FirebaseController {
                 password == data["password"] as? String,
                 let name = data["name"] as? String,
                 let usernames = data["friends"] as? [String],
-                let requests = data["friendRequests"] as? [String] {
+                let yourRequests = data["friendRequests"] as? [String],
+                let yourSentRequests = data["sentRequests"] as? [String] {
                 
                 let user = User(name: name, username: username, password: password)
                 currentUser = user
                 saveCurrentUser(user: user)
+                
                 friendUsernames = usernames
-                friendRequests = requests
+                friendRequests = yourRequests
+                sentRequests = yourSentRequests
+                
                 fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
                     return
@@ -90,7 +94,6 @@ class FirebaseController {
         userDefaults.set(user.password, forKey: "password")
     }
     
-    // auto sign in function
     static func signInSavedUser(completion: @escaping (Bool) -> Void) {
         let userDefaults = UserDefaults.standard
         guard let username = userDefaults.string(forKey: "username"),
@@ -107,11 +110,13 @@ class FirebaseController {
                 password == data["password"] as? String,
                 let name = data["name"] as? String,
                 let usernames = data["friends"] as? [String],
-                let requests = data["friendRequests"] as? [String] {
+                let yourRequests = data["friendRequests"] as? [String],
+                let yourSentRequests = data["sentRequests"] as? [String] {
                 
                 currentUser = User(name: name, username: username, password: password)
                 friendUsernames = usernames
-                friendRequests = requests
+                friendRequests = yourRequests
+                sentRequests = yourSentRequests
                 
                 fetchMarkerInfo(usernames: usernames, completion: {
                     completion(true)
@@ -229,7 +234,103 @@ class FirebaseController {
     }
     
     static func sendFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
-        completion(false)
+        
+        //gets the friend requests of the user you requested
+        Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+            guard let usersFriendRequests = document?.data()?["friendRequests"] as? [String],
+                let yourUsername = currentUser?.username else {
+                completion(false)
+                return
+            }
+            
+            guard !usersFriendRequests.contains(yourUsername) else {
+                print("\n\nUser was already sent a request\n\n")
+                completion(false)
+                return
+            }
+            
+            var newFriendRequests: [String]
+            newFriendRequests = usersFriendRequests
+            newFriendRequests.append(yourUsername)
+            
+            //update that users friend requests now with your username
+            Firestore.firestore().collection("users").document(username).updateData([
+                "friendRequests" : newFriendRequests
+                ], completion: { (error) in
+                    if error == nil {
+                        sentRequests.insert(username, at: 0)
+                        
+                        //updates your sent requests with that user
+                        Firestore.firestore().collection("users").document(yourUsername).updateData([
+                            "sentRequests" : sentRequests
+                            ], completion: { (error) in
+                                completion(true)
+                                return
+                        })
+                    } else {
+                        print(error!.localizedDescription)
+                        completion(false)
+                        return
+                    }
+            })
+        }
     }
+    
+    static func cancelFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
+        
+        //gets the friend requests of the user you requested
+        Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
+            guard let usersFriendRequests = document?.data()?["friendRequests"] as? [String],
+                let yourUsername = currentUser?.username else {
+                completion(false)
+                return
+            }
+            
+            //creates the new array of friend requests without your username
+            var newFriendRequests: [String]
+            newFriendRequests = usersFriendRequests
+            for index in 0...newFriendRequests.count - 1 {
+                let string = newFriendRequests[index]
+                if string == yourUsername {
+                    newFriendRequests.remove(at: index)
+                    break
+                }
+            }
+            
+            //updates their friend requests with new array of requests
+            Firestore.firestore().collection("users").document(username).updateData([
+                "friendRequests" : newFriendRequests
+                ], completion: { (error) in
+                    if error == nil {
+                        
+                        //updates sent requests array
+                        for index in 0...sentRequests.count - 1 {
+                            let string = sentRequests[index]
+                            if string == username {
+                                sentRequests.remove(at: index)
+                                break
+                            }
+                        }
+                        
+                        //updates your sent requests on firebase
+                        Firestore.firestore().collection("users").document(yourUsername).updateData([
+                            "sentRequests" : sentRequests
+                            ], completion: { (error) in
+                                if let error = error {
+                                    print(error.localizedDescription)
+                                }
+                                
+                                completion(true)
+                        })
+                    } else {
+                        completion(false)
+                        return
+                    }
+            })
+            
+        }
+    }
+    
+    
     
 }

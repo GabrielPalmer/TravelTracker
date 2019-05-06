@@ -17,6 +17,7 @@ class SentRequestTableViewCell: UITableViewCell {
         super.awakeFromNib()
         
         cancelButton.layer.cornerRadius = 5
+        usernameLabel.adjustsFontSizeToFitWidth = true
     }
 
 }

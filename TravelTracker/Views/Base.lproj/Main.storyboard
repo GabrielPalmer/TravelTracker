@@ -551,9 +551,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="txT-IR-FhZ">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                            </activityIndicatorView>
                             <searchBar contentMode="redraw" placeholder="Username" translatesAutoresizingMaskIntoConstraints="NO" id="Lt9-cR-ikh">
                                 <rect key="frame" x="0.0" y="64" width="375" height="56"/>
-                                <textInputTraits key="textInputTraits"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no"/>
                             </searchBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="0Yr-LM-4lm">
                                 <rect key="frame" x="0.0" y="120" width="375" height="498"/>
@@ -608,12 +611,15 @@
                             <constraint firstItem="qJf-tH-wec" firstAttribute="trailing" secondItem="0Yr-LM-4lm" secondAttribute="trailing" id="QcC-2L-zKI"/>
                             <constraint firstItem="Lt9-cR-ikh" firstAttribute="leading" secondItem="qJf-tH-wec" secondAttribute="leading" id="eV1-bD-kg1"/>
                             <constraint firstItem="Lt9-cR-ikh" firstAttribute="trailing" secondItem="qJf-tH-wec" secondAttribute="trailing" id="grB-HA-GTb"/>
+                            <constraint firstItem="txT-IR-FhZ" firstAttribute="centerX" secondItem="xl5-sP-uVC" secondAttribute="centerX" id="mHz-RD-97X"/>
                             <constraint firstItem="Lt9-cR-ikh" firstAttribute="top" secondItem="qJf-tH-wec" secondAttribute="top" id="og1-dd-Mas"/>
+                            <constraint firstItem="txT-IR-FhZ" firstAttribute="centerY" secondItem="xl5-sP-uVC" secondAttribute="centerY" id="qA3-vv-aIY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="qJf-tH-wec"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Request a Friend" image="Request-Light" selectedImage="Request-Dark" id="l0e-vG-cex"/>
                     <connections>
+                        <outlet property="loadingIndicator" destination="txT-IR-FhZ" id="yqD-sa-cq8"/>
                         <outlet property="searchBar" destination="Lt9-cR-ikh" id="6G0-HE-zYw"/>
                         <outlet property="tableView" destination="0Yr-LM-4lm" id="SON-cN-Vhf"/>
                     </connections>
