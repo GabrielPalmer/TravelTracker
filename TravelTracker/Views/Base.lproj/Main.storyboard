@@ -634,18 +634,21 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendsCell" rowHeight="75" id="9eS-h2-HC8" customClass="FriendsTableViewCell" customModule="TravelTracker" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="75"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="friendsCell" rowHeight="70" id="9eS-h2-HC8" customClass="FriendsTableViewCell" customModule="TravelTracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="9eS-h2-HC8" id="Vi2-fM-89T">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="74.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="S95-1O-COr">
-                                                    <rect key="frame" x="311" y="33" width="51" height="31"/>
+                                                    <rect key="frame" x="311" y="19.5" width="51" height="31"/>
                                                 </switch>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QVq-BE-fKW">
-                                                    <rect key="frame" x="15" y="41.5" width="225" height="22.5"/>
+                                                    <rect key="frame" x="8" y="39" width="225" height="22.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22.5" id="7PM-ye-2oM"/>
+                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Username">
                                                             <attributes>
@@ -656,20 +659,11 @@
                                                     </attributedString>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="c1Q-we-2WT">
-                                                    <rect key="frame" x="289" y="0.0" width="86" height="22.5"/>
-                                                    <attributedString key="attributedText">
-                                                        <fragment content="Pins Visible">
-                                                            <attributes>
-                                                                <font key="NSFont" size="17" name="Futura-Medium"/>
-                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                            </attributes>
-                                                        </fragment>
-                                                    </attributedString>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jNj-ha-ogQ">
-                                                    <rect key="frame" x="15" y="0.0" width="225" height="22.5"/>
+                                                    <rect key="frame" x="8" y="8.5" width="225" height="22.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22.5" id="GCc-JT-rBy"/>
+                                                    </constraints>
                                                     <attributedString key="attributedText">
                                                         <fragment content="Name">
                                                             <attributes>
@@ -682,26 +676,21 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="bottom" secondItem="Vi2-fM-89T" secondAttribute="bottomMargin" id="0Ft-GV-FWf"/>
-                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="top" secondItem="Vi2-fM-89T" secondAttribute="top" id="FXe-3t-qdy"/>
-                                                <constraint firstItem="S95-1O-COr" firstAttribute="top" relation="greaterThanOrEqual" secondItem="c1Q-we-2WT" secondAttribute="bottom" constant="8" id="LB3-xO-snS"/>
-                                                <constraint firstItem="c1Q-we-2WT" firstAttribute="top" secondItem="Vi2-fM-89T" secondAttribute="top" id="NAL-QR-B0O"/>
-                                                <constraint firstAttribute="trailing" secondItem="c1Q-we-2WT" secondAttribute="trailing" id="Ot5-4h-me7"/>
-                                                <constraint firstItem="c1Q-we-2WT" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="jNj-ha-ogQ" secondAttribute="trailing" constant="8" id="PzE-dt-MeR"/>
+                                                <constraint firstItem="S95-1O-COr" firstAttribute="centerY" secondItem="Vi2-fM-89T" secondAttribute="centerY" id="0eu-OH-Rb4"/>
+                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leading" constant="8" id="3h3-7l-dab"/>
+                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="top" secondItem="Vi2-fM-89T" secondAttribute="top" constant="8.25" id="FXe-3t-qdy"/>
+                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leading" constant="8" id="JP5-WR-s2k"/>
                                                 <constraint firstItem="S95-1O-COr" firstAttribute="trailing" secondItem="Vi2-fM-89T" secondAttribute="trailingMargin" id="bS3-6I-KCB"/>
-                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leadingMargin" id="czj-Ew-qN9"/>
                                                 <constraint firstItem="jNj-ha-ogQ" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="18/30" id="eav-3n-cIm"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="S95-1O-COr" secondAttribute="bottom" id="gSK-t3-9U1"/>
-                                                <constraint firstItem="jNj-ha-ogQ" firstAttribute="leading" secondItem="Vi2-fM-89T" secondAttribute="leadingMargin" id="ncF-dQ-cfN"/>
+                                                <constraint firstAttribute="bottom" secondItem="QVq-BE-fKW" secondAttribute="bottom" constant="8.25" id="f5H-zh-SbX"/>
                                                 <constraint firstItem="QVq-BE-fKW" firstAttribute="width" secondItem="Vi2-fM-89T" secondAttribute="width" multiplier="18/30" id="rQ1-58-Bbz"/>
-                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="top" relation="greaterThanOrEqual" secondItem="jNj-ha-ogQ" secondAttribute="bottom" constant="8" id="wX1-8w-M5F"/>
+                                                <constraint firstItem="QVq-BE-fKW" firstAttribute="top" secondItem="jNj-ha-ogQ" secondAttribute="bottom" constant="8" id="wX1-8w-M5F"/>
                                                 <constraint firstItem="S95-1O-COr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QVq-BE-fKW" secondAttribute="trailing" constant="8" id="zRk-mM-EVk"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="friendsSwitch" destination="S95-1O-COr" id="pgY-kA-sL3"/>
                                             <outlet property="nameLabel" destination="jNj-ha-ogQ" id="8AC-fq-qhv"/>
-                                            <outlet property="pinsVisible" destination="c1Q-we-2WT" id="Frv-CV-1Cl"/>
                                             <outlet property="usernameLabel" destination="QVq-BE-fKW" id="xx4-zL-n2J"/>
                                         </connections>
                                     </tableViewCell>
@@ -959,14 +948,14 @@
     </scenes>
     <resources>
         <image name="Friends-Icon" width="352" height="292"/>
-        <image name="Friends-TabBar-Dark" width="25" height="25"/>
-        <image name="Friends-TabBar-Light" width="25" height="25"/>
-        <image name="Mail-Dark" width="25" height="25"/>
-        <image name="Mail-Light" width="25" height="25"/>
-        <image name="Pin-My-Location" width="208" height="331"/>
-        <image name="Request-Dark" width="25" height="25"/>
-        <image name="Request-Light" width="25" height="25"/>
-        <image name="Settings" width="240" height="308"/>
+        <image name="Friends-TabBar-Dark" width="37.5" height="37.5"/>
+        <image name="Friends-TabBar-Light" width="37.5" height="37.5"/>
+        <image name="Mail-Dark" width="37.5" height="37.5"/>
+        <image name="Mail-Light" width="37.5" height="37.5"/>
+        <image name="Pin-My-Location" width="208.5" height="331.5"/>
+        <image name="Request-Dark" width="37.5" height="37.5"/>
+        <image name="Request-Light" width="37.5" height="37.5"/>
+        <image name="Settings" width="240.5" height="308.5"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="M17-2d-B1A"/>

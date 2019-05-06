@@ -14,8 +14,6 @@ class FriendsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var usernameLabel: UILabel!
     
-    @IBOutlet weak var pinsVisible: UILabel!
-    
     @IBOutlet weak var friendsSwitch: UISwitch!
     
 }

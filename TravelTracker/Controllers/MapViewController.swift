@@ -25,7 +25,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             } else {
                 print("Something")
             }
-            stopLocationTracking()
+            locationManager.stopUpdatingLocation()
         }
     }
     
@@ -247,7 +247,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             deselectCurrentMarker()
         } else {
             globeVC.clearAnnotations()
-            globeVC.animate(toPosition: coord, time: 0.5)
         }
         markerEditorToolbar.isHidden = true
         defaultToolbar.isHidden = false
@@ -282,10 +281,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         lastTrackedLocation = nil
         return
-    }
-    
-    func stopLocationTracking() {
-        locationManager.stopUpdatingLocation()
     }
     
     func startReceivingLocationChanges() {
