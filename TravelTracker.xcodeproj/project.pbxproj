@@ -16,7 +16,6 @@
 		7497F015224A663E00824123 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F014224A663E00824123 /* FriendsViewController.swift */; };
 		7497F017224A666600824123 /* UsersRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F016224A666600824123 /* UsersRequestsViewController.swift */; };
 		7497F019224A66A800824123 /* RequestFriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F018224A66A800824123 /* RequestFriendsViewController.swift */; };
-		7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7497F024224A68B400824123 /* TabBarAnimationExtension.swift */; };
 		7497F02B224BBACE00824123 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02A224BBACE00824123 /* GoogleService-Info.plist */; };
 		7497F02D224BBAFF00824123 /* geography-class_medres.mbtiles in Resources */ = {isa = PBXBuildFile; fileRef = 7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */; };
 		749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 749C243F2260CCE900CFF2BF /* MarkerInfo.swift */; };
@@ -67,7 +66,6 @@
 		7497F014224A663E00824123 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
 		7497F016224A666600824123 /* UsersRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersRequestsViewController.swift; sourceTree = "<group>"; };
 		7497F018224A66A800824123 /* RequestFriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFriendsViewController.swift; sourceTree = "<group>"; };
-		7497F024224A68B400824123 /* TabBarAnimationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarAnimationExtension.swift; sourceTree = "<group>"; };
 		7497F02A224BBACE00824123 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7497F02C224BBAFF00824123 /* geography-class_medres.mbtiles */ = {isa = PBXFileReference; lastKnownFileType = file; path = "geography-class_medres.mbtiles"; sourceTree = "<group>"; };
 		749C243F2260CCE900CFF2BF /* MarkerInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkerInfo.swift; sourceTree = "<group>"; };
@@ -116,7 +114,6 @@
 			children = (
 				74E485B62249119100788691 /* Main.storyboard */,
 				74E485BB2249119300788691 /* LaunchScreen.storyboard */,
-				7497F024224A68B400824123 /* TabBarAnimationExtension.swift */,
 				747FA81A2252636F0062D762 /* OtherExtensions.swift */,
 			);
 			path = Views;
@@ -390,7 +387,6 @@
 				74C37CEB225AF47A00DB865C /* MapMarker.swift in Sources */,
 				749C24402260CCE900CFF2BF /* MarkerInfo.swift in Sources */,
 				7497F019224A66A800824123 /* RequestFriendsViewController.swift in Sources */,
-				7497F025224A68B400824123 /* TabBarAnimationExtension.swift in Sources */,
 				74DA3FB322774A3D00B29E93 /* SettingsViewController.swift in Sources */,
 				74E485B52249119100788691 /* MapViewController.swift in Sources */,
 				74E485B32249119100788691 /* AppDelegate.swift in Sources */,
