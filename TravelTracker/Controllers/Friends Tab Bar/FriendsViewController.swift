@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITabBarControllerDelegate {
     
     var changedUsers: [User] = []
     
@@ -18,8 +18,14 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tabBarController?.delegate = self
         updateVisiblePins()
-        
+    }
+    
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        guard let twoIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else { return false }
+        tabBarController.animateToTab(toIndex: twoIndex)
+        return true
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
