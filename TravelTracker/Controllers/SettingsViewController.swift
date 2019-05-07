@@ -16,6 +16,11 @@ class SettingsViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    @IBAction func logOutButtonTapped(_ sender: Any) {
+        FirebaseController.signOutSavedUser()
+        performSegue(withIdentifier: "unwindFromSettings", sender: nil)
+    }
+    
 
     /*
     // MARK: - Navigation

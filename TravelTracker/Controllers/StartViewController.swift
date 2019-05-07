@@ -42,10 +42,16 @@ class StartViewController: UIViewController {
         }
         
     }
-    
+
     @IBAction func unwindFromSettings(sender: UIStoryboardSegue) {
         FirebaseController.signOutSavedUser()
-        view.isHidden = false
+        FirebaseController.friends.removeAll()
+        FirebaseController.friendUsernames.removeAll()
+        FirebaseController.friendRequests.removeAll()
+        FirebaseController.sentRequests.removeAll()
+        FirebaseController.currentUser = nil
+        loadingIndicator.isHidden = true
+        buttonsView.isHidden = false
         
     }
     
