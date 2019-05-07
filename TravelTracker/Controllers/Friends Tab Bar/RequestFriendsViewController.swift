@@ -14,6 +14,14 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
+    //set up tab bar delegate and animation
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tabBarController?.navigationItem.title = ""
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
