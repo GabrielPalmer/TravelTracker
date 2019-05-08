@@ -16,4 +16,8 @@ class FriendsTableViewCell: UITableViewCell {
     
     @IBOutlet weak var friendsSwitch: UISwitch!
     
+    override func awakeFromNib() {
+        friendsSwitch.onTintColor = #colorLiteral(red: 0.6392156863, green: 0.6784313725, blue: 0.7215686275, alpha: 1)
+    }
+    
 }
