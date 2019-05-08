@@ -11,11 +11,13 @@ import FirebaseFirestore
 
 class FirebaseController {
     
-    static var currentUser: User?
-    static var friends: [User] = []
-    static var friendUsernames: [String] = []
-    static var friendRequests: [String] = []
-    static var sentRequests: [String] = []
+    static let shared = FirebaseController()
+    
+    var currentUser: User?
+    var friends: [User] = []
+    var friendUsernames: [String] = []
+    var friendRequests: [String] = []
+    var sentRequests: [String] = []
     
     enum UpdateType {
         case add
@@ -23,7 +25,7 @@ class FirebaseController {
         case delete
     }
     
-    static func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
+    func createUser(name: String, username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         //checks if the their username is already taken otherwise creates a user
         Firestore.firestore().collection("users").whereField("username", isEqualTo: username).getDocuments { (snapshot, error) in
@@ -46,8 +48,8 @@ class FirebaseController {
                 "sentRequests" : [String]()
                 ], completion: { (error) in
                     let user = User(name: name, username: username, password: password)
-                    currentUser = user
-                    saveCurrentUser(user: user)
+                    self.currentUser = user
+                    self.saveCurrentUser(user: user)
                     completion(true)
             })
             
@@ -55,7 +57,7 @@ class FirebaseController {
         
     }
     
-    static func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
+    func signIn(username: String, password: String, completion: @escaping (Bool) -> Void) {
         
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
             if let document = document,
@@ -67,14 +69,14 @@ class FirebaseController {
                 let yourSentRequests = data["sentRequests"] as? [String] {
                 
                 let user = User(name: name, username: username, password: password)
-                currentUser = user
-                saveCurrentUser(user: user)
+                self.currentUser = user
+                self.saveCurrentUser(user: user)
                 
-                friendUsernames = usernames
-                friendRequests = yourRequests
-                sentRequests = yourSentRequests
+                self.friendUsernames = usernames
+                self.friendRequests = yourRequests
+                self.sentRequests = yourSentRequests
                 
-                fetchMarkerInfo(usernames: usernames, completion: {
+                self.generateFriendInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -88,13 +90,13 @@ class FirebaseController {
     }
     
     // saves the current user for auto sign
-    static func saveCurrentUser(user: User) {
+    func saveCurrentUser(user: User) {
         let userDefaults = UserDefaults.standard
         userDefaults.set(user.username, forKey: "username")
         userDefaults.set(user.password, forKey: "password")
     }
     
-    static func signInSavedUser(completion: @escaping (Bool) -> Void) {
+    func signInSavedUser(completion: @escaping (Bool) -> Void) {
         let userDefaults = UserDefaults.standard
         guard let username = userDefaults.string(forKey: "username"),
             let password = userDefaults.string(forKey: "password") else {
@@ -113,12 +115,12 @@ class FirebaseController {
                 let yourRequests = data["friendRequests"] as? [String],
                 let yourSentRequests = data["sentRequests"] as? [String] {
                 
-                currentUser = User(name: name, username: username, password: password)
-                friendUsernames = usernames
-                friendRequests = yourRequests
-                sentRequests = yourSentRequests
+                self.currentUser = User(name: name, username: username, password: password)
+                self.friendUsernames = usernames
+                self.friendRequests = yourRequests
+                self.sentRequests = yourSentRequests
                 
-                fetchMarkerInfo(usernames: usernames, completion: {
+                self.generateFriendInfo(usernames: usernames, completion: {
                     completion(true)
                     return
                 })
@@ -131,14 +133,14 @@ class FirebaseController {
         
     }
     
-    static func signOutSavedUser() {
+    func signOutSavedUser() {
         let userDefaults = UserDefaults.standard
         
         userDefaults.set(nil, forKey: "username")
         userDefaults.set(nil, forKey: "password")
     }
     
-    static func fetchMarkerInfo(usernames: [String], completion: @escaping () -> Void) {
+    func generateFriendInfo(usernames: [String], completion: @escaping () -> Void) {
         
         if usernames.count == 0 {
             completion()
@@ -150,12 +152,12 @@ class FirebaseController {
             
             group.enter()
             
-            if let yourUsername = FirebaseController.currentUser?.username {
+            if let yourUsername = self.currentUser?.username {
                 Firestore.firestore().collection("users").document(yourUsername).collection("markers").getDocuments(completion: { (snapshot, error) in
                     if let documents = snapshot?.documents {
                         for document in documents {
                             if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
-                                FirebaseController.currentUser?.markers.append(markerInfo)
+                                self.currentUser?.markers.append(markerInfo)
                             }
                         }
                         
@@ -173,7 +175,7 @@ class FirebaseController {
                 Firestore.firestore().collection("users").document(username).getDocument(completion: { (document, error) in
                     if let name = document?.data()?["name"] as? String {
                         let user = User(name: name, username: username, password: "")
-                        FirebaseController.friends.append(user)
+                        self.friends.append(user)
                         group.leave()
                     } else {
                         group.leave()
@@ -183,7 +185,7 @@ class FirebaseController {
             
             group.wait()
             
-            for friend in FirebaseController.friends {
+            for friend in self.friends {
                 group.enter()
                 
                 Firestore.firestore().collection("users").document(friend.username).collection("markers").getDocuments(completion: { (snapshot, error) in
@@ -210,9 +212,9 @@ class FirebaseController {
         
     }
     
-    static func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
+    func updateMapMarkers(_ marker: MapMarker, type: UpdateType) {
         
-        guard let username = FirebaseController.currentUser?.username else { return }
+        guard let username = currentUser?.username else { return }
         
         DispatchQueue.global().async {
             switch type {
@@ -233,12 +235,12 @@ class FirebaseController {
         }
     }
     
-    static func sendFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
+    func sendFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
         
         //gets the friend requests of the user you requested
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
             guard let usersFriendRequests = document?.data()?["friendRequests"] as? [String],
-                let yourUsername = currentUser?.username else {
+                let yourUsername = self.currentUser?.username else {
                 completion(false)
                 return
             }
@@ -258,11 +260,11 @@ class FirebaseController {
                 "friendRequests" : newFriendRequests
                 ], completion: { (error) in
                     if error == nil {
-                        sentRequests.insert(username, at: 0)
+                        self.sentRequests.insert(username, at: 0)
                         
                         //updates your sent requests with that user
                         Firestore.firestore().collection("users").document(yourUsername).updateData([
-                            "sentRequests" : sentRequests
+                            "sentRequests" : self.sentRequests
                             ], completion: { (error) in
                                 completion(true)
                                 return
@@ -276,12 +278,12 @@ class FirebaseController {
         }
     }
     
-    static func cancelFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
+    func cancelFriendRequest(username: String, completion: @escaping (Bool) -> Void) {
         
         //gets the friend requests of the user you requested
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
             guard let usersFriendRequests = document?.data()?["friendRequests"] as? [String],
-                let yourUsername = currentUser?.username else {
+                let yourUsername = self.currentUser?.username else {
                 completion(false)
                 return
             }
@@ -304,17 +306,17 @@ class FirebaseController {
                     if error == nil {
                         
                         //updates sent requests array
-                        for index in 0...sentRequests.count - 1 {
-                            let string = sentRequests[index]
+                        for index in 0...self.sentRequests.count - 1 {
+                            let string = self.sentRequests[index]
                             if string == username {
-                                sentRequests.remove(at: index)
+                                self.sentRequests.remove(at: index)
                                 break
                             }
                         }
                         
                         //updates your sent requests on firebase
                         Firestore.firestore().collection("users").document(yourUsername).updateData([
-                            "sentRequests" : sentRequests
+                            "sentRequests" : self.sentRequests
                             ], completion: { (error) in
                                 if let error = error {
                                     print(error.localizedDescription)
@@ -331,6 +333,138 @@ class FirebaseController {
         }
     }
     
+    func acceptFriendRequest(username: String, completion: @escaping () -> Void) {
+        
+        guard let yourUsername = currentUser?.username else {
+            completion()
+            return
+        }
+        
+        for index in 0...friendRequests.count - 1 {
+            let string = friendRequests[index]
+            if string == username {
+                friendRequests.remove(at: index)
+                break
+            }
+        }
+        
+        //updates your firebase without that friend request
+        Firestore.firestore().collection("users").document(yourUsername).updateData([
+            "friendRequests" : friendRequests
+        ]) { (error) in
+            guard error == nil else {
+                completion()
+                return
+            }
+            
+            //gets the new friends info
+            Firestore.firestore().collection("users").document(username).getDocument(completion: { (document, error) in
+                if error == nil,
+                    let data = document?.data(),
+                    let name = data["name"] as? String,
+                    let usersSentRequests = data["sentRequests"] as? [String] {
+                    
+                    let newFriend = User(name: name, username: username, password: "")
+                    
+                    //fill out markers info for new friend
+                    Firestore.firestore().collection("users").document(username).collection("markers").getDocuments(completion: { (snapshot, error) in
+                        if let documents = snapshot?.documents {
+                            for document in documents {
+                                if let markerInfo = MarkerInfo(id: document.documentID, firebaseDict: document.data()) {
+                                    newFriend.markers.append(markerInfo)
+                                }
+                            }
+                            
+                            self.friends.append(newFriend)
+                            
+                            //removes your username
+                            var newSentRequests = usersSentRequests
+                            for index in 0...usersSentRequests.count - 1 {
+                                let string = usersSentRequests[index]
+                                if string == yourUsername {
+                                    newSentRequests.remove(at: index)
+                                    break
+                                }
+                            }
+                            
+                            //update new friend's sent requests without your username
+                            Firestore.firestore().collection("users").document(username).updateData([
+                                "sentRequests" : newSentRequests
+                                ], completion: { (error) in
+                                    
+                                    completion()
+                                    return
+                            })
+                            
+                        } else {
+                            completion()
+                            return
+                        }
+                    })
+                    
+                } else {
+                    completion()
+                    return
+                }
+            })
+            
+        }
+        
+    }
     
+    func declineFriendRequest(username: String, completion: @escaping () -> Void) {
+        
+        guard let yourUsername = currentUser?.username else {
+            completion()
+            return
+        }
+        
+        for index in 0...friendRequests.count - 1 {
+            let string = friendRequests[index]
+            if string == username {
+                friendRequests.remove(at: index)
+                break
+            }
+        }
+        
+        //updates your firebase without that friend request
+        Firestore.firestore().collection("users").document(yourUsername).updateData([
+            "friendRequests" : friendRequests
+        ]) { (error) in
+            guard error == nil else {
+                completion()
+                return
+            }
+            
+            //gets users sent requests
+            Firestore.firestore().collection("users").document(username).getDocument(completion: { (document, error) in
+                if error == nil,
+                    let data = document?.data(),
+                    let usersSentRequests = data["sentRequests"] as? [String] {
+                    
+                    //removes your username
+                    var newSentRequests = usersSentRequests
+                    for index in 0...usersSentRequests.count - 1 {
+                        let string = usersSentRequests[index]
+                        if string == yourUsername {
+                            newSentRequests.remove(at: index)
+                            break
+                        }
+                    }
+                    
+                    //updates the user's sent requests without your username
+                    Firestore.firestore().collection("users").document(username).updateData([
+                        "sentRequests" : newSentRequests
+                        ], completion: { (error) in
+                            
+                            completion()
+                            return
+                    })
+                }
+            })
+            
+        }
+        
+    }
     
 }
