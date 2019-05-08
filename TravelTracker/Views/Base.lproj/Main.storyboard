@@ -534,10 +534,89 @@
                     <view key="view" contentMode="scaleToFill" id="RUC-5S-PkL">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="ouD-uq-8Jh">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="friendRequestCell" rowHeight="70" id="GPB-03-T1e" customClass="FriendRequestTableViewCell" customModule="TravelTracker" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="70"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="GPB-03-T1e" id="z9A-YK-FL1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="69.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fAQ-gy-wpW">
+                                                    <rect key="frame" x="8" y="23.5" width="286" height="22.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22.5" id="Mm6-fq-GYJ"/>
+                                                    </constraints>
+                                                    <attributedString key="attributedText">
+                                                        <fragment content="Username">
+                                                            <attributes>
+                                                                <font key="NSFont" size="17" name="Futura-Medium"/>
+                                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                            </attributes>
+                                                        </fragment>
+                                                    </attributedString>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Mlf-82-Lhs">
+                                                    <rect key="frame" x="302" y="8.5" width="65" height="22.5"/>
+                                                    <color key="backgroundColor" red="0.094888155098599075" green="0.77570890563393613" blue="0.021319283439918537" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22.5" id="Bu4-CP-t7V"/>
+                                                        <constraint firstAttribute="width" constant="65" id="z2j-hO-60j"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Accept">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LiH-0F-bcZ">
+                                                    <rect key="frame" x="302" y="39" width="65" height="22.5"/>
+                                                    <color key="backgroundColor" red="1" green="0.270844635" blue="0.1060603299" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="65" id="Xug-ll-gkJ"/>
+                                                        <constraint firstAttribute="height" constant="22.5" id="s7p-6D-nNf"/>
+                                                    </constraints>
+                                                    <state key="normal" title="Decline">
+                                                        <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    </state>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="LiH-0F-bcZ" secondAttribute="trailing" constant="8" id="0Oj-1j-GOm"/>
+                                                <constraint firstAttribute="bottom" secondItem="LiH-0F-bcZ" secondAttribute="bottom" constant="8.25" id="2nL-B3-VNc"/>
+                                                <constraint firstAttribute="trailing" secondItem="Mlf-82-Lhs" secondAttribute="trailing" constant="8" id="4qw-Xk-5Sb"/>
+                                                <constraint firstItem="LiH-0F-bcZ" firstAttribute="leading" secondItem="fAQ-gy-wpW" secondAttribute="trailing" constant="8" id="6pc-B1-sxX"/>
+                                                <constraint firstItem="LiH-0F-bcZ" firstAttribute="top" secondItem="Mlf-82-Lhs" secondAttribute="bottom" constant="8" id="H0M-eF-PCW"/>
+                                                <constraint firstItem="fAQ-gy-wpW" firstAttribute="leading" secondItem="z9A-YK-FL1" secondAttribute="leading" constant="8" id="Jhg-u2-krB"/>
+                                                <constraint firstItem="fAQ-gy-wpW" firstAttribute="centerY" secondItem="z9A-YK-FL1" secondAttribute="centerY" id="LXG-R7-JPj"/>
+                                                <constraint firstItem="Mlf-82-Lhs" firstAttribute="top" secondItem="z9A-YK-FL1" secondAttribute="top" constant="8.25" id="aTy-Uj-RCp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="acceptButton" destination="Mlf-82-Lhs" id="i1v-Hl-zcs"/>
+                                            <outlet property="declineButton" destination="LiH-0F-bcZ" id="eVu-Ok-QuT"/>
+                                            <outlet property="usernameLabel" destination="fAQ-gy-wpW" id="4Ou-kV-G0v"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ouD-uq-8Jh" firstAttribute="top" secondItem="MeP-W0-8rf" secondAttribute="top" id="0Rq-0H-VSa"/>
+                            <constraint firstItem="MeP-W0-8rf" firstAttribute="trailing" secondItem="ouD-uq-8Jh" secondAttribute="trailing" id="bQc-oc-ELy"/>
+                            <constraint firstItem="ouD-uq-8Jh" firstAttribute="leading" secondItem="MeP-W0-8rf" secondAttribute="leading" id="gWD-XM-7vD"/>
+                            <constraint firstItem="MeP-W0-8rf" firstAttribute="bottom" secondItem="ouD-uq-8Jh" secondAttribute="bottom" id="iJp-Qf-N5W"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="MeP-W0-8rf"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Your Requests" image="Mail-Light" selectedImage="Mail-Dark" id="kqw-6K-1Ze"/>
+                    <connections>
+                        <outlet property="tableView" destination="ouD-uq-8Jh" id="y9A-4k-yuo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jpl-XV-oyB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
