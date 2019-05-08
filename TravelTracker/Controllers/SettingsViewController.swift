@@ -16,7 +16,7 @@ class SettingsViewController: UIViewController {
     }
     
     @IBAction func logOutButtonTapped(_ sender: Any) {
-        FirebaseController.signOutSavedUser()
+        FirebaseController.shared.signOutSavedUser()
         performSegue(withIdentifier: "unwindFromSettings", sender: nil)
     }
     

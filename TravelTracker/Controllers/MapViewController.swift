@@ -128,20 +128,20 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         
         // Setup Own Pins \\
         
-        for marker in FirebaseController.currentUser!.markers {
+        for marker in FirebaseController.shared.currentUser!.markers {
             let mapMarker = MapMarker(info: marker)
             mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
             mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
             mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
             mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
-            mapMarker.user = FirebaseController.currentUser
+            mapMarker.user = FirebaseController.shared.currentUser
             mapMarkers.append(mapMarker)
         }
         
         // Setup Friends Pins \\
         
-        for friend in FirebaseController.friends {
+        for friend in FirebaseController.shared.friends {
             for marker in friend.markers {
                 let mapMarker = MapMarker(info: marker)
                 mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
@@ -193,7 +193,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         mapMarker.component = component
         
         currentSelectedMarkerIndex = newSelectedMarkerIndex
-        if mapMarker.user === FirebaseController.currentUser {
+        if mapMarker.user === FirebaseController.shared.currentUser {
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
             removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
@@ -214,7 +214,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = lastTappedCoordinate
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
-        marker.user = FirebaseController.currentUser
+        marker.user = FirebaseController.shared.currentUser
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
@@ -222,8 +222,8 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
-        FirebaseController.updateMapMarkers(marker, type: .add)
-        FirebaseController.currentUser?.markers.append(marker.info)
+        FirebaseController.shared.updateMapMarkers(marker, type: .add)
+        FirebaseController.shared.currentUser?.markers.append(marker.info)
         nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
     }
     
@@ -308,7 +308,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         marker.screenMarker.image = UIImage(named: "Green-Pin")
         marker.screenMarker.loc = MaplyCoordinate(x: lastTrackedLocation!.x, y: lastTrackedLocation!.y)
         marker.component = globeVC.addScreenMarkers([marker.screenMarker], desc: nil)
-        marker.user = FirebaseController.currentUser
+        marker.user = FirebaseController.shared.currentUser
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
@@ -316,8 +316,8 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
-        FirebaseController.updateMapMarkers(marker, type: .add)
-        FirebaseController.currentUser?.markers.append(marker.info)
+        FirebaseController.shared.updateMapMarkers(marker, type: .add)
+        FirebaseController.shared.currentUser?.markers.append(marker.info)
         nameDateLabel.text = ("\(marker.user!.name) - \(marker.info.date.formatAsString())")
         globeVC.animate(toPosition: MaplyCoordinate(x: marker.info.xCoord, y: marker.info.yCoord), time: 0.5)
         pinCurrentLocation.isEnabled = true
@@ -363,7 +363,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                         let mapMarker = MapMarker(info: marker)
                         mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
                         mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
-                        if user === FirebaseController.currentUser {
+                        if user === FirebaseController.shared.currentUser {
                             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
                         } else {
                             mapMarker.screenMarker.image = UIImage(named: "White-Pin")
@@ -395,7 +395,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                 print("marker didn't have component")
                 return
             }
-            FirebaseController.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
+            FirebaseController.shared.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
             globeVC.remove(component)
             mapMarkers.remove(at: currentSelectedMarkerIndex)
             self.currentSelectedMarkerIndex = nil
@@ -403,12 +403,12 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             markerEditorToolbar.isHidden = true
             defaultToolbar.isHidden = false
             var deletedMarkers: [Int] = []
-            for index in 0...(FirebaseController.currentUser!.markers.count - 1) {
-                if FirebaseController.currentUser!.markers[index].id == marker.info.id {
+            for index in 0...(FirebaseController.shared.currentUser!.markers.count - 1) {
+                if FirebaseController.shared.currentUser!.markers[index].id == marker.info.id {
                     deletedMarkers.append(index)
                 }
             }
-            FirebaseController.currentUser!.markers.remove(at: deletedMarkers)
+            FirebaseController.shared.currentUser!.markers.remove(at: deletedMarkers)
         }
     }
     
@@ -440,11 +440,11 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             if let comment = alert.textFields?.first?.text, !comment.isEmpty {
                 mapMarker.info.comment = comment
                 self.updateMarkerEditor(mapMarker)
-                FirebaseController.updateMapMarkers(mapMarker, type: .update)
+                FirebaseController.shared.updateMapMarkers(mapMarker, type: .update)
             } else {
                 mapMarker.info.comment = nil
                 self.updateMarkerEditor(mapMarker)
-                FirebaseController.updateMapMarkers(mapMarker, type: .update)
+                FirebaseController.shared.updateMapMarkers(mapMarker, type: .update)
             }
         }))
         self.present(alert, animated: true)
@@ -498,7 +498,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         guard let currentMarker = currentSelectedMarkerIndex else { return }
         mapMarkers[currentMarker].info.image = selectedImage
         updateMarkerEditor(mapMarkers[currentMarker])
-        FirebaseController.updateMapMarkers(mapMarkers[currentMarker], type: .update)
+        FirebaseController.shared.updateMapMarkers(mapMarkers[currentMarker], type: .update)
         //Dismiss the picker.
         dismiss(animated: true, completion: nil)
     }
@@ -551,7 +551,7 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             let screenMarker = MaplyScreenMarker()
             screenMarker.size = CGSize(width: 18, height: 36)
             
-            if mapMarker.user === FirebaseController.currentUser {
+            if mapMarker.user === FirebaseController.shared.currentUser {
                 screenMarker.image = UIImage(named: "Red-Pin")
                 screenMarker.offset = CGPoint(x: 0, y: 17)
             } else {

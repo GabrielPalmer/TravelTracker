@@ -82,10 +82,10 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            FirebaseController.friends[indexPath.row].pinsVisible = false
-            changedUsers.append(FirebaseController.friends[indexPath.row])
+            FirebaseController.shared.friends[indexPath.row].pinsVisible = false
+            changedUsers.append(FirebaseController.shared.friends[indexPath.row])
             tableView.beginUpdates()
-            FirebaseController.friends.remove(at: indexPath.row)
+            FirebaseController.shared.friends.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             tableView.endUpdates()
         }
@@ -95,7 +95,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         if section == 0 {
             return 1
         } else {
-            return (FirebaseController.friends.count)
+            return (FirebaseController.shared.friends.count)
         }
     }
     
@@ -106,7 +106,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendsCell", for: indexPath) as! FriendsTableViewCell
         if indexPath.section == 0 {
-            let user = FirebaseController.currentUser!
+            let user = FirebaseController.shared.currentUser!
             cell.nameLabel.text = user.name
             cell.usernameLabel.text = user.username
             cell.friendsSwitch.isOn = user.pinsVisible
@@ -114,7 +114,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.friendsSwitch.addTarget(self, action: #selector(switchValueChanged(_:)), for: .valueChanged)
             return cell
         } else {
-            let friend = FirebaseController.friends[indexPath.row]
+            let friend = FirebaseController.shared.friends[indexPath.row]
             cell.nameLabel.text = friend.name
             cell.usernameLabel.text = friend.username
             cell.friendsSwitch.isOn = friend.pinsVisible
@@ -125,7 +125,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func switchValueChanged(_ sender: UISwitch) {
-        let user = sender.tag == -1 ? FirebaseController.currentUser! : FirebaseController.friends[sender.tag]
+        let user = sender.tag == -1 ? FirebaseController.shared.currentUser! : FirebaseController.friends[sender.tag]
         var removedIndexes: [Int] = []
         if !changedUsers.isEmpty { 
             for index in 0...(changedUsers.count - 1) {
@@ -148,13 +148,13 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func updateVisiblePins() {
         var visiblePins: Int = 0
-        for friend in FirebaseController.friends {
+        for friend in FirebaseController.shared.friends {
             if friend.pinsVisible == true {
                 visiblePins += friend.markers.count
             }
         }
-        if FirebaseController.currentUser!.pinsVisible == true {
-            visiblePins += FirebaseController.currentUser!.markers.count
+        if FirebaseController.shared.currentUser!.pinsVisible == true {
+            visiblePins += FirebaseController.shared.currentUser!.markers.count
         }
         tabBarController?.navigationItem.title = "Visible Pins: \(visiblePins)"
     }
