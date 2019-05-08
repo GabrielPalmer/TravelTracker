@@ -80,7 +80,7 @@ class SignInViewController: UITableViewController, UITextFieldDelegate {
             return
         }
         
-        FirebaseController.signIn(username: username, password: password) { (success) in
+        FirebaseController.shared.signIn(username: username, password: password) { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "fromSignIn", sender: nil)

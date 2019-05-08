@@ -168,7 +168,7 @@ class SignUpViewController: UITableViewController, UITextFieldDelegate {
         
         //check for to long entries here
         
-        FirebaseController.createUser(name: name, username: username, password: password) { (success) in
+        FirebaseController.shared.createUser(name: name, username: username, password: password) { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "fromUserCreator", sender: nil)

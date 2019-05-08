@@ -39,12 +39,12 @@ class UsersRequestsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FirebaseController.friendRequests.count
+        return FirebaseController.shared.friendRequests.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "friendRequestCell", for: indexPath) as! FriendRequestTableViewCell
-        cell.usernameLabel.text = FirebaseController.friendRequests[indexPath.row]
+        cell.usernameLabel.text = FirebaseController.shared.friendRequests[indexPath.row]
         cell.acceptButton.tag = indexPath.row
         cell.declineButton.tag = indexPath.row
         cell.acceptButton.addTarget(self, action: #selector(acceptButtonTapped(_:)), for: .touchUpInside)

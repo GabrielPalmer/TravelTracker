@@ -19,7 +19,7 @@ class StartViewController: UIViewController {
         buttonsView.isHidden = true
         loadingIndicator.color = UIColor.black
 
-        FirebaseController.signInSavedUser { (success) in
+        FirebaseController.shared.signInSavedUser { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.performSegue(withIdentifier: "autoSignInSegue", sender: nil)
@@ -44,12 +44,12 @@ class StartViewController: UIViewController {
     }
 
     @IBAction func unwindFromSettings(sender: UIStoryboardSegue) {
-        FirebaseController.signOutSavedUser()
-        FirebaseController.friends.removeAll()
-        FirebaseController.friendUsernames.removeAll()
-        FirebaseController.friendRequests.removeAll()
-        FirebaseController.sentRequests.removeAll()
-        FirebaseController.currentUser = nil
+        FirebaseController.shared.signOutSavedUser()
+        FirebaseController.shared.friends.removeAll()
+        FirebaseController.shared.friendUsernames.removeAll()
+        FirebaseController.shared.friendRequests.removeAll()
+        FirebaseController.shared.sentRequests.removeAll()
+        FirebaseController.shared.currentUser = nil
         loadingIndicator.isHidden = true
         buttonsView.isHidden = false
         

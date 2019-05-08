@@ -36,13 +36,13 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     }
     
     @objc func cellCancelButtonTapped(_ sender: UIButton) {
-        let username = FirebaseController.sentRequests[sender.tag]
+        let username = FirebaseController.shared.sentRequests[sender.tag]
         
         searchBar.isUserInteractionEnabled = false
         tableView.isUserInteractionEnabled = false
         loadingIndicator.isHidden = false
         
-        FirebaseController.cancelFriendRequest(username: username) { (success) in
+        FirebaseController.shared.cancelFriendRequest(username: username) { (success) in
             DispatchQueue.main.async {
                 if success {
                     self.tableView.reloadData()
@@ -68,12 +68,12 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FirebaseController.sentRequests.count
+        return FirebaseController.shared.sentRequests.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sentRequestCell", for: indexPath) as! SentRequestTableViewCell
-        cell.usernameLabel.text = "\(FirebaseController.sentRequests[indexPath.row]) was requested as a friend"
+        cell.usernameLabel.text = "\(FirebaseController.shared.sentRequests[indexPath.row]) was requested as a friend"
         cell.cancelButton.addTarget(self, action: #selector(cellCancelButtonTapped(_:)), for: .touchUpInside)
         cell.cancelButton.tag = indexPath.row
         return cell
@@ -97,14 +97,14 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
         
         guard let searchTerm = searchBar.text, !searchTerm.isEmpty else { return }
         
-        guard !FirebaseController.friendUsernames.contains(searchTerm) else {
+        guard !FirebaseController.shared.friendUsernames.contains(searchTerm) else {
             let alertController = UIAlertController(title: "That user is already your friend", message: nil, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
             present(alertController, animated: true)
             return
         }
         
-        FirebaseController.sendFriendRequest(username: searchTerm) { (success) in
+        FirebaseController.shared.sendFriendRequest(username: searchTerm) { (success) in
             
             DispatchQueue.main.async {
                 if success {
