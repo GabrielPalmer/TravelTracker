@@ -284,8 +284,8 @@ class FirebaseController {
         Firestore.firestore().collection("users").document(username).getDocument { (document, error) in
             guard let usersFriendRequests = document?.data()?["friendRequests"] as? [String],
                 let yourUsername = self.currentUser?.username else {
-                completion(false)
-                return
+                    completion(false)
+                    return
             }
             
             //creates the new array of friend requests without your username
@@ -335,8 +335,9 @@ class FirebaseController {
     
     func acceptFriendRequest(username: String, completion: @escaping () -> Void) {
         
-       guard let yourUsername = currentUser?.username else { fatalError("current user did not exist") }
+        guard let yourUsername = currentUser?.username else { fatalError("current user did not exist") }
         
+        //remove friend request from local array
         for index in 0...friendRequests.count - 1 {
             let string = friendRequests[index]
             if string == username {
@@ -359,6 +360,7 @@ class FirebaseController {
                 if error == nil,
                     let data = document?.data(),
                     let name = data["name"] as? String,
+                    let usersFriends = data["friends"] as? [String],
                     let usersSentRequests = data["sentRequests"] as? [String] {
                     
                     let newFriend = User(name: name, username: username, password: "")
@@ -375,28 +377,40 @@ class FirebaseController {
                             self.friends.append(newFriend)
                             self.friendUsernames.append(username)
                             
-                            //adds your new friend to firebase
+                            //adds your new friend to your firestore
                             Firestore.firestore().collection("users").document(yourUsername).updateData([
                                 "friends" : self.friendUsernames
                                 ], completion: { (error) in
                                     
-                                    //removes your username
-                                    var newSentRequests = usersSentRequests
-                                    for index in 0...usersSentRequests.count - 1 {
-                                        let string = usersSentRequests[index]
-                                        if string == yourUsername {
-                                            newSentRequests.remove(at: index)
-                                            break
-                                        }
-                                    }
+                                    var friendsArray = usersFriends
+                                    friendsArray.append(yourUsername)
                                     
-                                    //update new friend's sent requests without your username
+                                    //adds you the their friends list
                                     Firestore.firestore().collection("users").document(username).updateData([
-                                        "sentRequests" : newSentRequests
+                                        "friends" : friendsArray
                                         ], completion: { (error) in
-                                            completion()
-                                            return
+                                            
+                                            //removes your username
+                                            var newSentRequests = usersSentRequests
+                                            for index in 0...usersSentRequests.count - 1 {
+                                                let string = usersSentRequests[index]
+                                                if string == yourUsername {
+                                                    newSentRequests.remove(at: index)
+                                                    break
+                                                }
+                                            }
+                                            
+                                            //update new friend's sent requests without your username
+                                            Firestore.firestore().collection("users").document(username).updateData([
+                                                "sentRequests" : newSentRequests
+                                                ], completion: { (error) in
+                                                    completion()
+                                                    return
+                                            })
                                     })
+                                    
+                                    
+                                    
                             })
                             
                             
@@ -429,7 +443,7 @@ class FirebaseController {
             }
         }
         
-        //updates your firebase without that friend request
+        //updates your firestore without that friend request
         Firestore.firestore().collection("users").document(yourUsername).updateData([
             "friendRequests" : friendRequests
         ]) { (error) in
@@ -491,10 +505,39 @@ class FirebaseController {
         Firestore.firestore().collection("users").document(yourUsername).updateData([
             "friends" : friendUsernames
         ]) { (error) in
-            completion()
-            return
+            if error == nil {
+                
+                Firestore.firestore().collection("users").document(username).getDocument(completion: { (document, error) in
+                    if let usersFriends = document?.data()?["friends"] as? [String] {
+                        var friendsArray = usersFriends
+                        
+                        for index in 0...usersFriends.count - 1 {
+                            let string = usersFriends[index]
+                            if string == yourUsername {
+                                friendsArray.remove(at: index)
+                                break
+                            }
+                        }
+                        
+                        Firestore.firestore().collection("users").document(username).updateData([
+                            "friends" : friendsArray
+                            ], completion: { (_) in
+                                completion()
+                                return
+                        })
+                        
+                    } else {
+                        completion()
+                        return
+                    }
+                })
+                
+            } else {
+                completion()
+                return
+            }
         }
-        
     }
+    
     
 }
