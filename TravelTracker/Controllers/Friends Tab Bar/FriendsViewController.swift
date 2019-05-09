@@ -125,7 +125,7 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func switchValueChanged(_ sender: UISwitch) {
-        let user = sender.tag == -1 ? FirebaseController.shared.currentUser! : FirebaseController.friends[sender.tag]
+        let user = sender.tag == -1 ? FirebaseController.shared.currentUser! : FirebaseController.shared.friends[sender.tag]
         var removedIndexes: [Int] = []
         if !changedUsers.isEmpty { 
             for index in 0...(changedUsers.count - 1) {
