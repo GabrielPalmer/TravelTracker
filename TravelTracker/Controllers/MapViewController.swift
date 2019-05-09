@@ -344,10 +344,12 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     @IBAction func unwindToGlobeVC(sender: UIStoryboardSegue) {
         if let source = sender.source as? UITabBarController,
             let viewControllers = source.viewControllers,
-            let friendVC = viewControllers[0] as? FriendsViewController {
+            let friendVC = viewControllers[0] as? FriendsViewController,
+            let requestVC = viewControllers[2] as? UsersRequestsViewController {
             var deletedMapMarkers: [Int] = []
             var deletedComponents: [MaplyComponentObject] = []
             let changedUsers: [User] = friendVC.changedUsers
+            let addedUsers: [User] = requestVC.addedUsers
             
             for user in changedUsers {
                 if !user.pinsVisible {
@@ -373,6 +375,31 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                             mapMarker.screenMarker.color = user.color
                         }
                         
+                        mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
+                        mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
+                        mapMarker.user = user
+                        mapMarkers.append(mapMarker)
+                    }
+                }
+            }
+            for user in addedUsers {
+                if !user.pinsVisible {
+                    for index in 0...(mapMarkers.count - 1) {
+                        let mapMarker = mapMarkers[index]
+                        
+                        if mapMarker.user === user {
+                            guard let component = mapMarker.component else { return }
+                            deletedComponents.append(component)
+                            deletedMapMarkers.append(index)
+                        }
+                    }
+                } else {
+                    for marker in user.markers {
+                        let mapMarker = MapMarker(info: marker)
+                        mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
+                        mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
+                        mapMarker.screenMarker.image = UIImage(named: "White-Pin")
+                        mapMarker.screenMarker.color = user.color
                         mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
                         mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
                         mapMarker.user = user

@@ -10,6 +10,8 @@ import UIKit
 
 class UsersRequestsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    var addedUsers: [User] = []
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -27,7 +29,10 @@ class UsersRequestsViewController: UIViewController, UITableViewDataSource, UITa
     @objc func acceptButtonTapped(_ sender: UIButton) {
         FirebaseController.shared.acceptFriendRequest(username: FirebaseController.shared.friendRequests[sender.tag]) {
             print("accepted friend")
-            //update friends view controller from tab bar
+            guard let newFriend = FirebaseController.shared.friends.last else { return }
+            self.addedUsers.append(newFriend)
+            guard let friendsVC = self.tabBarController?.viewControllers?[0] as? FriendsViewController else { return }
+            friendsVC.tableView.reloadData()
             self.tableView.reloadData()
         }
     }

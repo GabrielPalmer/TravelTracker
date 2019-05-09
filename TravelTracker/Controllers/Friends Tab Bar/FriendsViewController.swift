@@ -83,11 +83,11 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         if editingStyle == .delete {
             FirebaseController.shared.friends[indexPath.row].pinsVisible = false
             changedUsers.append(FirebaseController.shared.friends[indexPath.row])
-            tableView.beginUpdates()
             FirebaseController.shared.removeFriend(username: "\(FirebaseController.shared.friends[indexPath.row].username)") {
-                tableView.deleteRows(at: [indexPath], with: .automatic)
+                DispatchQueue.main.async {
+                    tableView.deleteRows(at: [indexPath], with: .automatic)
+                }
             }
-            tableView.endUpdates()
         }
     }
     
