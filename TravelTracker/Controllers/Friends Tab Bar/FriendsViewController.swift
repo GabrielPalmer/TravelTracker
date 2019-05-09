@@ -20,7 +20,6 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
         tabBarController?.delegate = self
         updateVisiblePins()
-        
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
@@ -85,8 +84,9 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
             FirebaseController.shared.friends[indexPath.row].pinsVisible = false
             changedUsers.append(FirebaseController.shared.friends[indexPath.row])
             tableView.beginUpdates()
-            FirebaseController.shared.friends.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            FirebaseController.shared.removeFriend(username: "\(FirebaseController.shared.friends[indexPath.row].username)") {
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            }
             tableView.endUpdates()
         }
     }

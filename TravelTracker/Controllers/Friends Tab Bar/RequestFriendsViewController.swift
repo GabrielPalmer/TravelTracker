@@ -63,9 +63,24 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     // MARK: - Table View Data Source
     //===========================================
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Sent Requests"
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: self.tableView.bounds.width, height: 25))
+        view.backgroundColor = #colorLiteral(red: 0.6392156863, green: 0.6784313725, blue: 0.7215686275, alpha: 1)
+        let friendsRequestLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: 50, height: 20))
+        friendsRequestLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(friendsRequestLabel)
+        friendsRequestLabel.font = UIFont(name: "Futura", size: 17)
+        friendsRequestLabel.text = "Sent Requests"
+        friendsRequestLabel.textColor = #colorLiteral(red: 0.2509803922, green: 0.3098039216, blue: 0.1411764706, alpha: 1)
+        view.addConstraints([NSLayoutConstraint(item: friendsRequestLabel, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0),
+                             NSLayoutConstraint(item: friendsRequestLabel, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0),
+                             NSLayoutConstraint(item: friendsRequestLabel, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 8)])
+        return view
     }
+    
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return "Sent Requests"
+//    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FirebaseController.shared.sentRequests.count
@@ -96,6 +111,8 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
         loadingIndicator.isHidden = false
         
         guard let searchTerm = searchBar.text, !searchTerm.isEmpty else { return }
+        
+        /////////// Gabe Reminder to check if you have a request for that user already. \\\\\\\\\\\
         
         guard !FirebaseController.shared.friendUsernames.contains(searchTerm) else {
             let alertController = UIAlertController(title: "That user is already your friend", message: nil, preferredStyle: .alert)
