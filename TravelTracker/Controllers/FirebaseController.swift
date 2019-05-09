@@ -335,10 +335,7 @@ class FirebaseController {
     
     func acceptFriendRequest(username: String, completion: @escaping () -> Void) {
         
-        guard let yourUsername = currentUser?.username else {
-            completion()
-            return
-        }
+       guard let yourUsername = currentUser?.username else { fatalError("current user did not exist") }
         
         for index in 0...friendRequests.count - 1 {
             let string = friendRequests[index]
@@ -376,25 +373,33 @@ class FirebaseController {
                             }
                             
                             self.friends.append(newFriend)
+                            self.friendUsernames.append(username)
                             
-                            //removes your username
-                            var newSentRequests = usersSentRequests
-                            for index in 0...usersSentRequests.count - 1 {
-                                let string = usersSentRequests[index]
-                                if string == yourUsername {
-                                    newSentRequests.remove(at: index)
-                                    break
-                                }
-                            }
-                            
-                            //update new friend's sent requests without your username
-                            Firestore.firestore().collection("users").document(username).updateData([
-                                "sentRequests" : newSentRequests
+                            //adds your new friend to firebase
+                            Firestore.firestore().collection("users").document(yourUsername).updateData([
+                                "friends" : self.friendUsernames
                                 ], completion: { (error) in
                                     
-                                    completion()
-                                    return
+                                    //removes your username
+                                    var newSentRequests = usersSentRequests
+                                    for index in 0...usersSentRequests.count - 1 {
+                                        let string = usersSentRequests[index]
+                                        if string == yourUsername {
+                                            newSentRequests.remove(at: index)
+                                            break
+                                        }
+                                    }
+                                    
+                                    //update new friend's sent requests without your username
+                                    Firestore.firestore().collection("users").document(username).updateData([
+                                        "sentRequests" : newSentRequests
+                                        ], completion: { (error) in
+                                            completion()
+                                            return
+                                    })
                             })
+                            
+                            
                             
                         } else {
                             completion()
@@ -414,10 +419,7 @@ class FirebaseController {
     
     func declineFriendRequest(username: String, completion: @escaping () -> Void) {
         
-        guard let yourUsername = currentUser?.username else {
-            completion()
-            return
-        }
+        guard let yourUsername = currentUser?.username else { fatalError("current user did not exist") }
         
         for index in 0...friendRequests.count - 1 {
             let string = friendRequests[index]
@@ -456,13 +458,41 @@ class FirebaseController {
                     Firestore.firestore().collection("users").document(username).updateData([
                         "sentRequests" : newSentRequests
                         ], completion: { (error) in
-                            
                             completion()
                             return
                     })
                 }
             })
             
+        }
+        
+    }
+    
+    func removeFriend(username: String, completion: @escaping () -> Void) {
+        
+        guard let yourUsername = currentUser?.username else { fatalError("current user did not exist") }
+        
+        for index in 0...friendUsernames.count - 1 {
+            let string = friendUsernames[index]
+            if string == username {
+                friendUsernames.remove(at: index)
+                break
+            }
+        }
+        
+        for index in 0...friends.count - 1 {
+            let string = friends[index].username
+            if string == username {
+                friends.remove(at: index)
+                break
+            }
+        }
+        
+        Firestore.firestore().collection("users").document(yourUsername).updateData([
+            "friends" : friendUsernames
+        ]) { (error) in
+            completion()
+            return
         }
         
     }

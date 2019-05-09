@@ -27,11 +27,18 @@ class UsersRequestsViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @objc func acceptButtonTapped(_ sender: UIButton) {
-        print("accept tapped")
+        FirebaseController.shared.acceptFriendRequest(username: FirebaseController.shared.friendRequests[sender.tag]) {
+            print("accepted friend")
+            //update friends view controller from tab bar
+            self.tableView.reloadData()
+        }
     }
     
     @objc func declineButtonTapped(_ sender: UIButton) {
-        print("decline tapped")
+        FirebaseController.shared.declineFriendRequest(username: FirebaseController.shared.friendRequests[sender.tag]) {
+            print("declined friend")
+            self.tableView.reloadData()
+        }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
