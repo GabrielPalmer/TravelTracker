@@ -348,10 +348,12 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
             var deletedMapMarkers: [Int] = []
             var deletedComponents: [MaplyComponentObject] = []
             let changedUsers: [User] = friendVC.changedUsers
+            
             for user in changedUsers {
                 if !user.pinsVisible {
                     for index in 0...(mapMarkers.count - 1) {
                         let mapMarker = mapMarkers[index]
+                        
                         if mapMarker.user === user {
                             guard let component = mapMarker.component else { return }
                             deletedComponents.append(component)
@@ -363,12 +365,14 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
                         let mapMarker = MapMarker(info: marker)
                         mapMarker.screenMarker.size = CGSize(width: 18, height: 36)
                         mapMarker.screenMarker.offset = CGPoint(x: 0, y: 17)
+                        
                         if user === FirebaseController.shared.currentUser {
                             mapMarker.screenMarker.image = UIImage(named: "Red-Pin")
                         } else {
                             mapMarker.screenMarker.image = UIImage(named: "White-Pin")
                             mapMarker.screenMarker.color = user.color
                         }
+                        
                         mapMarker.screenMarker.loc = MaplyCoordinate(x: marker.xCoord, y: marker.yCoord)
                         mapMarker.component = globeVC.addScreenMarkers([mapMarker.screenMarker], desc: nil)
                         mapMarker.user = user
