@@ -28,6 +28,8 @@ class StartViewController: UIViewController {
                 }
             }
         }
+        
+        buttonsView.isHidden = true
     }
 
     @IBAction func buttonTapped(_ sender: UIButton) {

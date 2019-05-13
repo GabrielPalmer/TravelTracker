@@ -301,16 +301,16 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8zp-YK-iPZ">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" translatesAutoresizingMaskIntoConstraints="NO" id="HoU-GN-iRr">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HoU-GN-iRr">
                                                 <rect key="frame" x="8" y="8" width="359" height="34"/>
                                                 <subviews>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
-                                                        <rect key="frame" x="0.0" y="0.0" width="84" height="34"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="119.5" height="34"/>
                                                         <state key="normal">
                                                             <attributedString key="attributedTitle">
                                                                 <fragment content="Remove">
                                                                     <attributes>
-                                                                        <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                                                        <color key="NSColor" red="0.77282281091370564" green="0.21162465301087111" blue="0.19336373830767556" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                                         <font key="NSFont" size="15" name="Futura-Medium"/>
                                                                         <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                                                     </attributes>
@@ -321,33 +321,19 @@
                                                             <action selector="removePinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="lZJ-8G-Fzu"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-J1-XaE">
-                                                        <rect key="frame" x="84" y="0.0" width="152" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Add Comment">
-                                                                    <attributes>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xWC-J1-XaE">
+                                                        <rect key="frame" x="119.5" y="0.0" width="120" height="34"/>
+                                                        <state key="normal" image="Add-Comment">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="addCommentButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="6e3-1i-KSc"/>
                                                         </connections>
                                                     </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j6y-kh-Zov">
-                                                        <rect key="frame" x="236" y="0.0" width="123" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Add Picture">
-                                                                    <attributes>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="j6y-kh-Zov">
+                                                        <rect key="frame" x="239.5" y="0.0" width="119.5" height="34"/>
+                                                        <state key="normal" image="Add-Picture">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="addPictureButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="B79-Eb-wDj"/>
@@ -982,7 +968,25 @@
                     <view key="view" contentMode="scaleToFill" id="FZu-Vj-Lux">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cFQ-pE-PGQ">
+                                <rect key="frame" x="25" y="89" width="325" height="120"/>
+                                <color key="backgroundColor" red="1" green="0.270844635" blue="0.1060603299" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="120" id="8wg-Mc-aXV"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="68"/>
+                                <state key="normal" title="REPORT">
+                                    <color key="titleColor" red="0.91174254440000002" green="0.69468851249999997" blue="0.2044236562" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                            </button>
+                        </subviews>
                         <color key="backgroundColor" red="0.30588235294117649" green="0.38039215686274508" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="s5Z-Qw-ORu" firstAttribute="trailing" secondItem="cFQ-pE-PGQ" secondAttribute="trailing" constant="25" id="bsW-bR-Lu9"/>
+                            <constraint firstItem="cFQ-pE-PGQ" firstAttribute="leading" secondItem="s5Z-Qw-ORu" secondAttribute="leading" constant="25" id="iSy-oZ-THX"/>
+                            <constraint firstItem="cFQ-pE-PGQ" firstAttribute="top" secondItem="s5Z-Qw-ORu" secondAttribute="top" constant="25" id="qEC-Dx-u4s"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="s5Z-Qw-ORu"/>
                     </view>
                     <navigationItem key="navigationItem" title="Settings" id="izo-ne-Eea">
@@ -1050,17 +1054,19 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Add-Comment" width="60" height="71"/>
+        <image name="Add-Picture" width="50" height="68"/>
         <image name="Friends-Icon" width="352" height="292"/>
-        <image name="Friends-TabBar-Dark" width="37.5" height="37.5"/>
-        <image name="Friends-TabBar-Light" width="37.5" height="37.5"/>
-        <image name="Mail-Dark" width="37.5" height="37.5"/>
-        <image name="Mail-Light" width="37.5" height="37.5"/>
-        <image name="Pin-My-Location" width="208.5" height="331.5"/>
-        <image name="Request-Dark" width="37.5" height="37.5"/>
-        <image name="Request-Light" width="37.5" height="37.5"/>
-        <image name="Settings" width="240.5" height="308.5"/>
+        <image name="Friends-TabBar-Dark" width="25" height="25"/>
+        <image name="Friends-TabBar-Light" width="25" height="25"/>
+        <image name="Mail-Dark" width="25" height="25"/>
+        <image name="Mail-Light" width="25" height="25"/>
+        <image name="Pin-My-Location" width="208" height="331"/>
+        <image name="Request-Dark" width="25" height="25"/>
+        <image name="Request-Light" width="25" height="25"/>
+        <image name="Settings" width="240" height="308"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="M17-2d-B1A"/>
+        <segue reference="F6t-nI-ra9"/>
     </inferredMetricsTieBreakers>
 </document>
