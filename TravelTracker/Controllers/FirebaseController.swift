@@ -245,12 +245,6 @@ class FirebaseController {
                 return
             }
             
-            guard !usersFriendRequests.contains(yourUsername) else {
-                print("\n\nUser was already sent a request\n\n")
-                completion(false)
-                return
-            }
-            
             var newFriendRequests: [String]
             newFriendRequests = usersFriendRequests
             newFriendRequests.append(yourUsername)

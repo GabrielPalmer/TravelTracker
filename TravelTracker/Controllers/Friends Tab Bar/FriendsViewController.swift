@@ -23,8 +23,8 @@ class FriendsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let twoIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else { return false }
-        tabBarController.animateToTab(toIndex: twoIndex)
+        guard let toIndex = tabBarController.viewControllers?.firstIndex(of: viewController) else { return false }
+        tabBarController.animateToTab(toIndex: toIndex)
         return true
     }
     

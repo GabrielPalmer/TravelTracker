@@ -78,17 +78,13 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
         return view
     }
     
-//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return "Sent Requests"
-//    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FirebaseController.shared.sentRequests.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "sentRequestCell", for: indexPath) as! SentRequestTableViewCell
-        cell.usernameLabel.text = "\(FirebaseController.shared.sentRequests[indexPath.row]) was requested as a friend"
+        cell.usernameLabel.text = "\(FirebaseController.shared.sentRequests[indexPath.row]) was sent a friend request"
         cell.cancelButton.addTarget(self, action: #selector(cellCancelButtonTapped(_:)), for: .touchUpInside)
         cell.cancelButton.tag = indexPath.row
         return cell
@@ -104,19 +100,36 @@ class RequestFriendsViewController: UIViewController, UISearchBarDelegate, UITab
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        print("search bar button was clicked")
-        
         searchBar.isUserInteractionEnabled = false
         tableView.isUserInteractionEnabled = false
         loadingIndicator.isHidden = false
         
         guard let searchTerm = searchBar.text, !searchTerm.isEmpty else { return }
         
-        /////////// Gabe Reminder to check if you have a request for that user already. \\\\\\\\\\\
-        
         guard !FirebaseController.shared.friendUsernames.contains(searchTerm) else {
             let alertController = UIAlertController(title: "That user is already your friend", message: nil, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(alertController, animated: true)
+            return
+        }
+        
+        guard !FirebaseController.shared.sentRequests.contains(searchTerm) else {
+            let alertController = UIAlertController(title: "You have already sent a friend request to that user", message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(alertController, animated: true)
+            return
+        }
+        
+        guard !FirebaseController.shared.friendRequests.contains(searchTerm) else {
+            let alertController = UIAlertController(title: "You already have a friend request from that user", message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            present(alertController, animated: true)
+            return
+        }
+        
+        guard searchTerm != FirebaseController.shared.currentUser?.username else {
+            let alertController = UIAlertController(title: "This app does not support users with multiple personality disorder", message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Go make some friends", style: .default, handler: nil))
             present(alertController, animated: true)
             return
         }

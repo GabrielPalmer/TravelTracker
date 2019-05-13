@@ -81,7 +81,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         markerCommentLabel.superview?.backgroundColor = UIColor.black.withAlphaComponent(1)
         defaultToolbar.isHidden = false
         markerEditorToolbar.isHidden = true
-        //        addPinButton.setAttributedTitle(NSAttributedString(string: "Pin Current Location", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         markerDetailView.layer.cornerRadius = 25
         markerImageView.layer.masksToBounds = true
         toolbar.backgroundColor = UIColor.clear
@@ -536,26 +535,34 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     
     func updateMarkerEditor(_ marker: MapMarker) {
         if marker.info.image == nil && marker.info.comment == nil {
-            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addCommentButton.setImage(UIImage(named: "Add-Comment"), for: .normal)
+            addPictureButton.setImage(UIImage(named: "Add-Picture"), for: .normal)
+//            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+//            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = true
         } else if marker.info.image == nil && marker.info.comment != nil {
-            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addCommentButton.setImage(UIImage(named: "Edit-Comment"), for: .normal)
+            addPictureButton.setImage(UIImage(named: "Add-Picture"), for: .normal)
+//            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+//            addPictureButton.setAttributedTitle(NSAttributedString(string: "Add Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerCommentLabel.superview?.isHidden = false
             markerCommentLabel.text = marker.info.comment
             markerImageView.isHidden = true
         } else if marker.info.comment == nil && marker.info.image != nil {
-            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addCommentButton.setImage(UIImage(named: "Add-Comment"), for: .normal)
+            addPictureButton.setImage(UIImage(named: "Edit-Picture"), for: .normal)
+//            addCommentButton.setAttributedTitle(NSAttributedString(string: "Add Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+//            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
             markerCommentLabel.superview?.isHidden = true
             markerImageView.image = marker.info.image
         } else {
-            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
-            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+            addCommentButton.setImage(UIImage(named: "Edit-Comment"), for: .normal)
+            addPictureButton.setImage(UIImage(named: "Edit-Picture"), for: .normal)
+//            addCommentButton.setAttributedTitle(NSAttributedString(string: "Edit Comment", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
+//            addPictureButton.setAttributedTitle(NSAttributedString(string: "Edit Picture", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             markerDetailView.isHidden = false
             markerImageView.isHidden = false
             markerCommentLabel.superview?.isHidden = false
@@ -601,13 +608,5 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         }
     }
     
-    //    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    //        if let destination = segue.destination as? UINavigationController,
-    //            let tabBar = destination.viewControllers[0] as? UITabBarController,
-    //            let viewControllers = tabBar.viewControllers,
-    //            let friendsVC = viewControllers[0] as? FriendsViewController {
-    //            friendsVC.seguedFromGlobeVC()
-    //        }
-    //    }
 }
 
