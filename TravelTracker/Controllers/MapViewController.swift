@@ -10,7 +10,6 @@ import UIKit
 import WhirlyGlobeMaplyComponent
 import CoreLocation
 import Network
-//// Add comment to pin with alert controller ////
 
 class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate, CLLocationManagerDelegate {
     
@@ -72,6 +71,9 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         settingsButton.imageView?.contentMode = .scaleAspectFit
         friendsButton.imageView?.contentMode = .scaleAspectFit
         pinCurrentLocation.imageView?.contentMode = .scaleAspectFit
+        removePinButton.imageView?.contentMode = .scaleAspectFit
+        addCommentButton.imageView?.contentMode = .scaleAspectFit
+        addPictureButton.imageView?.contentMode = .scaleAspectFit
         markerCommentLabel.showsVerticalScrollIndicator = true
         markerCommentLabel.indicatorStyle = .white
         markerCommentLabel.superview?.layer.cornerRadius = 25
@@ -195,7 +197,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         if mapMarker.user === FirebaseController.shared.currentUser {
             defaultToolbar.isHidden = true
             markerEditorToolbar.isHidden = false
-            removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
             nameDateLabel.text = ("\(mapMarker.user!.name) - \(mapMarker.info.date.formatAsString())")
             
         } else {
@@ -217,7 +218,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
-        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
@@ -311,7 +311,6 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
         mapMarkers.append(marker)
         currentSelectedMarkerIndex = (mapMarkers.count - 1)
         updateMarkerEditor(marker)
-        removePinButton.setAttributedTitle(NSAttributedString(string: "Remove Pin", attributes: [NSAttributedString.Key.font : UIFont(name: "Futura", size: 15) as Any]), for: .normal)
         globeVC.clearAnnotations()
         defaultToolbar.isHidden = true
         markerEditorToolbar.isHidden = false
@@ -388,31 +387,31 @@ class MapViewController: UIViewController, WhirlyGlobeViewControllerDelegate, UI
     }
     
     @IBAction func removePinButtonTapped(_ sender: Any) {
-        if removePinButton.titleLabel?.text == "Remove Pin" {
-            guard let currentSelectedMarkerIndex = currentSelectedMarkerIndex else {
-                print("Remove Pin was selected without currentSelectedMarkerIndex having a value.")
-                return
-            }
-            let marker = mapMarkers[currentSelectedMarkerIndex]
-            guard let component = marker.component else {
-                print("marker didn't have component")
-                return
-            }
-            FirebaseController.shared.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
-            globeVC.remove(component)
-            mapMarkers.remove(at: currentSelectedMarkerIndex)
-            self.currentSelectedMarkerIndex = nil
-            markerDetailView.isHidden = true
-            markerEditorToolbar.isHidden = true
-            defaultToolbar.isHidden = false
-            var deletedMarkers: [Int] = []
-            for index in 0...(FirebaseController.shared.currentUser!.markers.count - 1) {
-                if FirebaseController.shared.currentUser!.markers[index].id == marker.info.id {
-                    deletedMarkers.append(index)
-                }
-            }
-            FirebaseController.shared.currentUser!.markers.remove(at: deletedMarkers)
+        guard let currentSelectedMarkerIndex = currentSelectedMarkerIndex else {
+            print("Remove Pin was selected without currentSelectedMarkerIndex having a value.")
+            return
         }
+        
+        let marker = mapMarkers[currentSelectedMarkerIndex]
+        guard let component = marker.component else {
+            print("marker didn't have component")
+            return
+        }
+        
+        FirebaseController.shared.updateMapMarkers(mapMarkers[currentSelectedMarkerIndex], type: .delete)
+        globeVC.remove(component)
+        mapMarkers.remove(at: currentSelectedMarkerIndex)
+        self.currentSelectedMarkerIndex = nil
+        markerDetailView.isHidden = true
+        markerEditorToolbar.isHidden = true
+        defaultToolbar.isHidden = false
+        var deletedMarkers: [Int] = []
+        for index in 0...(FirebaseController.shared.currentUser!.markers.count - 1) {
+            if FirebaseController.shared.currentUser!.markers[index].id == marker.info.id {
+                deletedMarkers.append(index)
+            }
+        }
+        FirebaseController.shared.currentUser!.markers.remove(at: deletedMarkers)
     }
     
     func mapmarkersIndex(for screenMarker: MaplyScreenMarker) -> Int? {

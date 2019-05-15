@@ -304,18 +304,10 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HoU-GN-iRr">
                                                 <rect key="frame" x="8" y="8" width="359" height="34"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="EEc-XO-RZt">
                                                         <rect key="frame" x="0.0" y="0.0" width="119.5" height="34"/>
-                                                        <state key="normal">
-                                                            <attributedString key="attributedTitle">
-                                                                <fragment content="Remove">
-                                                                    <attributes>
-                                                                        <color key="NSColor" red="0.77282281091370564" green="0.21162465301087111" blue="0.19336373830767556" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                                        <font key="NSFont" size="15" name="Futura-Medium"/>
-                                                                        <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                                                    </attributes>
-                                                                </fragment>
-                                                            </attributedString>
+                                                        <state key="normal" image="Remove-Pin">
+                                                            <attributedString key="attributedTitle"/>
                                                         </state>
                                                         <connections>
                                                             <action selector="removePinButtonTapped:" destination="gSl-fU-ypg" eventType="touchUpInside" id="lZJ-8G-Fzu"/>
@@ -1062,6 +1054,7 @@
         <image name="Mail-Dark" width="25" height="25"/>
         <image name="Mail-Light" width="25" height="25"/>
         <image name="Pin-My-Location" width="208" height="331"/>
+        <image name="Remove-Pin" width="81" height="58"/>
         <image name="Request-Dark" width="25" height="25"/>
         <image name="Request-Light" width="25" height="25"/>
         <image name="Settings" width="240" height="308"/>
